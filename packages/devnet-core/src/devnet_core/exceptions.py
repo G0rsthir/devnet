@@ -12,3 +12,19 @@ class InfrastructureError(Exception):
     """
 
     code = "infrastructure_error"
+
+
+class DataIntegrityError(InfrastructureError):
+    code = "data_integrity_error"
+
+
+class UnsupportedOperationError(InfrastructureError):
+    code = "unsupported_operation"
+
+
+class ResourceLimitExceededError(InfrastructureError):
+    code = "resource_limit_exceeded"
+
+
+class ConfigurationError(InfrastructureError):
+    code = "configuration_error"

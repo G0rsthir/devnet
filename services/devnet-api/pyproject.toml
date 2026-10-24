@@ -8,14 +8,18 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "bcrypt>=5.0.0",
     "devnet-core",
     "fastapi[standard]>=0.150.0",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.1",
+    "pyjwt>=2.15.1",
+    "typer>=0.27.3",
+    "uvicorn>=0.54.0",
 ]
 
 [project.scripts]
-devnet-api = "devnet_api:main"
+devnet-api = 'devnet_api.cli:cli'
 
 [build-system]
 requires = ["uv_build>=0.12.19,<0.13.0"]

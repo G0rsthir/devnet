@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from devnet_core.const import ENCODING, EnvironmentsEnum
+from devnet_core.const import ENCODING, Environments
 
 
 class BaseEnvSettings(BaseSettings):
@@ -14,4 +14,4 @@ class BaseEnvSettings(BaseSettings):
 class CoreEnvSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    ENVIRONMENT: EnvironmentsEnum = EnvironmentsEnum.DEVELOPMENT
+    ENVIRONMENT: Environments = Environments.DEVELOPMENT

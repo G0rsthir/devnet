@@ -2,15 +2,17 @@ from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
 
 from devnet_api.runtime import RuntimeContainer
-from devnet_core.const import EnvironmentsEnum
+from devnet_api.security.loader import create_auth_managers
+from devnet_core.const import Environments
 
 from .routes import api_router
 
 
+# TODO improve description
 def create_http_server(app_context: RuntimeContainer, **kwargs) -> FastAPI:
     debug = False
 
-    if app_context.env.ENVIRONMENT == EnvironmentsEnum.DEVELOPMENT:
+    if app_context.core.ENVIRONMENT == Environments.DEVELOPMENT:
         debug = True
 
     app = FastAPI(

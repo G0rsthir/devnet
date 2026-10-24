@@ -15,6 +15,6 @@ class UnsetEnum(Enum):
 UNSET = UnsetEnum.UNSET
 
 
-class EnvironmentsEnum(StrEnum):
+class Environments(StrEnum):
     PRODUCTION = "production"
     DEVELOPMENT = "development"
