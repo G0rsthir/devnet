@@ -49,9 +49,24 @@ packages/compliance/
 └── tests/fixtures/          # saved device output, so CI tests checks offline
 ```
 
+## Enviroment Setup
+
+Create .env for development. Update required variables
+
+```bash
+cp .env.example .env
+```
+
+```bash
+docker compose -f deploy/docker/compose-prefect.yaml up -d prefect-server
+```
+
 ## Python Enviroment
 
 ```bash
 # add python package
 uv add --package devnet-api fastapi[standard]
+
+#
+uv init --lib --vcs none --no-pin-python packages/ise
 ```

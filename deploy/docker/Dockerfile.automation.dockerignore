@@ -1,0 +1,9 @@
+# Used by BuildKit for docker/Dockerfile (the context is the repository root).
+# Allowlist: exclude everything, then include only what the image needs.
+*
+
+!packages/
+!services/
+
+!uv.lock
+!pyproject.toml
