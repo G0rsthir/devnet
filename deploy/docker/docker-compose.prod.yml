@@ -1,0 +1,71 @@
+name: devnet
+
+x-prefect-client: &prefect-client
+  PREFECT_API_URL: http://prefect-server:4200/api
+  PREFECT_API_AUTH_STRING: ${PREFECT_API_AUTH_STRING:?set PREFECT_API_AUTH_STRING in .env}
+
+x-devnet: &devnet
+  image: ${DEVNET_IMAGE:-devnet}:${DEVNET_TAG:-dev}
+  build: .
+  env_file: .env              # NETBOX_*, ISE_*, ...; `environment` below wins over it
+  environment: *prefect-client
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: prefect
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: prefect
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prefect -d prefect"]
+      interval: 5s
+      retries: 20
+    restart: unless-stopped
+
+  prefect-server:
+    image: prefecthq/prefect:3.9.0-python3.13
+    command: prefect server start --host 0.0.0.0
+    environment:
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:${POSTGRES_PASSWORD}@postgres:5432/prefect
+      PREFECT_SERVER_API_AUTH_STRING: ${PREFECT_API_AUTH_STRING}
+      PREFECT_UI_API_URL: ${PREFECT_UI_API_URL:-http://localhost:4200/api}
+    ports:
+      - "127.0.0.1:4200:4200"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:4200/api/health')"]
+      interval: 5s
+      retries: 30
+    restart: unless-stopped
+
+  worker:
+    <<: *devnet
+    command: prefect worker start --pool devnet --type process
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+
+  api:
+    <<: *devnet
+    command: devnet-api serve --env production --host 0.0.0.0
+    ports:
+      - "8000:8000"
+
+  # One-off: docker compose run --rm deploy
+  deploy:
+    <<: *devnet
+    command: sh -c "prefect work-pool inspect devnet >/dev/null 2>&1 || prefect work-pool create devnet --type process; prefect deploy --all --prefect-file flows/prefect.yaml"
+    restart: "no"
+    profiles: [tools]
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+
+volumes:
+  postgres-data:

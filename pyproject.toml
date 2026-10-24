@@ -4,13 +4,10 @@ version = "0.1.0"
 description = "Network Automation"
 requires-python = ">=3.13"
 dependencies = [
-    "ansible-core",
-    "ansible-runner",
     "compliance",
     "devnet-core",
     "ingest",
     "devnet-api",
-    "prefect",
 ]
 
 [tool.uv]

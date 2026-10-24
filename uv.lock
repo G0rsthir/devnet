@@ -709,6 +709,7 @@ dependencies = [
     { name = "bcrypt" },
     { name = "devnet-core" },
     { name = "fastapi", extra = ["standard"] },
+    { name = "prefect-client" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pyjwt" },
@@ -721,6 +722,7 @@ requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
     { name = "devnet-core", editable = "packages/devnet-core" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.150.0" },
+    { name = "prefect-client", specifier = ">=3.9.0" },
     { name = "pydantic", specifier = ">=2.14.1" },
     { name = "pydantic-settings", specifier = ">=2.16.1" },
     { name = "pyjwt", specifier = ">=2.15.1" },
@@ -1784,6 +1786,58 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/74/1e/d65fa8c77036a83bed085e305693dc96186c1a9281fe211ee5d7403d7d7d/prefect-3.9.0.tar.gz", hash = "sha256:ef29cf3a1883ecdbe824a5cf403affc9adade43eb77888e5322ffb854e115ccb", size = 6319483, upload-time = "2026-10-21T03:45:50.974Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/87/8e/2c83290d7a3dbd9850400df07b7482f58ab9410651e12f22cfa4d74dd38b/prefect-3.9.0-py3-none-any.whl", hash = "sha256:995dbbd1e6db042aba761111e0fb4a766220eba5ad01f567c6843c933b46da61", size = 6961499, upload-time = "2026-10-21T03:45:48.187Z" },
+]
+
+[[package]]
+name = "prefect-client"
+version = "3.9.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "amplitude-analytics" },
+    { name = "anyio" },
+    { name = "asgi-lifespan" },
+    { name = "cachetools" },
+    { name = "certifi" },
+    { name = "cloudpickle" },
+    { name = "coolname" },
+    { name = "dateparser" },
+    { name = "exceptiongroup" },
+    { name = "fastapi" },
+    { name = "fsspec" },
+    { name = "graphviz" },
+    { name = "griffe" },
+    { name = "httpcore" },
+    { name = "httpx", extra = ["http2"] },
+    { name = "humanize" },
+    { name = "jsonpatch" },
+    { name = "jsonschema" },
+    { name = "opentelemetry-api" },
+    { name = "orjson" },
+    { name = "packaging" },
+    { name = "pathspec" },
+    { name = "prometheus-client" },
+    { name = "pydantic" },
+    { name = "pydantic-core" },
+    { name = "pydantic-extra-types" },
+    { name = "pydantic-settings" },
+    { name = "python-dateutil" },
+    { name = "python-slugify" },
+    { name = "pytz" },
+    { name = "pyyaml" },
+    { name = "rfc3339-validator" },
+    { name = "rich" },
+    { name = "ruamel-yaml" },
+    { name = "sniffio" },
+    { name = "starlette" },
+    { name = "toml" },
+    { name = "typing-extensions" },
+    { name = "uvicorn" },
+    { name = "websockets" },
+    { name = "whenever" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/90/c9/55a9ebb33a0abc024b816a7ab2a748f0ae8efaca0dcbe746959bd8f1b99b/prefect_client-3.9.0.tar.gz", hash = "sha256:fbcc6d1d4e93b56007cffd98ec3054b754e2f08fa95303225ac160ed90550df7", size = 948029, upload-time = "2026-10-21T03:45:03.862Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/05/d6/46b9f7af6c237ff5f9d5aa6f106ba58a08555a6b35953880e93361063df1/prefect_client-3.9.0-py3-none-any.whl", hash = "sha256:576718308f3b1052f03e329283502030b497c104f184d646c5b3c3a2cb1427c8", size = 1170248, upload-time = "2026-10-21T03:45:01.643Z" },
 ]
 
 [[package]]
