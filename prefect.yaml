@@ -1,0 +1,30 @@
+# Prefect deployments for the whole repo. Run `prefect deploy --all` from the repo root,
+# so every entrypoint is relative to the root (e.g. flows/compliance.py:compliance).
+name: devnet
+prefect-version: 3.9.0
+
+# Code is not built or uploaded anywhere: the process worker on the VM runs flows
+# straight from the checkout that CI keeps up to date at /opt/devnet.
+build: null
+push: null
+pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /opt/devnet
+
+# Shared settings, reused in deployments below via YAML anchors.
+definitions:
+  work_pools:
+    vm: &vm
+      name: devnet-vm  # create once: prefect work-pool create devnet-vm --type process
+      job_variables: {}
+
+deployments: []
+# Add one entry per flow, for example:
+#  - name: nightly
+#    entrypoint: flows/compliance.py:compliance
+#    description: Nightly compliance run against all sites.
+#    parameters: {}
+#    schedules:
+#      - cron: "0 2 * * *"
+#        timezone: "UTC"
+#    work_pool: *vm

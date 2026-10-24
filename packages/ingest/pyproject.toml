@@ -1,0 +1,19 @@
+[project]
+name = "ingest"
+version = "0.1.0"
+description = "Data ingestion: collect data and write it to NetBox and other systems."
+readme = "README.md"
+authors = [
+    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "devnet-core",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+devnet-core = { workspace = true }

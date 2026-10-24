@@ -1,0 +1,16 @@
+[project]
+name = "devnet-core"
+version = "0.1.0"
+description = "Shared code: settings and secrets, NetBox client, device access"
+readme = "README.md"
+authors = [
+    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic-settings>=2.16.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"

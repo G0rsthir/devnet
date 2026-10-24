@@ -1,0 +1,43 @@
+[project]
+name = "devnet"
+version = "0.1.0"
+description = "Network Automation"
+requires-python = ">=3.13"
+dependencies = [
+    "ansible-core",
+    "ansible-runner",
+    "compliance",
+    "devnet-core",
+    "ingest",
+    "devnet-api",
+    "prefect",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["packages/*", "services/*"]
+
+[tool.uv.sources]
+devnet-core = { workspace = true }
+compliance = { workspace = true }
+ingest = { workspace = true }
+devnet-api = { workspace = true }
+
+[dependency-groups]
+dev = ["pytest", "ruff"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+src = ["packages/*/src", "services/*/src"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+    "I",  # isort
+]

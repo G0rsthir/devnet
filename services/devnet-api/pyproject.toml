@@ -1,0 +1,25 @@
+[project]
+name = "devnet-api"
+version = "0.1.0"
+description = "HTTP API for devnet: receives webhooks and other requests"
+readme = "README.md"
+authors = [
+    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "devnet-core",
+    "fastapi[standard]>=0.150.0",
+    "pydantic>=2.14.1",
+    "pydantic-settings>=2.16.1",
+]
+
+[project.scripts]
+devnet-api = "devnet_api:main"
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+devnet-core = { workspace = true }

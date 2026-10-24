@@ -1,0 +1,7 @@
+__pycache__
+.venv/
+.idea/
+.ruff_cache/
+.env
+.vscode/*
+!.vscode/settings.json.default
