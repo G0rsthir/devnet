@@ -3,19 +3,19 @@
 name: devnet
 prefect-version: 3.9.0
 
-# Code is not built or uploaded anywhere: the process worker on the VM runs flows
-# straight from the checkout that CI keeps up to date at /opt/devnet.
+# Code is not built or uploaded anywhere: the process worker runs flows from the
+# code baked into the devnet-automation image at /app.
 build: null
 push: null
 pull:
   - prefect.deployments.steps.set_working_directory:
-      directory: /opt/devnet
+      directory: /app
 
 # Shared settings, reused in deployments below via YAML anchors.
 definitions:
   work_pools:
-    vm: &vm
-      name: devnet-vm  # create once: prefect work-pool create devnet-vm --type process
+    process: &process
+      name: worker-process  # create once: prefect work-pool create worker-process --type process
       job_variables: {}
 
 deployments: []
@@ -27,4 +27,4 @@ deployments: []
 #    schedules:
 #      - cron: "0 2 * * *"
 #        timezone: "UTC"
-#    work_pool: *vm
+#    work_pool: *process

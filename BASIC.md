@@ -7,7 +7,7 @@ Imports go one way: everything else → compliance/ingest → devnet-core. Nothi
 Fill devnet-core as sharing appears. This answers your "not sure yet". Start it with settings, secrets, the NetBox client and device connections, and move code in only when a second user needs it.
 
 NetBox is the inventory.
-Use the same names in devnet-core's settings, so one .env file locally and one systemd EnvironmentFile on the VM cover both Ansible and Python.
+Use the same names in devnet-core's settings, so one .env file, locally and in the containers, covers both Ansible and Python.
 
 ## Dev environment
 
@@ -24,4 +24,3 @@ Occasionally: the production setup. After changing the Dockerfile, the dependenc
 
 Two things blocking you now
 Then run uv sync from the repo root to restore your venv.
-Want me to add the Dockerfile, .dockerignore and compose.yaml, switch the pull step in flows/prefect.yaml, and update DEVELOPMENT.md? It still describes systemd units on a VM.

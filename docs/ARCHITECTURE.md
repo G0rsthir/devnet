@@ -25,7 +25,7 @@ flowchart TB
         prime_nightly["reconcile-prime/nightly"]
     end
 
-    subgraph vm["Process worker on the VM"]
+    subgraph worker["Process worker · devnet-automation container"]
         ise_flow["flows/ise.py<br/>retries, logs"]
         prime_flow["flows/prime.py<br/>retries, logs"]
     end

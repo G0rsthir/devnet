@@ -8,6 +8,7 @@ dependencies = [
     "devnet-core",
     "ingest",
     "devnet-api",
+    "devnet-flows",
 ]
 
 [tool.uv]
@@ -21,6 +22,7 @@ devnet-core = { workspace = true }
 compliance = { workspace = true }
 ingest = { workspace = true }
 devnet-api = { workspace = true }
+devnet-flows = { workspace = true }
 
 [dependency-groups]
 dev = ["pytest", "ruff"]

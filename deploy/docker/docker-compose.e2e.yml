@@ -1,0 +1,44 @@
+name: e2e
+
+x-prefect-client: &prefect-client
+  PREFECT_API_URL: http://prefect-server:4200/api
+  #PREFECT_API_AUTH_STRING: ${PREFECT_API_AUTH_STRING:?set PREFECT_API_AUTH_STRING in .env}
+
+x-automation: &automation
+  image: ${AUTOMATION_IMAGE:-devnet-automation}:${AUTOMATION_TAG:-e2e}
+  build:
+    context: ../..
+    dockerfile: deploy/docker/Dockerfile.automation
+  pull_policy: build  # never pull
+  env_file: ../../.env
+  restart: unless-stopped
+
+
+services:
+  prefect-server:
+    <<: *automation
+    command: prefect server start --host 0.0.0.0
+    environment:
+      PREFECT_UI_API_URL: ${PREFECT_UI_API_URL:-http://localhost:4210/api}
+    ports:
+      - "4210:4200"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:4200/api/health', timeout=1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  prefect-worker:
+    <<: *automation
+    command: prefect worker start --pool worker-process --type process
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+    environment: *prefect-client
+
+  api:
+    <<: *automation
+    command: devnet-api run prod
+    ports:
+      - "8000:8000"
