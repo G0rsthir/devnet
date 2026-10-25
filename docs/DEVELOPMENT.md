@@ -63,6 +63,8 @@ Start docker containers (Prefect Server)
 docker compose -f deploy/docker/docker-compose.dev.yml up -d
 ```
 
+Prefect UI - <http://localhost:4200/>
+
 ## Python Enviroment
 
 ```bash

@@ -1,0 +1,24 @@
+version: 1
+disable_existing_loggers: false
+formatters:
+  default:
+    format: "%(asctime)s [%(levelname)s] [%(name)s] %(message)s"
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: default
+    stream: ext://sys.stdout
+loggers:
+  # All devnet code: devnet_core.logging.get_logger(__name__)
+  devnet:
+    level: INFO
+  # Server start/stop
+  uvicorn:
+    level: INFO
+  # Dev reload
+  watchfiles.main:
+    level: WARNING
+# Everything else
+root:
+  level: WARNING
+  handlers: [console]

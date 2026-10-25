@@ -9,12 +9,12 @@ resolution-markers = [
 [manifest]
 members = [
     "compliance",
-    "devnet",
     "devnet-api",
     "devnet-core",
     "devnet-flows",
     "ingest",
     "ise",
+    "network-automation",
 ]
 
 [[package]]
@@ -633,39 +633,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/cd/eb/77b0cc7fc0235b0495b32410edebe14cf6757b826135a7f92bb0f5d843b9/detect_installer-0.2.1.tar.gz", hash = "sha256:85f889d4d19c1caf5bef89ef389eb920cd8c6c2a868e1eeceec24527b93021e7", size = 3634, upload-time = "2026-09-02T14:14:38.961Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/61/fe/a245e1d579e7abf47208f7c1ce5684caa2cd956ede5ff646d66d0299d9e8/detect_installer-0.2.1-py3-none-any.whl", hash = "sha256:87e2ce7d05cb108b178f8e45bb80d3d88c0cb4b397983345c18ad6562e02e620", size = 5371, upload-time = "2026-09-02T14:14:38.106Z" },
-]
-
-[[package]]
-name = "devnet"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "compliance" },
-    { name = "devnet-api" },
-    { name = "devnet-core" },
-    { name = "devnet-flows" },
-    { name = "ingest" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "compliance", editable = "packages/compliance" },
-    { name = "devnet-api", editable = "services/devnet-api" },
-    { name = "devnet-core", editable = "packages/devnet-core" },
-    { name = "devnet-flows", editable = "services/devnet-flows" },
-    { name = "ingest", editable = "packages/ingest" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "pytest" },
-    { name = "ruff" },
 ]
 
 [[package]]
@@ -1495,6 +1462,39 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba", size = 8729, upload-time = "2022-08-14T12:40:10.846Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8", size = 9979, upload-time = "2022-08-14T12:40:09.779Z" },
+]
+
+[[package]]
+name = "network-automation"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "compliance" },
+    { name = "devnet-api" },
+    { name = "devnet-core" },
+    { name = "devnet-flows" },
+    { name = "ingest" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "compliance", editable = "packages/compliance" },
+    { name = "devnet-api", editable = "services/devnet-api" },
+    { name = "devnet-core", editable = "packages/devnet-core" },
+    { name = "devnet-flows", editable = "services/devnet-flows" },
+    { name = "ingest", editable = "packages/ingest" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest" },
+    { name = "ruff" },
 ]
 
 [[package]]

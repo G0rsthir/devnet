@@ -3,10 +3,13 @@ from pathlib import Path
 import uvicorn
 from typer import Typer, echo
 
-import devnet_api
+import devnet_api.infrastructure.logging
 import devnet_api.runtime
 import devnet_core
 import devnet_core.const
+
+# Shipped inside the package
+LOG_CONFIG = Path(devnet_api.infrastructure.logging.__file__).parent / "logging.yaml"
 
 # Main CLI app
 cli = Typer(no_args_is_help=True)
@@ -35,6 +38,7 @@ def dev_server():
         factory=True,
         port=8000,
         host="0.0.0.0",
+        log_config=LOG_CONFIG,
         # devnet-core is an editable install: watch it too.
         reload_dirs=[str(Path(devnet_api.__file__).parent), str(Path(devnet_core.__file__).parent)],
     )
@@ -51,4 +55,10 @@ def prod_server():
 
     devnet_api.runtime.validate_server_startup(env=container.env)
 
-    uvicorn.run(app="devnet_api.main:run_http_server_prod", factory=True, port=8000, host="0.0.0.0")
+    uvicorn.run(
+        app="devnet_api.main:run_http_server_prod",
+        factory=True,
+        port=8000,
+        host="0.0.0.0",
+        log_config=LOG_CONFIG,
+    )

@@ -1,4 +1,5 @@
 name: devnet
+# TODO
 
 x-prefect-client: &prefect-client
   PREFECT_API_URL: http://prefect-server:4200/api
@@ -26,28 +27,6 @@ services:
       retries: 30
     restart: unless-stopped
 
-  worker:
-    <<: *devnet
-    command: prefect worker start --pool devnet --type process
-    depends_on:
-      prefect-server:
-        condition: service_healthy
-
-  api:
-    <<: *devnet
-    command: devnet-api serve --env production --host 0.0.0.0
-    ports:
-      - "8000:8000"
-
-  # One-off: docker compose run --rm deploy
-  deploy:
-    <<: *devnet
-    command: sh -c "prefect work-pool inspect devnet >/dev/null 2>&1 || prefect work-pool create devnet --type process; prefect deploy --all --prefect-file flows/prefect.yaml"
-    restart: "no"
-    profiles: [tools]
-    depends_on:
-      prefect-server:
-        condition: service_healthy
 
 volumes:
   postgres-data:

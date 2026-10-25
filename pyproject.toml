@@ -1,5 +1,5 @@
 [project]
-name = "devnet"
+name = "network-automation"
 version = "0.1.0"
 description = "Network Automation"
 requires-python = ">=3.13"

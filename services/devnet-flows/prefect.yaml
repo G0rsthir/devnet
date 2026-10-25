@@ -1,30 +1,20 @@
-# Prefect deployments for the whole repo. Run `prefect deploy --all` from the repo root,
-# so every entrypoint is relative to the root (e.g. flows/compliance.py:compliance).
-name: devnet
+name: network-automation
 prefect-version: 3.9.0
 
-# Code is not built or uploaded anywhere: the process worker runs flows from the
-# code baked into the devnet-automation image at /app.
 build: null
 push: null
-pull:
-  - prefect.deployments.steps.set_working_directory:
-      directory: /app
+pull: [] # flows are imported from the installed devnet_flows package
 
-# Shared settings, reused in deployments below via YAML anchors.
+
+# Shared settings
 definitions:
   work_pools:
     process: &process
       name: worker-process  # create once: prefect work-pool create worker-process --type process
       job_variables: {}
 
-deployments: []
-# Add one entry per flow, for example:
-#  - name: nightly
-#    entrypoint: flows/compliance.py:compliance
-#    description: Nightly compliance run against all sites.
-#    parameters: {}
-#    schedules:
-#      - cron: "0 2 * * *"
-#        timezone: "UTC"
-#    work_pool: *process
+deployments:
+ - name: nightly
+   entrypoint: devnet_flows.flows.compliance.compliance
+   description: Test
+   work_pool: *process

@@ -36,9 +36,27 @@ services:
       prefect-server:
         condition: service_healthy
     environment: *prefect-client
+    healthcheck:
+      test: ["CMD", "prefect", "work-pool", "inspect", "worker-process"]
+      interval: 5s
+      retries: 20
 
   api:
     <<: *automation
     command: devnet-api run prod
     ports:
       - "8000:8000"
+
+  # Registers every deployment in prefect.yaml
+  deploy:
+    <<: *automation
+    command:
+      - sh
+      - -ec
+      - |
+        prefect --no-prompt deploy --all --prefect-file services/devnet-flows/prefect.yaml
+    environment: *prefect-client
+    restart: "no"
+    depends_on:
+      prefect-worker:
+        condition: service_healthy

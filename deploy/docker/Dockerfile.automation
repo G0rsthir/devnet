@@ -7,7 +7,10 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_PYTHON_DOWNLOADS=never \
     PATH="/app/.venv/bin:$PATH" \
     # The server writes UI files at startup; the venv isn't writable by the devnet user.
-    PREFECT_UI_STATIC_DIRECTORY=/tmp/prefect-ui
+    PREFECT_UI_STATIC_DIRECTORY=/tmp/prefect-ui \
+    # Logging for the worker and its flow runs, including the devnet logger. devnet-api has its own.
+    PREFECT_LOGGING_SETTINGS_PATH=/app/services/devnet-flows/logging.yaml \
+    PREFECT_LOGGING_TO_API_WHEN_MISSING_FLOW=ignore
 
 WORKDIR /app
 

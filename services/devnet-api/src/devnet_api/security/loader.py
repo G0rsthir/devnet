@@ -1,13 +1,13 @@
-from logging import getLogger
 from typing import Any
 
 from pydantic import ValidationError
 
 from devnet_api.schemas.security import AccessSessionContext, RefreshSessionContext
+from devnet_core.logging import get_logger
 
 from .manager import AuthManager
 
-logger = getLogger(__name__)
+logger = get_logger(__name__)
 
 
 async def load_access_context(context_info: dict[str, Any]) -> AccessSessionContext | None:
