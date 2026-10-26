@@ -1,6 +1,7 @@
 {
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.analysis.autoImportCompletions": true,
+  "python.analysis.includeAliasesFromUserFiles": true,
   "[python]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "charliermarsh.ruff",
@@ -20,7 +21,8 @@
     "**/__pycache__": true,
     "**/*.pyc": true,
     "**/.pytest_cache": true,
-    "**/.ruff_cache": true
+    "**/.ruff_cache": true,
+    "**/py.typed": true
   },
   "search.exclude": {
     "**/__pycache__": true,

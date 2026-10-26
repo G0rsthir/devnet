@@ -10,10 +10,10 @@ Create .env for development. Update required variables
 cp .env.example .env
 ```
 
-Start docker containers (Prefect Server)
+Start docker containers (Prefect Server) and optionally Netbox
 
 ```bash
-docker compose -f deploy/docker/docker-compose.dev.yml up -d
+docker compose -f deploy/docker/docker-compose.dev.yml --profile netbox  up  -d
 ```
 
 Prefect UI - <http://localhost:4200/>

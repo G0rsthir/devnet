@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from typing import Any
 
 from pydantic import ValidationError
@@ -34,13 +35,14 @@ AUTH_URL = "/api/v1/auth"
 AUTH_TOKEN_URL = AUTH_URL + "/token"
 
 
-def create_auth_managers(access_jwt_secret: str, refresh_jwt_secret: str):
+def create_auth_managers(access_jwt_secret: str, refresh_jwt_secret: str, revoked_tokens: Collection[str] = ()):
     access_manager = AuthManager(
         secret=access_jwt_secret,
         token_url=AUTH_TOKEN_URL,
         use_cookie=False,
         context_callback=load_access_context,
         use_header=True,
+        revoked_tokens=revoked_tokens,
     )
 
     refresh_manager = AuthManager(
@@ -49,6 +51,7 @@ def create_auth_managers(access_jwt_secret: str, refresh_jwt_secret: str):
         use_cookie=True,
         use_header=False,
         context_callback=load_refresh_context,
+        revoked_tokens=revoked_tokens,
     )
 
     return access_manager, refresh_manager

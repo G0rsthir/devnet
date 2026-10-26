@@ -1,4 +1,25 @@
 name: dev
+
+x-netbox: &netbox
+  image: netboxcommunity/netbox:v4.7-5.1.1
+  environment:
+    DB_HOST: netbox-postgres
+    DB_USER: netbox
+    DB_PASSWORD: netbox
+    # One instance: tasks in db 0, cache in db 1
+    REDIS_HOST: netbox-redis
+    SECRET_KEY: dev-only-netbox-secret-key-not-for-production-use-0123456789
+    API_TOKEN_PEPPER_1: dev-only-netbox-api-token-pepper-not-for-production-0123456789
+    # Created on an empty DB: admin/admin and the API token
+    # NETBOX_TOKEN=nbt_devnetdevkey.0123456789abcdef0123456789abcdef01234567
+    SUPERUSER_PASSWORD: admin
+    SUPERUSER_API_KEY: devnetdevkey
+    SUPERUSER_API_TOKEN: 0123456789abcdef0123456789abcdef01234567
+  depends_on:
+    - netbox-postgres
+    - netbox-redis
+  restart: unless-stopped
+
 services:
   prefect-server:
     image: prefecthq/prefect:3.9-python3.13
@@ -17,5 +38,42 @@ services:
       retries: 3
       start_period: 60s
 
+  netbox:
+    <<: *netbox
+    ports:
+      - "127.0.0.1:8080:8080"
+    healthcheck:
+      test: ["CMD", "/opt/netbox/health.sh"]
+      interval: 15s
+      # First start on an empty DB runs all migrations: ~5 min
+      start_period: 600s
+    profiles: [netbox]
+
+  # Runs background jobs, incl. event rule webhooks. A webhook to devnet-api on the host
+  # needs the host's LAN IP: rootless Docker can't reach the host via host-gateway.
+  netbox-worker:
+    <<: *netbox
+    command: /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py rqworker
+    depends_on:
+      netbox:
+        condition: service_healthy
+    profiles: [netbox]
+
+  netbox-postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: netbox
+      POSTGRES_PASSWORD: netbox
+    volumes:
+      - netbox_postgres:/var/lib/postgresql
+    restart: unless-stopped
+    profiles: [netbox]
+
+  netbox-redis:
+    image: valkey/valkey:9.1-alpine
+    restart: unless-stopped
+    profiles: [netbox]
+
 volumes:
   prefect_data:
+  netbox_postgres:

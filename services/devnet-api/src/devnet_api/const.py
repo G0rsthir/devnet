@@ -6,5 +6,4 @@ class RefreshScope(StrEnum):
 
 
 class AccessScope(StrEnum):
-    ADMIN_READ = "admin:read"
-    ADMIN_WRITE = "admin:write"
+    SYSTEM_NETBOX = "system:netbox"

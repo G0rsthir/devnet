@@ -22,10 +22,11 @@ def create_http_server(app_context: RuntimeContainer, **kwargs) -> FastAPI:
             "\n"
             "All endpoints require a bearer token in the `Authorization` header.\n"
             "\n"
-            "Get a token:\n"
+            "Create a token on the server:\n"
             "\n"
-            "1. Sign in to the web UI.\n"
-            "2. Open **Settings -> API Keys** and click **Add Key**.\n"
+            "```bash\n"
+            "devnet-api token create netbox --scope system:netbox --expires-in 365d\n"
+            "```\n"
             "\n"
             "Send it on every request:\n"
             "\n"
@@ -49,6 +50,7 @@ def create_http_server(app_context: RuntimeContainer, **kwargs) -> FastAPI:
     access_manager, refresh_manager = create_auth_managers(
         access_jwt_secret=app_context.env.ACCESS_JWT_SECRET,
         refresh_jwt_secret=app_context.env.REFRESH_JWT_SECRET,
+        revoked_tokens=app_context.env.REVOKED_JWT_TOKENS,
     )
 
     app.state.env = app_context.env

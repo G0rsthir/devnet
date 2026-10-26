@@ -40,3 +40,17 @@ select = [
     "UP", # pyupgrade
     "I",  # isort
 ]
+
+ignore = [
+    # line too long
+    "E501"
+]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"httpx".msg = "Use httpx2 instead"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

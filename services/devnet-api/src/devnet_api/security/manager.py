@@ -1,6 +1,7 @@
 from collections.abc import Awaitable, Callable, Collection
 from datetime import UTC, datetime, timedelta
 from typing import Any
+from uuid import uuid4
 
 import jwt
 from fastapi import Request
@@ -11,10 +12,13 @@ from devnet_api.exceptions import (
     InsufficientPermissionsException,
     InvalidCredentialsException,
 )
+from devnet_core.logging import get_logger
 
 """
 Modified version of https://github.com/maxrdu/fastapi_login
 """
+
+logger = get_logger(__name__)
 
 
 class AuthManager[T](OAuth2PasswordBearer):
@@ -25,11 +29,12 @@ class AuthManager[T](OAuth2PasswordBearer):
         context_callback: Callable[[dict[str, Any]], Awaitable[T]],
         use_cookie=False,
         use_header=True,
-        cookie_name: str = "access-token",
+        cookie_name: str = "x-access-token",
         not_authenticated_exception: Exception | None = None,
         default_expiry: timedelta = timedelta(minutes=15),
         scopes: dict[str, str] | None = None,
         out_of_scope_exception: Exception | None = None,
+        revoked_tokens: Collection[str] = (),
     ):
         """
         Initializes AuthManager
@@ -45,6 +50,7 @@ class AuthManager[T](OAuth2PasswordBearer):
             scopes (Dict[str, str]): Scopes argument of OAuth2PasswordBearer for more information see
                 `https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-security-scheme`
             out_of_scope_exception (Exception): Exception to raise when the user is out of scopes
+            revoked_tokens (Collection[str]): jti of tokens to reject before they expire
         """
         if use_cookie is False and use_header is False:
             raise AttributeError("use_cookie and use_header are both False one of them needs to be True")
@@ -59,6 +65,7 @@ class AuthManager[T](OAuth2PasswordBearer):
         self.default_expiry = default_expiry
         self.algorithm = "HS256"
         self.token_url = token_url
+        self.revoked_tokens = frozenset(revoked_tokens)
 
         # private
         self._context_callback = context_callback
@@ -191,7 +198,7 @@ class AuthManager[T](OAuth2PasswordBearer):
 
         Returns:
             The encoded JWT with the data and the expiry. The expiry is
-            available under the 'exp' key
+            available under the 'exp' key, a unique ID under 'jti'
         """
 
         to_encode = data.copy()
@@ -199,7 +206,7 @@ class AuthManager[T](OAuth2PasswordBearer):
         if expires_at is None:
             expires_at = datetime.now(UTC) + self.default_expiry
 
-        to_encode.update({"exp": expires_at})
+        to_encode.update({"exp": expires_at, "jti": uuid4().hex})
 
         if scopes is not None:
             unique_scopes = set(scopes)
@@ -253,10 +260,14 @@ class AuthManager[T](OAuth2PasswordBearer):
         Validate a token obtained outside of the normal flow
 
         Raises:
-            AuthManager.not_authenticated_exception: The token is invalid
+            AuthManager.not_authenticated_exception: The token is invalid or revoked
             AuthManager.out_of_scope_exception: The token lacks a required scope
         """
         payload = self._get_payload(token)
+
+        if payload.get("jti") in self.revoked_tokens:
+            logger.warning("Rejected revoked token %s (sub: %s)", payload["jti"], payload.get("sub"))
+            raise self.not_authenticated_exception
 
         if not self._has_scopes(payload, security_scopes):
             raise self.out_of_scope_exception

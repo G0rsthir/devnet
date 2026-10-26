@@ -1,6 +1,7 @@
 from pydantic import (
     BaseModel,
     ConfigDict,
+    Field,
 )
 
 from devnet_api.const import AccessScope, RefreshScope
@@ -8,6 +9,9 @@ from devnet_api.const import AccessScope, RefreshScope
 
 class AuthSessionContextBase(BaseModel):
     model_config = ConfigDict(serialize_by_alias=True)
+
+    sub: str = Field(alias="sub")
+    jti: str | None = Field(default=None, alias="jti")
 
 
 class AccessSessionContext(AuthSessionContextBase):
