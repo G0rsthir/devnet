@@ -4,9 +4,6 @@ version = "0.1.0"
 description = "Network Automation"
 requires-python = ">=3.13"
 dependencies = [
-    "compliance",
-    "devnet-core",
-    "ingest",
     "devnet-api",
     "devnet-flows",
 ]
@@ -18,11 +15,11 @@ package = false
 members = ["packages/*", "services/*"]
 
 [tool.uv.sources]
-devnet-core = { workspace = true }
-compliance = { workspace = true }
-ingest = { workspace = true }
+# Members inherit these, so they don't need their own [tool.uv.sources]
 devnet-api = { workspace = true }
 devnet-flows = { workspace = true }
+devnet-core = { workspace = true }
+system-netbox = { workspace = true }
 
 [dependency-groups]
 dev = ["pytest", "ruff"]

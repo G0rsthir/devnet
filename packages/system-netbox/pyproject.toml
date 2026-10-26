@@ -1,0 +1,35 @@
+[project]
+name = "system-netbox"
+version = "0.1.0"
+description = "Netbox"
+readme = "README.md"
+authors = [
+    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "datamodel-code-generator>=0.86.0",
+]
+
+# NetBox REST API types, generated from its OpenAPI schema
+# --url can't be used: it fails to resolve $refs
+[tool.datamodel-codegen]
+input = "schema/netbox.yaml"
+input-file-type = "openapi"
+output = "src/system_netbox/models/types.py"
+output-model-type = "dataclasses.dataclass"
+preset = "standard-py313-20261017"
+dataclass-arguments = { kw_only = true }
+output-datetime-class = "datetime"
+# Device.status -> DeviceStatus
+naming-strategy = "parent-prefixed"
+# Keep `_depth` and `_occupied` as in the API
+special-field-name-prefix = ""
+openapi-include-info-version = true
