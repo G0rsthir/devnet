@@ -28,3 +28,16 @@ class ResourceLimitExceededError(InfrastructureError):
 
 class ConfigurationError(InfrastructureError):
     code = "configuration_error"
+
+
+class SystemConnectionError(DomainError):
+    """
+    An external system is unreachable, rejected the request or returned an unexpected response
+    """
+
+    code = "system_connection_error"
+
+    def __init__(self, name: str, msg: str):
+        self.name = name
+        self.msg = msg
+        super().__init__(f"{name}: {msg}")

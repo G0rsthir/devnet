@@ -732,22 +732,34 @@ name = "devnet-core"
 version = "0.1.0"
 source = { editable = "packages/devnet-core" }
 dependencies = [
+    { name = "httpx2" },
+    { name = "prefect" },
     { name = "pydantic-settings" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pydantic-settings", specifier = ">=2.16.1" }]
+requires-dist = [
+    { name = "httpx2", specifier = ">=2.16.0" },
+    { name = "prefect", specifier = ">=3.9.0" },
+    { name = "pydantic-settings", specifier = ">=2.16.1" },
+]
 
 [[package]]
 name = "devnet-flows"
 version = "0.1.0"
 source = { editable = "services/devnet-flows" }
 dependencies = [
+    { name = "devnet-core" },
     { name = "prefect" },
+    { name = "system-netbox" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "prefect", specifier = ">=3.9.0" }]
+requires-dist = [
+    { name = "devnet-core", editable = "packages/devnet-core" },
+    { name = "prefect", specifier = ">=3.9.0" },
+    { name = "system-netbox", editable = "packages/system-netbox" },
+]
 
 [[package]]
 name = "dnspython"
@@ -2847,6 +2859,9 @@ wheels = [
 name = "system-netbox"
 version = "0.1.0"
 source = { editable = "packages/system-netbox" }
+dependencies = [
+    { name = "httpx2" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -2854,6 +2869,7 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "httpx2", specifier = ">=2.16.0" }]
 
 [package.metadata.requires-dev]
 dev = [{ name = "datamodel-code-generator", specifier = ">=0.86.0" }]

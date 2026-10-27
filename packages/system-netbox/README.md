@@ -46,6 +46,8 @@ flowchart TB
     system_pkg -->|create, update, delete| system_api
 ```
 
+## Regenerate NetBox API types
+
 ```bash
 # Regenerate NetBox API types after a NetBox upgrade (dev NetBox running)
 cd packages/system-netbox

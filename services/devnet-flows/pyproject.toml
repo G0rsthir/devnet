@@ -1,7 +1,7 @@
 [project]
 name = "devnet-flows"
 version = "0.1.0"
-description = "Add your description here"
+description = "Prefect Flows"
 readme = "README.md"
 authors = [
     { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
@@ -9,6 +9,8 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "prefect>=3.9.0",
+    "devnet-core",
+    "system-netbox"
 ]
 
 [build-system]

@@ -8,10 +8,8 @@ class BaseEnvSettings(BaseSettings):
     Base settings class for environment-specific settings
     """
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding=ENCODING)
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding=ENCODING, extra="ignore")
 
 
-class CoreEnvSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
+class CoreEnvSettings(BaseEnvSettings):
     ENVIRONMENT: Environments = Environments.DEVELOPMENT
