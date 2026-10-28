@@ -1,5 +1,8 @@
+from functools import cache
 from importlib.resources import files
+from typing import Any, Literal
 
+from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
 from devnet_core.settings import BaseEnvSettings, ConfigModel, load_yaml_model
@@ -15,6 +18,9 @@ class DevnetConfig(ConfigModel):
     systems: Systems
     # compliance: ComplianceConfig
 
+    # Kept raw and validated by provision_config(), so a flow run never needs provisioning secrets
+    provision: dict[str, Any] = Field(default_factory=dict)
+
 
 class FlowsEnvSettings(BaseEnvSettings):
     model_config = SettingsConfigDict(env_prefix="DEVNET_FLOWS_")
@@ -26,4 +32,4 @@ class FlowsEnvSettings(BaseEnvSettings):
 @cache
 def get_config() -> DevnetConfig:
     name = FlowsEnvSettings().CONFIG
-    return load_yaml_model(files("devnet_flows") / "config" / f"{name}.yaml", DevnetConfig)
+    return load_yaml_model(files(__package__) / f"{name}.yaml", DevnetConfig)

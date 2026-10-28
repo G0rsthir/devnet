@@ -7,7 +7,7 @@ from devnet_api.const import AccessScope
 from devnet_api.dependencies import AccessSecurity
 from devnet_api.schemas.security import AccessSessionContext
 
-router = APIRouter(prefix="netbox")
+router = APIRouter(prefix="/netbox")
 
 # Deployments started when a NetBox device changes. Each flow decides what, if anything, to change.
 DEVICE_SYNCS = ["sync-ise-device/on-change", "sync-prime-device/on-change"]

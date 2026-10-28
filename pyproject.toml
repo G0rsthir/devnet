@@ -20,9 +20,14 @@ devnet-api = { workspace = true }
 devnet-flows = { workspace = true }
 devnet-core = { workspace = true }
 system-netbox = { workspace = true }
+devnet-config = { workspace = true }
 
 [dependency-groups]
-dev = ["pytest", "ruff"]
+dev = [
+    "deptry>=0.25.1",
+    "pytest",
+    "ruff",
+]
 
 [tool.ruff]
 line-length = 120
@@ -51,3 +56,18 @@ ignore = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+# Import rules, checked by `uv run lint-imports`
+[tool.importlinter]
+# Installed workspace packages
+root_packages = ["devnet_core", "system_netbox", "devnet_api", "devnet_flows", "devnet_config"]
+
+[[tool.importlinter.contracts]]
+name = "Layers: a layer imports only the layers below it"
+type = "layers"
+layers = [
+    "devnet_api | devnet_flows",
+    "devnet_config",
+    "system_netbox",
+    "devnet_core",
+]

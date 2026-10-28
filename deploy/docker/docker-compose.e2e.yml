@@ -54,6 +54,8 @@ services:
       - sh
       - -ec
       - |
+        devnet-api provision
+        devnet-flows provision
         prefect --no-prompt deploy --all --prefect-file services/devnet-flows/prefect.yaml
     environment: *prefect-client
     restart: "no"

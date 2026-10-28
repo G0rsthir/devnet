@@ -11,3 +11,4 @@
 | `packages/devnet-core`  | Settings base, shared logic                                                                                                         | Anything specific to one system                             |
 
 - **When devnet creates a device in a system, it stores the NetBox device ID on it**, so the sync can still find it after the device is deleted from NetBox.
+- **Each service provisions what it depends on**: devnet-flows its Prefect concurrency limits, devnet-api the NetBox webhook and event rule that call it. Code both need, like creating and updating NetBox objects, lives in `packages/`.
