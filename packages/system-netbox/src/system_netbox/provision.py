@@ -1,3 +1,55 @@
+from dataclasses import dataclass
+
+from devnet_core.settings import ConfigModel
+
+
+@dataclass(frozen=True, kw_only=True)
+class Kind:
+    path: str
+    # Field that identifies an object of this kind
+    key: str = "name"
+
+
+# Generated request type -> where objects of that kind live
+KINDS: dict[type, Kind] = {
+    WritableCustomFieldChoiceSetRequest: Kind(path="/api/extras/custom-field-choice-sets/"),
+    WritableCustomFieldRequest: Kind(path="/api/extras/custom-fields/"),
+    TagRequest: Kind(path="/api/extras/tags/", key="slug"),
+    WebhookRequest: Kind(path="/api/extras/webhooks/"),
+    WritableEventRuleRequest: Kind(path="/api/extras/event-rules/"),
+}
+
+
+async def ensure(client: NetboxClient, desired: Any, *, dry_run: bool) -> int | None:
+    """
+    Create the object, or update the fields it sets that differ. Never deletes
+
+    Args:
+        desired: A generated request, e.g. WebhookRequest. Fields left as None aren't compared or written
+
+    Returns:
+        The object's ID. None in a dry run, if it doesn't exist yet
+    """
+    kind = KINDS[type(desired)]
+    data = TypeAdapter(type(desired)).dump_python(desired, mode="json", exclude_none=True)
+    key = data[kind.key]
+    found = await client.find(kind.path, **{kind.key: key})
+    if found is None:
+        logger.info("+ %s%s", kind.path, key)
+        return None if dry_run else (await client.create(kind.path, data))["id"]
+    # Field names only: values can hold secrets, e.g. a webhook's headers
+    if changed := {k: v for k, v in data.items() if not _matches(v, found.get(k))}:
+        logger.info("~ %s%s: %s", kind.path, key, ", ".join(changed))
+        if not dry_run:
+            await client.update(kind.path, found["id"], changed)
+    else:
+        logger.info("= %s%s", kind.path, key)
+    return found["id"]
+
+
+## OLD
+
+
 class NetboxObject(ConfigModel):
     """
     An object devnet needs in NetBox. Fields left as None aren't compared or written, so people can change them

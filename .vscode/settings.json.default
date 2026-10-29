@@ -9,7 +9,7 @@
       "source.organizeImports": "explicit"
     }
   },
-  "[typescriptreact][typescript][css][javascript]": {
+  "[typescriptreact][typescript][css][javascript][jsonc][yaml]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit",
@@ -34,5 +34,8 @@
   "python.terminal.useEnvFile": false,
   "github.copilot.enable": {
      "*": false
-  }
+  },
+  "flake8.path": ["${workspaceFolder}/.venv/bin/flake8"],
+  "flake8.cwd": "${fileDirname}",
+  "flake8.args": ["--toml-config=${workspaceFolder}/pyproject.toml"]
 }

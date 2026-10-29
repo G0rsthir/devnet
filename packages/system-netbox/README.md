@@ -1,8 +1,8 @@
 # Architecture
 
-How a change in NetBox reaches the systems devnet keeps in sync with it
-
 ## Components
+
+How a change in NetBox reaches the systems devnet keeps in sync with it
 
 ```mermaid
 ---

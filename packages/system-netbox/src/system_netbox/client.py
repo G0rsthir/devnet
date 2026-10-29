@@ -1,75 +1,59 @@
-from typing import Self
-
 import httpx2
+from pydantic import BaseModel, Field
 
-from devnet_core.connections.http import build_client
+from devnet_core.connections.base import ConnectivityInfo
+from devnet_core.connections.client import ApiClient
+from devnet_core.connections.http import system_message
 from system_netbox.config import NetboxConfig
 
 
-class NetboxClient:
+class _Status(BaseModel):
+    netbox_version: str = Field(alias="netbox-version")
+
+
+class NetboxClient(ApiClient[NetboxConfig]):
     """
     Netbox REST API client
 
     Usage:
         async with NetboxClient(config) as client:
-            await client.get_version()
+            await client.check_connectivity()
     """
 
-    def __init__(self, config: NetboxConfig, *, transport: httpx2.AsyncBaseTransport | None = None):
-        self.config = config
-        self._transport = transport
-        self._client: httpx2.AsyncClient | None = None
+    def _headers(self) -> dict[str, str]:
+        # v2 token: nbt_<key>.<token>
+        return {"Authorization": f"Bearer {self.config.token.get_secret_value()}"}
 
-    @property
-    def client(self) -> httpx2.AsyncClient:
-        if self._client is None:
-            raise RuntimeError("NetboxClient must be used as an async context manager")
-        return self._client
+    async def check_connectivity(self) -> ConnectivityInfo:
+        response = await self._request("GET", "/api/status/")
+        return ConnectivityInfo(version=self._parse(response, _Status).netbox_version)
 
-    async def __aenter__(self) -> Self:
-        self._client = build_client(
-            base_url=self.config.base_url, verify_tls=self.config.verify_tls, transport=self._transport
-        )
-        await self._client.__aenter__()
-        return self
-
-    async def __aexit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_value: BaseException | None,
-        traceback: TracebackType | None,
-    ) -> None:
-        if self._client is not None:
-            await self._client.__aexit__(exc_type, exc_value, traceback)
-            self._client = None
-
-    async def _request(self, method: str, path: str, **kwargs: Any) -> httpx2.Response:
-        with connection_errors(self.config.name, message_key=ERROR_MESSAGE_KEY):
-            response = await self.client.request(method, path, **kwargs)
-            response.raise_for_status()
-            return response
-
-    def _parse[M: BaseModel](self, response: httpx2.Response, model: type[M]) -> M:
+    def _error_message(self, response: httpx2.Response) -> str | None:
+        # Validation errors come back as {"field": ["message", ...]}
+        message = system_message(response)
+        if message:
+            return message
         try:
-            return model.model_validate_json(response.content)
-        except ValidationError as e:
-            raise DataSourceConnectionError(
-                source_name=self.config.name, msg=f"Unexpected response from {response.request.url.path}"
-            ) from e
-
-    async def _login(self) -> None:
-        response = await self._request(
-            "POST",
-            "/api/v2/sessions",
-            json={
-                "username": self.config.username,
-                "password": self.config.password,
-                "provider": self.config.provider.value,
-            },
+            body = response.json()
+        except ValueError:
+            return None
+        if not isinstance(body, dict):
+            return None
+        return "; ".join(
+            f"{field}: {' '.join(map(str, errors)) if isinstance(errors, list) else errors}"
+            for field, errors in body.items()
         )
-        session = self._parse(response, _SessionResponse)
-        self.client.headers["Authorization"] = f"Bearer {session.sessionId}"
 
-    async def get_version(self) -> str | None:
-        response = await self._request("GET", "/api/v2/version")
-        return self._parse(response, _VersionResponse).version
+    async def find(self, path: str, **filters: str) -> dict[str, Any] | None:
+        """
+        The object at `path` matching the filters, e.g. find("/api/extras/webhooks/", name="devnet")
+        """
+        response = await self._request("GET", path, params={**filters, "limit": 1})
+        results = self._parse(response, _Page).results
+        return results[0] if results else None
+
+    async def create(self, path: str, data: dict[str, Any]) -> dict[str, Any]:
+        return self._parse(await self._request("POST", path, json=data), dict[str, Any])
+
+    async def update(self, path: str, id: int, data: dict[str, Any]) -> dict[str, Any]:
+        return self._parse(await self._request("PATCH", f"{path}{id}/", json=data), dict[str, Any])

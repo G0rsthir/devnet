@@ -22,14 +22,14 @@ class DevnetConfig(ConfigModel):
     provision: dict[str, Any] = Field(default_factory=dict)
 
 
-class FlowsEnvSettings(BaseEnvSettings):
-    model_config = SettingsConfigDict(env_prefix="DEVNET_FLOWS_")
+class ConfigEnvSettings(BaseEnvSettings):
+    model_config = SettingsConfigDict(env_prefix="DEVNET_")
 
-    # Which file in devnet_flows/config/ to load
+    # Which file in devnet_config/config/ to load
     CONFIG: Literal["dev", "e2e", "prod"] = "dev"
 
 
 @cache
 def get_config() -> DevnetConfig:
-    name = FlowsEnvSettings().CONFIG
+    name = ConfigEnvSettings().CONFIG
     return load_yaml_model(files(__package__) / f"{name}.yaml", DevnetConfig)

@@ -24,7 +24,8 @@ devnet-config = { workspace = true }
 
 [dependency-groups]
 dev = [
-    "deptry>=0.25.1",
+    "flake8-pyproject>=1.2.4",
+    "flake8-requirements>=2.3.0",
     "pytest",
     "ruff",
 ]
@@ -71,3 +72,9 @@ layers = [
     "system_netbox",
     "devnet_core",
 ]
+
+[tool.flake8]
+# Only flake8-requirements: ruff does everything else
+select = "I9"
+# Packages whose import name differs from the package name
+known-modules = "prefect-client:[prefect]"

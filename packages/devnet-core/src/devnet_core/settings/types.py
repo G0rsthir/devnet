@@ -55,7 +55,7 @@ def secret_ref(value: object) -> SecretRef:
     if not match:
         raise error
 
-    return SecretRef(match[1])
+    return SecretRef(var=match[1])
 
 
 # A secret in the config file: written as ${VAR}, read from the environment when used

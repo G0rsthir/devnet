@@ -110,3 +110,17 @@ def create_token(
 
     echo(f"{name}: {', '.join(scopes)}, expires {expires_at:%Y-%m-%d %H:%M} UTC", err=True)
     echo(token)
+
+
+@cli.command()
+def provision(
+    dry_run: Annotated[bool, Option("--dry-run", help="Show what would change, write nothing")] = False,
+):
+    """
+    Create or update the Prefect objects devnet-flows needs
+    """
+    try:
+        asyncio.run(provision_prefect(dry_run=dry_run))
+    except ConfigurationError as e:
+        echo(str(e), err=True)
+        raise Exit(1) from e

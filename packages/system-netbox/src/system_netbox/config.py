@@ -1,9 +1,7 @@
-from devnet_core.settings.file import ConfigModel
-from devnet_core.settings.types import EnvSecret
+from devnet_core.connections.client import HttpConfig
+from devnet_core.settings import EnvSecret
 
 
-class NetboxConfig(ConfigModel):
+class NetboxConfig(HttpConfig):
     name: str = "netbox"
-    base_url: str
     token: EnvSecret
-    verify_tls: bool = True

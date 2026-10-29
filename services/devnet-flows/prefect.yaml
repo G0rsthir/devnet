@@ -5,16 +5,15 @@ build: null
 push: null
 pull: [] # flows are imported from the installed devnet_flows package
 
-
 # Shared settings
 definitions:
   work_pools:
     process: &process
-      name: worker-process  # create once: prefect work-pool create worker-process --type process
+      name: worker-process # create once: prefect work-pool create worker-process --type process
       job_variables: {}
 
 deployments:
- - name: nightly
-   entrypoint: devnet_flows.flows.compliance.compliance
-   description: Test
-   work_pool: *process
+  - name: nightly
+    entrypoint: devnet_flows.flows.compliance.compliance
+    description: Test
+    work_pool: *process
