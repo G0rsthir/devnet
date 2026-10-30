@@ -1,23 +1,18 @@
 from abc import ABC, abstractmethod
-from functools import cache
 from types import TracebackType
 from typing import Any, Self
 
 import httpx2
-from pydantic import TypeAdapter, ValidationError
+from pydantic import ValidationError
 
 from devnet_core.connections.base import ConnectivityInfo
 from devnet_core.connections.http import build_client, connection_errors, system_message
 from devnet_core.exceptions import SystemConnectionError
+from devnet_core.logging import get_logger
+from devnet_core.serialization import cached_type_adapter
 from devnet_core.settings.file import ConfigModel
 
-
-@cache
-def _adapter(model: Any) -> TypeAdapter[Any]:
-    """
-    One validator per type
-    """
-    return TypeAdapter(model)
+logger = get_logger(__name__)
 
 
 class HttpConfig(ConfigModel):
@@ -105,6 +100,8 @@ class ApiClient[C: HttpConfig](ABC):
     async def _request(self, method: str, path: str, **kwargs: Any) -> httpx2.Response:
         with connection_errors(self.config.name, message_parser=self._error_message):
             response = await self.http.request(method, path, **kwargs)
+            # Not params or body: they can hold secrets
+            logger.debug("%s: %s %s -> %d", self.config.name, method, path, response.status_code)
             response.raise_for_status()
             return response
 
@@ -113,7 +110,7 @@ class ApiClient[C: HttpConfig](ABC):
         Also works with dataclasses
         """
         try:
-            return _adapter(model).validate_json(response.content)
+            return cached_type_adapter(model).validate_json(response.content)
         except ValidationError as e:
             error = e.errors()[0]
             field = ".".join(str(part) for part in error["loc"]) or "body"

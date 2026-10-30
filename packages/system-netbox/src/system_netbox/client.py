@@ -1,10 +1,14 @@
+from __future__ import annotations
+
+from functools import cached_property
+
 import httpx2
 from pydantic import BaseModel, Field
 
 from devnet_core.connections.base import ConnectivityInfo
 from devnet_core.connections.client import ApiClient
-from devnet_core.connections.http import system_message
 from system_netbox.config import NetboxConfig
+from system_netbox.endpoints import ExtrasEndpoints
 
 
 class _Status(BaseModel):
@@ -18,19 +22,23 @@ class NetboxClient(ApiClient[NetboxConfig]):
     Usage:
         async with NetboxClient(config) as client:
             await client.check_connectivity()
+            webhook = await client.extras.webhooks.find_one(name="devnet")
     """
 
     def _headers(self) -> dict[str, str]:
-        # v2 token: nbt_<key>.<token>
         return {"Authorization": f"Bearer {self.config.token.get_secret_value()}"}
 
     async def check_connectivity(self) -> ConnectivityInfo:
         response = await self._request("GET", "/api/status/")
         return ConnectivityInfo(version=self._parse(response, _Status).netbox_version)
 
+    @cached_property
+    def extras(self) -> ExtrasEndpoints:
+        return ExtrasEndpoints(self)
+
     def _error_message(self, response: httpx2.Response) -> str | None:
-        # Validation errors come back as {"field": ["message", ...]}
-        message = system_message(response)
+        # Error: {"field": ["message", ...]}
+        message = super()._error_message(response)
         if message:
             return message
         try:
@@ -43,17 +51,3 @@ class NetboxClient(ApiClient[NetboxConfig]):
             f"{field}: {' '.join(map(str, errors)) if isinstance(errors, list) else errors}"
             for field, errors in body.items()
         )
-
-    async def find(self, path: str, **filters: str) -> dict[str, Any] | None:
-        """
-        The object at `path` matching the filters, e.g. find("/api/extras/webhooks/", name="devnet")
-        """
-        response = await self._request("GET", path, params={**filters, "limit": 1})
-        results = self._parse(response, _Page).results
-        return results[0] if results else None
-
-    async def create(self, path: str, data: dict[str, Any]) -> dict[str, Any]:
-        return self._parse(await self._request("POST", path, json=data), dict[str, Any])
-
-    async def update(self, path: str, id: int, data: dict[str, Any]) -> dict[str, Any]:
-        return self._parse(await self._request("PATCH", f"{path}{id}/", json=data), dict[str, Any])

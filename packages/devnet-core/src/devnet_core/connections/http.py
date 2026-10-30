@@ -1,5 +1,6 @@
-from collections.abc import Callable, Generator
+from collections.abc import Callable, Generator, Sequence
 from contextlib import contextmanager
+from typing import Any
 
 import httpx2
 
@@ -10,8 +11,6 @@ logger = get_logger(__name__)
 
 DEFAULT_TIMEOUT = httpx2.Timeout(30.0, connect=10.0)
 
-
-MESSAGE_KEYS = ("detail", "message", "error")
 
 type MessageParser = Callable[[httpx2.Response], str | None]
 
@@ -57,18 +56,31 @@ def _error_reason(exc: BaseException) -> str:
     return type(exc).__name__
 
 
-def system_message(response: httpx2.Response) -> str | None:
+def _lookup(body: Any, path: str) -> Any:
+    for part in path.split("."):
+        if not isinstance(body, dict):
+            return None
+        body = body.get(part)
+    return body
+
+
+def system_message(response: httpx2.Response, *, keys: Sequence[str] | None = None) -> str | None:
     """
-    Default MessageParser
+    Default MessageParser. First non-empty string found at one of `keys`
+
+    Args:
+        keys: Paths into the JSON body, nested keys separated by dots
     """
+    if keys is None:
+        keys = ("detail", "message", "error")
+
     try:
         body = response.json()
     except ValueError:
         return None
-    if not isinstance(body, dict):
-        return None
-    for key in MESSAGE_KEYS:
-        if isinstance(value := body.get(key), str) and value.strip():
+    for key in keys:
+        value = _lookup(body, key)
+        if isinstance(value, str) and value.strip():
             return value.strip()
     return None
 
