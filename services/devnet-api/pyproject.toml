@@ -9,12 +9,14 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "bcrypt>=5.0.0",
+    "devnet-config",
     "devnet-core",
     "fastapi[standard]>=0.150.0",
     "prefect-client>=3.9.0",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.1",
     "pyjwt>=2.15.1",
+    "system-netbox",
     "typer>=0.27.3",
     "uvicorn>=0.54.0",
 ]

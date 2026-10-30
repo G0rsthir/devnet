@@ -6,6 +6,7 @@ from prefect.deployments import arun_deployment
 from devnet_api.const import AccessScope
 from devnet_api.dependencies import AccessSecurity
 from devnet_api.schemas.security import AccessSessionContext
+from devnet_api.schemas.webhooks import NetboxDeviceChange
 
 router = APIRouter(prefix="/netbox")
 
@@ -15,8 +16,11 @@ DEVICE_SYNCS = ["sync-ise-device/on-change", "sync-prime-device/on-change"]
 
 @router.post(path="/webhooks/device", status_code=status.HTTP_202_ACCEPTED, operation_id="NetboxWebhookDeviceChange")
 async def netbox_device_changed(
+    payload: NetboxDeviceChange,
     access_session: Annotated[AccessSessionContext, AccessSecurity(scopes=[AccessScope.SYSTEM_NETBOX])],
 ) -> dict[str, list[str]]:
+    print(payload)
+    print("test")
     return {}
 
 

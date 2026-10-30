@@ -43,5 +43,3 @@ uv add --package devnet-api <package>
 ## ???
 
 - **Redelivered webhooks don't start new runs.** The idempotency key is built from NetBox's `request_id`,
-
-# TODO rename to service-api ??

@@ -101,7 +101,14 @@ class ApiClient[C: HttpConfig](ABC):
         with connection_errors(self.config.name, message_parser=self._error_message):
             response = await self.http.request(method, path, **kwargs)
             # Not params or body: they can hold secrets
-            logger.debug("%s: %s %s -> %d", self.config.name, method, path, response.status_code)
+            logger.debug(
+                "%s(%s): %s %s -> %d",
+                self.__class__.__name__,
+                self.config.name,
+                method,
+                path,
+                response.status_code,
+            )
             response.raise_for_status()
             return response
 

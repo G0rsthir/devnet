@@ -111,7 +111,7 @@ class Endpoint[T: _HasId, R]:
     async def delete(self, id: int) -> None:
         await self._client._request("DELETE", f"{self.path}{id}/")
 
-    async def ensure(self, desired: R) -> int | None:
+    async def ensure(self, desired: R) -> int:
         """
         Create or update fields that differ
 
@@ -131,7 +131,7 @@ class Endpoint[T: _HasId, R]:
         changed = {k: v for k, v in data.items() if not _matches(v, found.get(k))}
         if changed:
             await self.update(found["id"], changed)
-            return found["id"]
+        return found["id"]
 
 
 class ExtrasEndpoints:

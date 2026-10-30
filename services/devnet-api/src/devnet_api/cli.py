@@ -1,19 +1,23 @@
+import asyncio
 import re
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Annotated
 
-from typer import Argument, BadParameter, Option, Typer, echo
+from typer import Argument, BadParameter, Exit, Option, Typer, echo
 from uvicorn import run as uvicorn_rum
 
 import devnet_api
 import devnet_core
 from devnet_api.const import AccessScope
 from devnet_api.infrastructure.logging import LOG_CONFIG_PATH
+from devnet_api.provision import netbox_provision_config, provision_netbox
 from devnet_api.runtime import bootstrap_runtime, validate_server_startup
 from devnet_api.security.loader import create_auth_managers
 from devnet_api.services.token import AuthTokenService
+from devnet_config import get_config
 from devnet_core.const import Environments
+from devnet_core.exceptions import ConfigurationError, SystemConnectionError
 
 DURATION_UNITS = {"m": "minutes", "h": "hours", "d": "days", "w": "weeks", "y": "years"}
 
@@ -82,6 +86,19 @@ def parse_duration(value: str) -> timedelta:
     return timedelta(**{DURATION_UNITS[unit]: int(amount)})
 
 
+def _token_service() -> AuthTokenService:
+    container = bootstrap_runtime()
+
+    validate_server_startup(env=container.env)
+
+    access_manager, refresh_manager = create_auth_managers(
+        access_jwt_secret=container.env.ACCESS_JWT_SECRET,
+        refresh_jwt_secret=container.env.REFRESH_JWT_SECRET,
+    )
+
+    return AuthTokenService(access_manager=access_manager, refresh_manager=refresh_manager)
+
+
 @token_cli.command(name="create")
 def create_token(
     name: Annotated[str, Argument(help="Who uses the token, e.g. netbox")],
@@ -94,17 +111,9 @@ def create_token(
     """
     Create an access token. Prints the token to stdout and its details to stderr
     """
-    container = bootstrap_runtime()
-
-    validate_server_startup(env=container.env)
-
-    access_manager, refresh_manager = create_auth_managers(
-        access_jwt_secret=container.env.ACCESS_JWT_SECRET,
-        refresh_jwt_secret=container.env.REFRESH_JWT_SECRET,
-    )
+    token_service = _token_service()
 
     expires_at = datetime.now(UTC) + expires_in
-    token_service = AuthTokenService(access_manager=access_manager, refresh_manager=refresh_manager)
 
     token = token_service.issue_access_token(sub=name, expires_at=expires_at, scopes=scopes)
 
@@ -113,14 +122,16 @@ def create_token(
 
 
 @cli.command()
-def provision(
-    dry_run: Annotated[bool, Option("--dry-run", help="Show what would change, write nothing")] = False,
-):
+def provision():
     """
-    Create or update the Prefect objects devnet-flows needs
+    Create or update the NetBox objects devnet-api needs
     """
     try:
-        asyncio.run(provision_prefect(dry_run=dry_run))
-    except ConfigurationError as e:
+        token_service = _token_service()
+        webhook_url = netbox_provision_config().webhook_url
+        asyncio.run(provision_netbox(get_config().systems.netbox, webhook_url, token_service))
+    except (ConfigurationError, SystemConnectionError) as e:
         echo(str(e), err=True)
         raise Exit(1) from e
+
+    echo("NetBox provisioned")

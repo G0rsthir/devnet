@@ -4,15 +4,13 @@ systems:
     token: ${NETBOX_TOKEN}
     verify_tls: false
 
-# provision:
-#   prefect:
-#     concurrency_limits:
-#       device-conn: 30
-#   netbox:
-#     # NetBox runs in rootless Docker, so it reaches devnet-api through the host's LAN IP
-#     webhook_url: http://192.168.122.88:8000/api/v1/netbox/webhooks/device
-#     # devnet-api token create netbox --scope system:netbox --expires-in 52w
-#     webhook_token: ${NETBOX_WEBHOOK_TOKEN}
+provision:
+  # prefect:
+  #   concurrency_limits:
+  #     device-conn: 30
+  netbox:
+    # NetBox runs in rootless Docker, so it reaches devnet-api through the host's LAN IP
+    webhook_url: http://192.168.122.88:8000/api/v1/netbox/webhooks/device
 # compliance:
 #   rules:
 #     - kind: must_contain

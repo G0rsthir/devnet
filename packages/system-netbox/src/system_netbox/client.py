@@ -26,7 +26,10 @@ class NetboxClient(ApiClient[NetboxConfig]):
     """
 
     def _headers(self) -> dict[str, str]:
-        return {"Authorization": f"Bearer {self.config.token.get_secret_value()}"}
+        auth = self.config.token.get_secret_value()
+        if not auth.startswith("Bearer "):
+            auth = f"Bearer {auth}"
+        return {"Authorization": auth}
 
     async def check_connectivity(self) -> ConnectivityInfo:
         response = await self._request("GET", "/api/status/")

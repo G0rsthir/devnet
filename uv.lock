@@ -702,12 +702,14 @@ version = "0.1.0"
 source = { editable = "services/devnet-api" }
 dependencies = [
     { name = "bcrypt" },
+    { name = "devnet-config" },
     { name = "devnet-core" },
     { name = "fastapi", extra = ["standard"] },
     { name = "prefect-client" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pyjwt" },
+    { name = "system-netbox" },
     { name = "typer" },
     { name = "uvicorn" },
 ]
@@ -715,12 +717,14 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
+    { name = "devnet-config", editable = "packages/devnet-config" },
     { name = "devnet-core", editable = "packages/devnet-core" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.150.0" },
     { name = "prefect-client", specifier = ">=3.9.0" },
     { name = "pydantic", specifier = ">=2.14.1" },
     { name = "pydantic-settings", specifier = ">=2.16.1" },
     { name = "pyjwt", specifier = ">=2.15.1" },
+    { name = "system-netbox", editable = "packages/system-netbox" },
     { name = "typer", specifier = ">=0.27.3" },
     { name = "uvicorn", specifier = ">=0.54.0" },
 ]
