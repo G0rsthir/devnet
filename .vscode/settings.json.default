@@ -28,6 +28,7 @@
   },
   "search.exclude": {
     "**/__pycache__": true,
+    "packages/system-*/schema": true
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
