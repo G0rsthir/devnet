@@ -37,7 +37,4 @@
   "github.copilot.enable": {
      "*": false
   },
-  "flake8.path": ["${workspaceFolder}/.venv/bin/flake8"],
-  "flake8.cwd": "${fileDirname}",
-  "flake8.args": ["--toml-config=${workspaceFolder}/pyproject.toml"]
 }

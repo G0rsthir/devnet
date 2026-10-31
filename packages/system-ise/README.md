@@ -16,7 +16,7 @@ Official ISE API documentation: <https://developer.cisco.com/docs/identity-servi
 
 ## Regenerate ISE API types
 
-Local reference only: `schema/` is git-ignored, copy what you need into `src/`.
+Local reference only: `schema/generated/` is git-ignored, copy what you need into `src/`.
 
 ```bash
 # Regenerate ISE API types after an ISE upgrade (dev ISE running)

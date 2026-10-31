@@ -8,6 +8,23 @@ Create .env for development. Update required variables
 cp .env.dev.example .env
 ```
 
+Instal UV environment manager
+
+```bash
+pip install uv
+```
+
+Synchronize python environment with uv
+
+```bash
+uv sync
+```
+
+```bash
+uv run pre-commit install
+uv run pre-commit run --all-files
+```
+
 Start docker containers (Prefect Server) and optionally Netbox
 
 ```bash

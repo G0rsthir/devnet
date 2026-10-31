@@ -6,7 +6,7 @@ import httpx2
 from pydantic import BaseModel
 
 from devnet_core.serialization import cached_type_adapter
-from system_netbox.models.types import (
+from system_netbox.models.generated import (
     CustomField,
     CustomFieldChoiceSet,
     EventRule,

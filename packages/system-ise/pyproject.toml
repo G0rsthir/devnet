@@ -23,7 +23,7 @@ dev = [
 ]
 
 # ISE ERS API types, generated from its OpenAPI schema
-# Local reference only (schema/ is git-ignored): copy what you need into src/
+# Local reference only (schema/generated/ is git-ignored): copy what you need into src/
 # and fix the types, the schema has e.g. enums typed as `object`
 [tool.datamodel-codegen]
 input = "schema/ise.json"

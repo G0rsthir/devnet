@@ -27,7 +27,7 @@ dev = [
 [tool.datamodel-codegen]
 input = "schema/netbox.yaml"
 input-file-type = "openapi"
-output = "src/system_netbox/models/types.py"
+output = "src/system_netbox/models/generated.py"
 output-model-type = "dataclasses.dataclass"
 preset = "standard-py313-20261017"
 dataclass-arguments = { kw_only = true }

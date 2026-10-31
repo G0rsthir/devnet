@@ -9,7 +9,7 @@ from devnet_core.exceptions import ConfigurationError
 from devnet_core.settings import ConfigModel
 from system_netbox.client import NetboxClient
 from system_netbox.config import NetboxConfig
-from system_netbox.models.types import WebhookRequest, WritableEventRuleRequest
+from system_netbox.models.generated import WebhookRequest, WritableEventRuleRequest
 
 # Provision again before this ends: NetBox's webhooks fail once the token expires
 TOKEN_LIFETIME = timedelta(days=365)
