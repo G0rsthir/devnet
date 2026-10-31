@@ -28,10 +28,6 @@ def build_client(
     HTTP client for system APIs
 
     Certificates are verified against the system trust store (httpx2 uses truststore)
-
-    Args:
-        auth: How requests authenticate, e.g. an `httpx2.BasicAuth`
-        transport: Where requests go instead of the network, e.g. an `httpx2.MockTransport`
     """
     return httpx2.AsyncClient(
         base_url=base_url,

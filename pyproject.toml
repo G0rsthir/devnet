@@ -37,7 +37,10 @@ line-length = 120
 target-version = "py313"
 src = ["packages/*/src", "services/*/src"]
 # codegen outputs
-extend-exclude = ["packages/system-*/src/*/models/generated*"]
+extend-exclude = [
+    "packages/system-*/src/*/models/generated*", 
+    "packages/system-*/models/**",
+]
 
 
 [tool.ruff.lint]

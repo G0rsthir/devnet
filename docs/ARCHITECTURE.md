@@ -46,13 +46,13 @@ flowchart TB
 
 ## Components
 
-| Part                    | Responsible for                                                                                                                     | Not responsible for                                         |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| NetBox                  | Source of truth. An Event Rule sends a webhook when a something is created, updated or deleted                                      | Deciding which devices belong in which system               |
-| devnet-api              | Checks `Authorization` header, starts one run per system, returns 202 with the run IDs                                              | Calling a system's API, business rules, waiting for results |
-| Prefect server + worker | Queueing (one sync per system at a time), retries, logs, run history, nightly reconcile                                             | Business rules                                              |
-| `packages/<system>/`    | Which devices belong in the system, mapping NetBox fields to the system's, comparing, create/update/delete through the system's API | Webhooks, scheduling                                        |
-| `packages/devnet-core`  | Settings base, shared logic                                                                                                         | Anything specific to one system                             |
+| Part                        | Responsible for                                                                                                                     | Not responsible for                                         |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| NetBox                      | Source of truth. An Event Rule sends a webhook when a something is created, updated or deleted                                      | Deciding which devices belong in which system               |
+| devnet-api                  | Checks `Authorization` header, starts one run per system, returns 202 with the run IDs                                              | Calling a system's API, business rules, waiting for results |
+| Prefect server + worker     | Queueing (one sync per system at a time), retries, logs, run history, nightly reconcile                                             | Business rules                                              |
+| `packages/system-<system>/` | Which devices belong in the system, mapping NetBox fields to the system's, comparing, create/update/delete through the system's API | Webhooks, scheduling                                        |
+| `packages/devnet-core`      | Settings base, shared logic                                                                                                         | Anything specific to one system                             |
 
 ## Design Principles
 

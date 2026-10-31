@@ -2,30 +2,33 @@
 
 ## Environment Setup
 
-Create .env for development. Update required variables
+### IDE, Docker and Package Management
+
+UV Package Manager - <https://docs.astral.sh>
+
+Rootless Docker - <https://docs.docker.com/engine/security/rootless/>
+
+VS Code and recommended extensions - <https://code.visualstudio.com/>
+
+### Packages
 
 ```bash
+# Create .env for development. Update required variables
 cp .env.dev.example .env
-```
 
-Instal UV environment manager
+# Copy or merge .vscode/settings.json for development
+cp .vscode/settings.json.default .vscode/settings.json
 
-```bash
-pip install uv
-```
-
-Synchronize python environment with uv
-
-```bash
+# Install python dependencies
 uv sync
-```
 
-```bash
+# Run pre-commit hooks
 uv run pre-commit install
 uv run pre-commit run --all-files
+
 ```
 
-Start docker containers (Prefect Server) and optionally Netbox
+### Start docker containers (Netbox, Prefect, etc.)
 
 ```bash
 docker compose -f deploy/docker/docker-compose.dev.yml --profile netbox  up  -d
@@ -35,19 +38,16 @@ Prefect UI - <http://localhost:4200/>
 
 Netbox UI - <http://localhost:8080/>
 
-## Python Environment
-
-````bash
-# add python package
-uv add --package devnet-api fastapi[standard]
-
-# create workspace
-uv init --lib --vcs none --no-pin-python packages/ise
-
-## End to End Docker Test
+## Common Development Commands
 
 ```bash
-docker compose -f deploy/docker/docker-compose.e2e.yml up
-````
+# add python package
+uv add --package devnet-api <package-name>
 
-Prefect UI <http://127.0.0.1:4210>
+# remove python package
+uv remove --no-sync --package devnet-flows <package-name>
+
+# create workspace
+uv init --lib --vcs none --no-pin-python packages/system-<name>
+
+```

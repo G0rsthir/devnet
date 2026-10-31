@@ -795,6 +795,7 @@ dependencies = [
     { name = "httpx2" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
@@ -802,6 +803,7 @@ requires-dist = [
     { name = "httpx2", specifier = ">=2.16.0" },
     { name = "pydantic", specifier = ">=2.14.1" },
     { name = "pydantic-settings", specifier = ">=2.16.1" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
 ]
 
 [[package]]
@@ -809,16 +811,18 @@ name = "devnet-flows"
 version = "0.1.0"
 source = { editable = "services/devnet-flows" }
 dependencies = [
+    { name = "devnet-config" },
     { name = "devnet-core" },
     { name = "prefect" },
-    { name = "system-netbox" },
+    { name = "pydantic" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "devnet-config", editable = "packages/devnet-config" },
     { name = "devnet-core", editable = "packages/devnet-core" },
     { name = "prefect", specifier = ">=3.9.0" },
-    { name = "system-netbox", editable = "packages/system-netbox" },
+    { name = "pydantic", specifier = ">=2.14.2" },
 ]
 
 [[package]]

@@ -1,7 +1,8 @@
-from pydantic import Field
+from pydantic import Field, ValidationError
 
+from devnet_config import get_config
+from devnet_core.exceptions import ConfigurationError
 from devnet_core.settings import ConfigModel
-from devnet_flows.config.models import get_config
 
 
 class PrefectProvision(ConfigModel):
@@ -9,17 +10,8 @@ class PrefectProvision(ConfigModel):
     concurrency_limits: dict[str, int] = Field(default_factory=dict)
 
 
-# TODO move?
-class NetboxProvision(ConfigModel):
-    # devnet-api endpoint that NetBox sends device changes to
-    webhook_url: str
-    # webhook_token: EnvSecret
-    webhook_verify_tls: bool = True
-
-
 class ProvisionConfig(ConfigModel):
     prefect: PrefectProvision = PrefectProvision()
-    netbox: NetboxProvision | None = None
 
 
 def provision_config() -> ProvisionConfig:

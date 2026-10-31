@@ -15,8 +15,6 @@ ROOT_LOGGER: Final = "devnet"
 def get_logger(name: str) -> logging.Logger:
     """
     Return the logger for a module, under the `devnet` namespace.
-
-    `get_logger(__name__)` in `compliance/collect.py` returns the `devnet.compliance.collect` logger.
     """
     if name == ROOT_LOGGER or name.startswith(f"{ROOT_LOGGER}."):
         return logging.getLogger(name)

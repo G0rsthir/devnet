@@ -1,7 +1,7 @@
 [project]
 name = "devnet-core"
 version = "0.1.0"
-description = "Shared code: settings and secrets, NetBox client, device access"
+description = "Shared Code"
 readme = "README.md"
 authors = [
     { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
@@ -11,6 +11,7 @@ dependencies = [
     "httpx2>=2.16.0",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.1",
+    "pyyaml>=6.0.3",
 ]
 
 [build-system]
