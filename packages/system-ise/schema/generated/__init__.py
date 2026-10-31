@@ -198,9 +198,7 @@ class ActivedirectoryResponseEntityAdvancedSettingsRewriteRule:
 
 @dataclass(kw_only=True)
 class ActivedirectoryResponseEntityAdvancedSettings:
-    rewriteRules: list[ActivedirectoryResponseEntityAdvancedSettingsRewriteRule] | None = (
-        None
-    )
+    rewriteRules: list[ActivedirectoryResponseEntityAdvancedSettingsRewriteRule] | None = None
     enableRewrites: bool | None = None
     enablePassChange: bool | None = None
     enableMachineAuth: bool | None = None
@@ -237,9 +235,7 @@ class ActivedirectoryResponseEntityERSActiveDirectoryDomainsDomain:
 
 @dataclass(kw_only=True)
 class ActivedirectoryResponseEntityERSActiveDirectoryDomains:
-    domains: list[ActivedirectoryResponseEntityERSActiveDirectoryDomainsDomain] | None = (
-        None
-    )
+    domains: list[ActivedirectoryResponseEntityERSActiveDirectoryDomainsDomain] | None = None
 
 
 @dataclass(kw_only=True)
@@ -251,16 +247,12 @@ class ErsActiveDirectoryGroupsResponseERSActiveDirectoryGroupsGroup:
 
 @dataclass(kw_only=True)
 class ErsActiveDirectoryGroupsResponseERSActiveDirectoryGroups:
-    groups: list[ErsActiveDirectoryGroupsResponseERSActiveDirectoryGroupsGroup] | None = (
-        None
-    )
+    groups: list[ErsActiveDirectoryGroupsResponseERSActiveDirectoryGroupsGroup] | None = None
 
 
 @dataclass(kw_only=True)
 class ErsActiveDirectoryGroupsResponse:
-    ERSActiveDirectoryGroups: (
-        ErsActiveDirectoryGroupsResponseERSActiveDirectoryGroups | None
-    ) = None
+    ERSActiveDirectoryGroups: ErsActiveDirectoryGroupsResponseERSActiveDirectoryGroups | None = None
 
 
 @dataclass(kw_only=True)
@@ -272,16 +264,12 @@ class ErsActiveDirectoryDomainsResponseERSActiveDirectoryDomainsDomain:
 
 @dataclass(kw_only=True)
 class ErsActiveDirectoryDomainsResponseERSActiveDirectoryDomains:
-    domains: list[ErsActiveDirectoryDomainsResponseERSActiveDirectoryDomainsDomain] | None = (
-        None
-    )
+    domains: list[ErsActiveDirectoryDomainsResponseERSActiveDirectoryDomainsDomain] | None = None
 
 
 @dataclass(kw_only=True)
 class ErsActiveDirectoryDomainsResponse:
-    ERSActiveDirectoryDomains: (
-        ErsActiveDirectoryDomainsResponseERSActiveDirectoryDomains | None
-    ) = None
+    ERSActiveDirectoryDomains: ErsActiveDirectoryDomainsResponseERSActiveDirectoryDomains | None = None
 
 
 @dataclass(kw_only=True)
@@ -536,9 +524,7 @@ class AuthorizationProfileAdvancedAttributesLeftHandSideDictionaryAttribue:
 @dataclass(kw_only=True)
 class AuthorizationProfileAdvancedAttributes:
     rightHandSideAttribueValue: dict[str, Any]
-    leftHandSideDictionaryAttribue: (
-        AuthorizationProfileAdvancedAttributesLeftHandSideDictionaryAttribue | None
-    ) = None
+    leftHandSideDictionaryAttribue: AuthorizationProfileAdvancedAttributesLeftHandSideDictionaryAttribue | None = None
 
 
 @dataclass(kw_only=True)
@@ -607,8 +593,7 @@ class AuthorizationprofileResponseEntityAdvancedAttributesLeftHandSideDictionary
 @dataclass(kw_only=True)
 class AuthorizationprofileResponseEntityAdvancedAttributes:
     leftHandSideDictionaryAttribue: (
-        AuthorizationprofileResponseEntityAdvancedAttributesLeftHandSideDictionaryAttribue
-        | None
+        AuthorizationprofileResponseEntityAdvancedAttributesLeftHandSideDictionaryAttribue | None
     ) = None
     rightHandSideAttribueValue: dict[str, Any] | None = None
 
@@ -650,12 +635,8 @@ class BYODPortalSettingsByodSettingsByodRegistrationSuccessSettings:
 @dataclass(kw_only=True)
 class BYODPortalSettingsByodSettings:
     byodWelcomeSettings: BYODPortalSettingsByodSettingsByodWelcomeSettings | None = None
-    byodRegistrationSettings: (
-        BYODPortalSettingsByodSettingsByodRegistrationSettings | None
-    ) = None
-    byodRegistrationSuccessSettings: (
-        BYODPortalSettingsByodSettingsByodRegistrationSuccessSettings | None
-    ) = None
+    byodRegistrationSettings: BYODPortalSettingsByodSettingsByodRegistrationSettings | None = None
+    byodRegistrationSuccessSettings: BYODPortalSettingsByodSettingsByodRegistrationSuccessSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -712,13 +693,9 @@ class BYODPortalCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        BYODPortalCustomizationsGlobalCustomizationsMobileLogoImage | None
-    ) = None
+    mobileLogoImage: BYODPortalCustomizationsGlobalCustomizationsMobileLogoImage | None = None
     bannerImage: BYODPortalCustomizationsGlobalCustomizationsBannerImage | None = None
-    backgroundImage: (
-        BYODPortalCustomizationsGlobalCustomizationsBackgroundImage | None
-    ) = None
+    backgroundImage: BYODPortalCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -788,15 +765,10 @@ class ByodportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSetting
 
 @dataclass(kw_only=True)
 class ByodportalResponseEntitySettingsByodSettings:
-    byodWelcomeSettings: (
-        ByodportalResponseEntitySettingsByodSettingsByodWelcomeSettings | None
-    ) = None
-    byodRegistrationSettings: (
-        ByodportalResponseEntitySettingsByodSettingsByodRegistrationSettings | None
-    ) = None
+    byodWelcomeSettings: ByodportalResponseEntitySettingsByodSettingsByodWelcomeSettings | None = None
+    byodRegistrationSettings: ByodportalResponseEntitySettingsByodSettingsByodRegistrationSettings | None = None
     byodRegistrationSuccessSettings: (
-        ByodportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSettings
-        | None
+        ByodportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSettings | None
     ) = None
 
 
@@ -816,9 +788,7 @@ class ByodportalResponseEntitySettingsSupportInfoSettings:
 class ByodportalResponseEntitySettings:
     portalSettings: ByodportalResponseEntitySettingsPortalSettings | None = None
     byodSettings: ByodportalResponseEntitySettingsByodSettings | None = None
-    supportInfoSettings: ByodportalResponseEntitySettingsSupportInfoSettings | None = (
-        None
-    )
+    supportInfoSettings: ByodportalResponseEntitySettingsSupportInfoSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -856,15 +826,9 @@ class ByodportalResponseEntityCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        ByodportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage | None
-    ) = None
-    bannerImage: (
-        ByodportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None
-    ) = None
-    backgroundImage: (
-        ByodportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage | None
-    ) = None
+    mobileLogoImage: ByodportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: ByodportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: ByodportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -875,24 +839,16 @@ class ByodportalResponseEntityCustomizationsPageCustomizationsDatum:
 
 @dataclass(kw_only=True)
 class ByodportalResponseEntityCustomizationsPageCustomizations:
-    data: list[ByodportalResponseEntityCustomizationsPageCustomizationsDatum] | None = (
-        None
-    )
+    data: list[ByodportalResponseEntityCustomizationsPageCustomizationsDatum] | None = None
 
 
 @dataclass(kw_only=True)
 class ByodportalResponseEntityCustomizations:
     portalTheme: ByodportalResponseEntityCustomizationsPortalTheme | None = None
-    portalTweakSettings: (
-        ByodportalResponseEntityCustomizationsPortalTweakSettings | None
-    ) = None
+    portalTweakSettings: ByodportalResponseEntityCustomizationsPortalTweakSettings | None = None
     language: dict[str, Any] | None = None
-    globalCustomizations: (
-        ByodportalResponseEntityCustomizationsGlobalCustomizations | None
-    ) = None
-    pageCustomizations: (
-        ByodportalResponseEntityCustomizationsPageCustomizations | None
-    ) = None
+    globalCustomizations: ByodportalResponseEntityCustomizationsGlobalCustomizations | None = None
+    pageCustomizations: ByodportalResponseEntityCustomizationsPageCustomizations | None = None
 
 
 @dataclass(kw_only=True)
@@ -1324,15 +1280,9 @@ class HotspotPortalCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        HotspotPortalCustomizationsGlobalCustomizationsMobileLogoImage | None
-    ) = None
-    bannerImage: HotspotPortalCustomizationsGlobalCustomizationsBannerImage | None = (
-        None
-    )
-    backgroundImage: (
-        HotspotPortalCustomizationsGlobalCustomizationsBackgroundImage | None
-    ) = None
+    mobileLogoImage: HotspotPortalCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: HotspotPortalCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: HotspotPortalCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -1413,15 +1363,9 @@ class HotspotportalResponseEntitySettingsSupportInfoSettings:
 class HotspotportalResponseEntitySettings:
     portalSettings: HotspotportalResponseEntitySettingsPortalSettings | None = None
     aupSettings: HotspotportalResponseEntitySettingsAupSettings | None = None
-    authSuccessSettings: (
-        HotspotportalResponseEntitySettingsAuthSuccessSettings | None
-    ) = None
-    postLoginBannerSettings: (
-        HotspotportalResponseEntitySettingsPostLoginBannerSettings | None
-    ) = None
-    supportInfoSettings: (
-        HotspotportalResponseEntitySettingsSupportInfoSettings | None
-    ) = None
+    authSuccessSettings: HotspotportalResponseEntitySettingsAuthSuccessSettings | None = None
+    postLoginBannerSettings: HotspotportalResponseEntitySettingsPostLoginBannerSettings | None = None
+    supportInfoSettings: HotspotportalResponseEntitySettingsSupportInfoSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -1459,17 +1403,9 @@ class HotspotportalResponseEntityCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        HotspotportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage
-        | None
-    ) = None
-    bannerImage: (
-        HotspotportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None
-    ) = None
-    backgroundImage: (
-        HotspotportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage
-        | None
-    ) = None
+    mobileLogoImage: HotspotportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: HotspotportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: HotspotportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -1480,24 +1416,16 @@ class HotspotportalResponseEntityCustomizationsPageCustomizationsDatum:
 
 @dataclass(kw_only=True)
 class HotspotportalResponseEntityCustomizationsPageCustomizations:
-    data: list[HotspotportalResponseEntityCustomizationsPageCustomizationsDatum] | None = (
-        None
-    )
+    data: list[HotspotportalResponseEntityCustomizationsPageCustomizationsDatum] | None = None
 
 
 @dataclass(kw_only=True)
 class HotspotportalResponseEntityCustomizations:
     portalTheme: HotspotportalResponseEntityCustomizationsPortalTheme | None = None
-    portalTweakSettings: (
-        HotspotportalResponseEntityCustomizationsPortalTweakSettings | None
-    ) = None
+    portalTweakSettings: HotspotportalResponseEntityCustomizationsPortalTweakSettings | None = None
     language: dict[str, Any] | None = None
-    globalCustomizations: (
-        HotspotportalResponseEntityCustomizationsGlobalCustomizations | None
-    ) = None
-    pageCustomizations: (
-        HotspotportalResponseEntityCustomizationsPageCustomizations | None
-    ) = None
+    globalCustomizations: HotspotportalResponseEntityCustomizationsGlobalCustomizations | None = None
+    pageCustomizations: HotspotportalResponseEntityCustomizationsPageCustomizations | None = None
 
 
 @dataclass(kw_only=True)
@@ -1731,9 +1659,7 @@ class LdapResponseEntityGeneralSettings:
     certificate: str | None = None
     schema: dict[str, Any] | None = None
     groupMemberReference: dict[str, Any] | None = None
-    userInfoAttributes: LdapResponseEntityGeneralSettingsUserInfoAttributes | None = (
-        None
-    )
+    userInfoAttributes: LdapResponseEntityGeneralSettingsUserInfoAttributes | None = None
 
 
 @dataclass(kw_only=True)
@@ -1867,9 +1793,7 @@ class MyDevicePortalSettings:
     portalSettings: MyDevicePortalSettingsPortalSettings | None = None
     loginPageSettings: MyDevicePortalSettingsLoginPageSettings | None = None
     aupSettings: MyDevicePortalSettingsAupSettings | None = None
-    employeeChangePasswordSettings: (
-        MyDevicePortalSettingsEmployeeChangePasswordSettings | None
-    ) = None
+    employeeChangePasswordSettings: MyDevicePortalSettingsEmployeeChangePasswordSettings | None = None
     postLoginBannerSettings: MyDevicePortalSettingsPostLoginBannerSettings | None = None
     supportInfoSettings: MyDevicePortalSettingsSupportInfoSettings | None = None
 
@@ -1909,15 +1833,9 @@ class MyDevicePortalCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        MyDevicePortalCustomizationsGlobalCustomizationsMobileLogoImage | None
-    ) = None
-    bannerImage: MyDevicePortalCustomizationsGlobalCustomizationsBannerImage | None = (
-        None
-    )
-    backgroundImage: (
-        MyDevicePortalCustomizationsGlobalCustomizationsBackgroundImage | None
-    ) = None
+    mobileLogoImage: MyDevicePortalCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: MyDevicePortalCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: MyDevicePortalCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -2005,19 +1923,11 @@ class MydeviceportalResponseEntitySettingsSupportInfoSettings:
 @dataclass(kw_only=True)
 class MydeviceportalResponseEntitySettings:
     portalSettings: MydeviceportalResponseEntitySettingsPortalSettings | None = None
-    loginPageSettings: MydeviceportalResponseEntitySettingsLoginPageSettings | None = (
-        None
-    )
+    loginPageSettings: MydeviceportalResponseEntitySettingsLoginPageSettings | None = None
     aupSettings: MydeviceportalResponseEntitySettingsAupSettings | None = None
-    employeeChangePasswordSettings: (
-        MydeviceportalResponseEntitySettingsEmployeeChangePasswordSettings | None
-    ) = None
-    postLoginBannerSettings: (
-        MydeviceportalResponseEntitySettingsPostLoginBannerSettings | None
-    ) = None
-    supportInfoSettings: (
-        MydeviceportalResponseEntitySettingsSupportInfoSettings | None
-    ) = None
+    employeeChangePasswordSettings: MydeviceportalResponseEntitySettingsEmployeeChangePasswordSettings | None = None
+    postLoginBannerSettings: MydeviceportalResponseEntitySettingsPostLoginBannerSettings | None = None
+    supportInfoSettings: MydeviceportalResponseEntitySettingsSupportInfoSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -2055,17 +1965,9 @@ class MydeviceportalResponseEntityCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        MydeviceportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage
-        | None
-    ) = None
-    bannerImage: (
-        MydeviceportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None
-    ) = None
-    backgroundImage: (
-        MydeviceportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage
-        | None
-    ) = None
+    mobileLogoImage: MydeviceportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: MydeviceportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: MydeviceportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -2076,24 +1978,16 @@ class MydeviceportalResponseEntityCustomizationsPageCustomizationsDatum:
 
 @dataclass(kw_only=True)
 class MydeviceportalResponseEntityCustomizationsPageCustomizations:
-    data: list[MydeviceportalResponseEntityCustomizationsPageCustomizationsDatum] | None = (
-        None
-    )
+    data: list[MydeviceportalResponseEntityCustomizationsPageCustomizationsDatum] | None = None
 
 
 @dataclass(kw_only=True)
 class MydeviceportalResponseEntityCustomizations:
     portalTheme: MydeviceportalResponseEntityCustomizationsPortalTheme | None = None
-    portalTweakSettings: (
-        MydeviceportalResponseEntityCustomizationsPortalTweakSettings | None
-    ) = None
+    portalTweakSettings: MydeviceportalResponseEntityCustomizationsPortalTweakSettings | None = None
     language: dict[str, Any] | None = None
-    globalCustomizations: (
-        MydeviceportalResponseEntityCustomizationsGlobalCustomizations | None
-    ) = None
-    pageCustomizations: (
-        MydeviceportalResponseEntityCustomizationsPageCustomizations | None
-    ) = None
+    globalCustomizations: MydeviceportalResponseEntityCustomizationsGlobalCustomizations | None = None
+    pageCustomizations: MydeviceportalResponseEntityCustomizationsPageCustomizations | None = None
 
 
 @dataclass(kw_only=True)
@@ -2211,15 +2105,9 @@ class NetworkDeviceTrustsecsettingsSgaNotificationAndUpdates:
 
 @dataclass(kw_only=True)
 class NetworkDeviceTrustsecsettings:
-    deviceAuthenticationSettings: (
-        NetworkDeviceTrustsecsettingsDeviceAuthenticationSettings | None
-    ) = None
-    deviceConfigurationDeployment: (
-        NetworkDeviceTrustsecsettingsDeviceConfigurationDeployment | None
-    ) = None
-    sgaNotificationAndUpdates: (
-        NetworkDeviceTrustsecsettingsSgaNotificationAndUpdates | None
-    ) = None
+    deviceAuthenticationSettings: NetworkDeviceTrustsecsettingsDeviceAuthenticationSettings | None = None
+    deviceConfigurationDeployment: NetworkDeviceTrustsecsettingsDeviceConfigurationDeployment | None = None
+    sgaNotificationAndUpdates: NetworkDeviceTrustsecsettingsSgaNotificationAndUpdates | None = None
 
 
 @dataclass(kw_only=True)
@@ -2330,15 +2218,11 @@ class NetworkdeviceResponseEntityTrustsecsettingsSgaNotificationAndUpdates:
 
 @dataclass(kw_only=True)
 class NetworkdeviceResponseEntityTrustsecsettings:
-    deviceAuthenticationSettings: (
-        NetworkdeviceResponseEntityTrustsecsettingsDeviceAuthenticationSettings | None
-    ) = None
-    deviceConfigurationDeployment: (
-        NetworkdeviceResponseEntityTrustsecsettingsDeviceConfigurationDeployment | None
-    ) = None
-    sgaNotificationAndUpdates: (
-        NetworkdeviceResponseEntityTrustsecsettingsSgaNotificationAndUpdates | None
-    ) = None
+    deviceAuthenticationSettings: NetworkdeviceResponseEntityTrustsecsettingsDeviceAuthenticationSettings | None = None
+    deviceConfigurationDeployment: NetworkdeviceResponseEntityTrustsecsettingsDeviceConfigurationDeployment | None = (
+        None
+    )
+    sgaNotificationAndUpdates: NetworkdeviceResponseEntityTrustsecsettingsSgaNotificationAndUpdates | None = None
 
 
 @dataclass(kw_only=True)
@@ -2463,12 +2347,8 @@ class ERSDeploymentInfoNetworkAccessInfoNodeListNodeAuthenticationInfo:
 @dataclass(kw_only=True)
 class ERSDeploymentInfoNetworkAccessInfoNodeListNode:
     NDGInfo: ERSDeploymentInfoNetworkAccessInfoNodeListNodeNDGInfo | None = None
-    AuthorizationInfo: (
-        ERSDeploymentInfoNetworkAccessInfoNodeListNodeAuthorizationInfo | None
-    ) = None
-    AuthenticationInfo: (
-        ERSDeploymentInfoNetworkAccessInfoNodeListNodeAuthenticationInfo | None
-    ) = None
+    AuthorizationInfo: ERSDeploymentInfoNetworkAccessInfoNodeListNodeAuthorizationInfo | None = None
+    AuthenticationInfo: ERSDeploymentInfoNetworkAccessInfoNodeListNodeAuthenticationInfo | None = None
 
 
 @dataclass(kw_only=True)
@@ -2731,17 +2611,9 @@ class DeploymentinfoResponseEntityNetworkAccessInfoNodeListNodeAuthenticationInf
 
 @dataclass(kw_only=True)
 class DeploymentinfoResponseEntityNetworkAccessInfoNodeListNode:
-    NDGInfo: DeploymentinfoResponseEntityNetworkAccessInfoNodeListNodeNDGInfo | None = (
-        None
-    )
-    AuthorizationInfo: (
-        DeploymentinfoResponseEntityNetworkAccessInfoNodeListNodeAuthorizationInfo
-        | None
-    ) = None
-    AuthenticationInfo: (
-        DeploymentinfoResponseEntityNetworkAccessInfoNodeListNodeAuthenticationInfo
-        | None
-    ) = None
+    NDGInfo: DeploymentinfoResponseEntityNetworkAccessInfoNodeListNodeNDGInfo | None = None
+    AuthorizationInfo: DeploymentinfoResponseEntityNetworkAccessInfoNodeListNodeAuthorizationInfo | None = None
+    AuthenticationInfo: DeploymentinfoResponseEntityNetworkAccessInfoNodeListNodeAuthenticationInfo | None = None
 
 
 @dataclass(kw_only=True)
@@ -2827,9 +2699,7 @@ class DeploymentinfoResponseEntityDeploymentInfoNodeListNodeDiskFileSystem:
 class DeploymentinfoResponseEntityDeploymentInfoNodeListNodeDisk:
     fromDate: dict[str, Any] | None = None
     toDate: dict[str, Any] | None = None
-    FileSystem: (
-        DeploymentinfoResponseEntityDeploymentInfoNodeListNodeDiskFileSystem | None
-    ) = None
+    FileSystem: DeploymentinfoResponseEntityDeploymentInfoNodeListNodeDiskFileSystem | None = None
 
 
 @dataclass(kw_only=True)
@@ -2891,9 +2761,7 @@ class DeploymentinfoResponseEntityNadInfoNodeListNodeNADProfileInfo:
 
 @dataclass(kw_only=True)
 class DeploymentinfoResponseEntityNadInfoNodeListNode:
-    NADProfileInfo: (
-        DeploymentinfoResponseEntityNadInfoNodeListNodeNADProfileInfo | None
-    ) = None
+    NADProfileInfo: DeploymentinfoResponseEntityNadInfoNodeListNodeNADProfileInfo | None = None
 
 
 @dataclass(kw_only=True)
@@ -3010,12 +2878,8 @@ class RadiusServerSequence:
     useAttrSetBeforeAcc: bool | None = None
     continueAuthorzPolicy: bool | None = None
     RadiusServerList: list[Any] | None = None
-    OnRequestAttrManipulatorList: list[RadiusServerSequenceOnRequestAttrManipulatorListItem] | None = (
-        None
-    )
-    BeforeAcceptAttrManipulatorsList: list[RadiusServerSequenceBeforeAcceptAttrManipulatorsListItem] | None = (
-        None
-    )
+    OnRequestAttrManipulatorList: list[RadiusServerSequenceOnRequestAttrManipulatorListItem] | None = None
+    BeforeAcceptAttrManipulatorsList: list[RadiusServerSequenceBeforeAcceptAttrManipulatorsListItem] | None = None
     id: str | None = None
     description: str | None = None
 
@@ -3069,15 +2933,9 @@ class ERSRestIDStoreErsRestIDStoreAdvanceSettings:
 class ERSRestIDStore:
     name: str
     ersRestIDStoreAttributes: ERSRestIDStoreErsRestIDStoreAttributes | None = None
-    ersRestIDStoreUserAttributes: ERSRestIDStoreErsRestIDStoreUserAttributes | None = (
-        None
-    )
-    ersRestIDStoreDeviceAttributes: (
-        ERSRestIDStoreErsRestIDStoreDeviceAttributes | None
-    ) = None
-    ersRestIDStoreAdvanceSettings: (
-        ERSRestIDStoreErsRestIDStoreAdvanceSettings | None
-    ) = None
+    ersRestIDStoreUserAttributes: ERSRestIDStoreErsRestIDStoreUserAttributes | None = None
+    ersRestIDStoreDeviceAttributes: ERSRestIDStoreErsRestIDStoreDeviceAttributes | None = None
+    ersRestIDStoreAdvanceSettings: ERSRestIDStoreErsRestIDStoreAdvanceSettings | None = None
     id: str | None = None
     description: str | None = None
 
@@ -3444,16 +3302,10 @@ class SelfRegPortalSettingsSelfRegPageSettings:
     fieldCompany: SelfRegPortalSettingsSelfRegPageSettingsFieldCompany | None = None
     fieldLocation: SelfRegPortalSettingsSelfRegPageSettingsFieldLocation | None = None
     selectableLocations: list[str] | None = None
-    fieldSmsProvider: (
-        SelfRegPortalSettingsSelfRegPageSettingsFieldSmsProvider | None
-    ) = None
+    fieldSmsProvider: SelfRegPortalSettingsSelfRegPageSettingsFieldSmsProvider | None = None
     selectableSmsProviders: list[str] | None = None
-    fieldPersonBeingVisited: (
-        SelfRegPortalSettingsSelfRegPageSettingsFieldPersonBeingVisited | None
-    ) = None
-    fieldReasonForVisit: (
-        SelfRegPortalSettingsSelfRegPageSettingsFieldReasonForVisit | None
-    ) = None
+    fieldPersonBeingVisited: SelfRegPortalSettingsSelfRegPageSettingsFieldPersonBeingVisited | None = None
+    fieldReasonForVisit: SelfRegPortalSettingsSelfRegPageSettingsFieldReasonForVisit | None = None
     includeAup: bool | None = None
     aupDisplay: str | None = None
     requireAupAcceptance: bool | None = None
@@ -3545,15 +3397,9 @@ class SelfRegPortalSettingsByodSettingsByodRegistrationSuccessSettings:
 
 @dataclass(kw_only=True)
 class SelfRegPortalSettingsByodSettings:
-    byodWelcomeSettings: SelfRegPortalSettingsByodSettingsByodWelcomeSettings | None = (
-        None
-    )
-    byodRegistrationSettings: (
-        SelfRegPortalSettingsByodSettingsByodRegistrationSettings | None
-    ) = None
-    byodRegistrationSuccessSettings: (
-        SelfRegPortalSettingsByodSettingsByodRegistrationSuccessSettings | None
-    ) = None
+    byodWelcomeSettings: SelfRegPortalSettingsByodSettingsByodWelcomeSettings | None = None
+    byodRegistrationSettings: SelfRegPortalSettingsByodSettingsByodRegistrationSettings | None = None
+    byodRegistrationSuccessSettings: SelfRegPortalSettingsByodSettingsByodRegistrationSuccessSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -3586,12 +3432,8 @@ class SelfRegPortalSettings:
     selfRegPageSettings: SelfRegPortalSettingsSelfRegPageSettings | None = None
     selfRegSuccessSettings: SelfRegPortalSettingsSelfRegSuccessSettings | None = None
     aupSettings: SelfRegPortalSettingsAupSettings | None = None
-    guestChangePasswordSettings: (
-        SelfRegPortalSettingsGuestChangePasswordSettings | None
-    ) = None
-    guestDeviceRegistrationSettings: (
-        SelfRegPortalSettingsGuestDeviceRegistrationSettings | None
-    ) = None
+    guestChangePasswordSettings: SelfRegPortalSettingsGuestChangePasswordSettings | None = None
+    guestDeviceRegistrationSettings: SelfRegPortalSettingsGuestDeviceRegistrationSettings | None = None
     byodSettings: SelfRegPortalSettingsByodSettings | None = None
     authSuccessSettings: SelfRegPortalSettingsAuthSuccessSettings | None = None
     postLoginBannerSettings: SelfRegPortalSettingsPostLoginBannerSettings | None = None
@@ -3633,15 +3475,9 @@ class SelfRegPortalCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        SelfRegPortalCustomizationsGlobalCustomizationsMobileLogoImage | None
-    ) = None
-    bannerImage: SelfRegPortalCustomizationsGlobalCustomizationsBannerImage | None = (
-        None
-    )
-    backgroundImage: (
-        SelfRegPortalCustomizationsGlobalCustomizationsBackgroundImage | None
-    ) = None
+    mobileLogoImage: SelfRegPortalCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: SelfRegPortalCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: SelfRegPortalCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -3769,39 +3605,18 @@ class SelfregportalResponseEntitySettingsSelfRegPageSettings:
     accountValidityTimeUnits: str | None = None
     requireRegistrationCode: bool | None = None
     registrationCode: str | None = None
-    fieldUserName: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldUserName | None
-    ) = None
-    fieldFirstName: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldFirstName | None
-    ) = None
-    fieldLastName: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldLastName | None
-    ) = None
-    fieldEmailAddr: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldEmailAddr | None
-    ) = None
-    fieldPhoneNo: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldPhoneNo | None
-    ) = None
-    fieldCompany: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldCompany | None
-    ) = None
-    fieldLocation: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldLocation | None
-    ) = None
+    fieldUserName: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldUserName | None = None
+    fieldFirstName: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldFirstName | None = None
+    fieldLastName: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldLastName | None = None
+    fieldEmailAddr: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldEmailAddr | None = None
+    fieldPhoneNo: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldPhoneNo | None = None
+    fieldCompany: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldCompany | None = None
+    fieldLocation: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldLocation | None = None
     selectableLocations: list[str] | None = None
-    fieldSmsProvider: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldSmsProvider | None
-    ) = None
+    fieldSmsProvider: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldSmsProvider | None = None
     selectableSmsProviders: list[str] | None = None
-    fieldPersonBeingVisited: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldPersonBeingVisited
-        | None
-    ) = None
-    fieldReasonForVisit: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldReasonForVisit | None
-    ) = None
+    fieldPersonBeingVisited: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldPersonBeingVisited | None = None
+    fieldReasonForVisit: SelfregportalResponseEntitySettingsSelfRegPageSettingsFieldReasonForVisit | None = None
     includeAup: bool | None = None
     aupDisplay: str | None = None
     requireAupAcceptance: bool | None = None
@@ -3893,15 +3708,10 @@ class SelfregportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSett
 
 @dataclass(kw_only=True)
 class SelfregportalResponseEntitySettingsByodSettings:
-    byodWelcomeSettings: (
-        SelfregportalResponseEntitySettingsByodSettingsByodWelcomeSettings | None
-    ) = None
-    byodRegistrationSettings: (
-        SelfregportalResponseEntitySettingsByodSettingsByodRegistrationSettings | None
-    ) = None
+    byodWelcomeSettings: SelfregportalResponseEntitySettingsByodSettingsByodWelcomeSettings | None = None
+    byodRegistrationSettings: SelfregportalResponseEntitySettingsByodSettingsByodRegistrationSettings | None = None
     byodRegistrationSuccessSettings: (
-        SelfregportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSettings
-        | None
+        SelfregportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSettings | None
     ) = None
 
 
@@ -3931,32 +3741,16 @@ class SelfregportalResponseEntitySettingsSupportInfoSettings:
 @dataclass(kw_only=True)
 class SelfregportalResponseEntitySettings:
     portalSettings: SelfregportalResponseEntitySettingsPortalSettings | None = None
-    loginPageSettings: SelfregportalResponseEntitySettingsLoginPageSettings | None = (
-        None
-    )
-    selfRegPageSettings: (
-        SelfregportalResponseEntitySettingsSelfRegPageSettings | None
-    ) = None
-    selfRegSuccessSettings: (
-        SelfregportalResponseEntitySettingsSelfRegSuccessSettings | None
-    ) = None
+    loginPageSettings: SelfregportalResponseEntitySettingsLoginPageSettings | None = None
+    selfRegPageSettings: SelfregportalResponseEntitySettingsSelfRegPageSettings | None = None
+    selfRegSuccessSettings: SelfregportalResponseEntitySettingsSelfRegSuccessSettings | None = None
     aupSettings: SelfregportalResponseEntitySettingsAupSettings | None = None
-    guestChangePasswordSettings: (
-        SelfregportalResponseEntitySettingsGuestChangePasswordSettings | None
-    ) = None
-    guestDeviceRegistrationSettings: (
-        SelfregportalResponseEntitySettingsGuestDeviceRegistrationSettings | None
-    ) = None
+    guestChangePasswordSettings: SelfregportalResponseEntitySettingsGuestChangePasswordSettings | None = None
+    guestDeviceRegistrationSettings: SelfregportalResponseEntitySettingsGuestDeviceRegistrationSettings | None = None
     byodSettings: SelfregportalResponseEntitySettingsByodSettings | None = None
-    authSuccessSettings: (
-        SelfregportalResponseEntitySettingsAuthSuccessSettings | None
-    ) = None
-    postLoginBannerSettings: (
-        SelfregportalResponseEntitySettingsPostLoginBannerSettings | None
-    ) = None
-    supportInfoSettings: (
-        SelfregportalResponseEntitySettingsSupportInfoSettings | None
-    ) = None
+    authSuccessSettings: SelfregportalResponseEntitySettingsAuthSuccessSettings | None = None
+    postLoginBannerSettings: SelfregportalResponseEntitySettingsPostLoginBannerSettings | None = None
+    supportInfoSettings: SelfregportalResponseEntitySettingsSupportInfoSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -3994,17 +3788,9 @@ class SelfregportalResponseEntityCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        SelfregportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage
-        | None
-    ) = None
-    bannerImage: (
-        SelfregportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None
-    ) = None
-    backgroundImage: (
-        SelfregportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage
-        | None
-    ) = None
+    mobileLogoImage: SelfregportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: SelfregportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: SelfregportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -4015,24 +3801,16 @@ class SelfregportalResponseEntityCustomizationsPageCustomizationsDatum:
 
 @dataclass(kw_only=True)
 class SelfregportalResponseEntityCustomizationsPageCustomizations:
-    data: list[SelfregportalResponseEntityCustomizationsPageCustomizationsDatum] | None = (
-        None
-    )
+    data: list[SelfregportalResponseEntityCustomizationsPageCustomizationsDatum] | None = None
 
 
 @dataclass(kw_only=True)
 class SelfregportalResponseEntityCustomizations:
     portalTheme: SelfregportalResponseEntityCustomizationsPortalTheme | None = None
-    portalTweakSettings: (
-        SelfregportalResponseEntityCustomizationsPortalTweakSettings | None
-    ) = None
+    portalTweakSettings: SelfregportalResponseEntityCustomizationsPortalTweakSettings | None = None
     language: dict[str, Any] | None = None
-    globalCustomizations: (
-        SelfregportalResponseEntityCustomizationsGlobalCustomizations | None
-    ) = None
-    pageCustomizations: (
-        SelfregportalResponseEntityCustomizationsPageCustomizations | None
-    ) = None
+    globalCustomizations: SelfregportalResponseEntityCustomizationsGlobalCustomizations | None = None
+    pageCustomizations: SelfregportalResponseEntityCustomizationsPageCustomizations | None = None
 
 
 @dataclass(kw_only=True)
@@ -4174,9 +3952,7 @@ class SponsorPortalSettings:
     portalSettings: SponsorPortalSettingsPortalSettings | None = None
     loginPageSettings: SponsorPortalSettingsLoginPageSettings | None = None
     aupSettings: SponsorPortalSettingsAupSettings | None = None
-    sponsorChangePasswordSettings: (
-        SponsorPortalSettingsSponsorChangePasswordSettings | None
-    ) = None
+    sponsorChangePasswordSettings: SponsorPortalSettingsSponsorChangePasswordSettings | None = None
     postLoginBannerSettings: SponsorPortalSettingsPostLoginBannerSettings | None = None
     supportInfoSettings: SponsorPortalSettingsSupportInfoSettings | None = None
 
@@ -4216,15 +3992,9 @@ class SponsorPortalCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        SponsorPortalCustomizationsGlobalCustomizationsMobileLogoImage | None
-    ) = None
-    bannerImage: SponsorPortalCustomizationsGlobalCustomizationsBannerImage | None = (
-        None
-    )
-    backgroundImage: (
-        SponsorPortalCustomizationsGlobalCustomizationsBackgroundImage | None
-    ) = None
+    mobileLogoImage: SponsorPortalCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: SponsorPortalCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: SponsorPortalCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -4314,19 +4084,11 @@ class SponsorportalResponseEntitySettingsSupportInfoSettings:
 @dataclass(kw_only=True)
 class SponsorportalResponseEntitySettings:
     portalSettings: SponsorportalResponseEntitySettingsPortalSettings | None = None
-    loginPageSettings: SponsorportalResponseEntitySettingsLoginPageSettings | None = (
-        None
-    )
+    loginPageSettings: SponsorportalResponseEntitySettingsLoginPageSettings | None = None
     aupSettings: SponsorportalResponseEntitySettingsAupSettings | None = None
-    sponsorChangePasswordSettings: (
-        SponsorportalResponseEntitySettingsSponsorChangePasswordSettings | None
-    ) = None
-    postLoginBannerSettings: (
-        SponsorportalResponseEntitySettingsPostLoginBannerSettings | None
-    ) = None
-    supportInfoSettings: (
-        SponsorportalResponseEntitySettingsSupportInfoSettings | None
-    ) = None
+    sponsorChangePasswordSettings: SponsorportalResponseEntitySettingsSponsorChangePasswordSettings | None = None
+    postLoginBannerSettings: SponsorportalResponseEntitySettingsPostLoginBannerSettings | None = None
+    supportInfoSettings: SponsorportalResponseEntitySettingsSupportInfoSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -4364,17 +4126,9 @@ class SponsorportalResponseEntityCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        SponsorportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage
-        | None
-    ) = None
-    bannerImage: (
-        SponsorportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None
-    ) = None
-    backgroundImage: (
-        SponsorportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage
-        | None
-    ) = None
+    mobileLogoImage: SponsorportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: SponsorportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: SponsorportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -4385,24 +4139,16 @@ class SponsorportalResponseEntityCustomizationsPageCustomizationsDatum:
 
 @dataclass(kw_only=True)
 class SponsorportalResponseEntityCustomizationsPageCustomizations:
-    data: list[SponsorportalResponseEntityCustomizationsPageCustomizationsDatum] | None = (
-        None
-    )
+    data: list[SponsorportalResponseEntityCustomizationsPageCustomizationsDatum] | None = None
 
 
 @dataclass(kw_only=True)
 class SponsorportalResponseEntityCustomizations:
     portalTheme: SponsorportalResponseEntityCustomizationsPortalTheme | None = None
-    portalTweakSettings: (
-        SponsorportalResponseEntityCustomizationsPortalTweakSettings | None
-    ) = None
+    portalTweakSettings: SponsorportalResponseEntityCustomizationsPortalTweakSettings | None = None
     language: dict[str, Any] | None = None
-    globalCustomizations: (
-        SponsorportalResponseEntityCustomizationsGlobalCustomizations | None
-    ) = None
-    pageCustomizations: (
-        SponsorportalResponseEntityCustomizationsPageCustomizations | None
-    ) = None
+    globalCustomizations: SponsorportalResponseEntityCustomizationsGlobalCustomizations | None = None
+    pageCustomizations: SponsorportalResponseEntityCustomizationsPageCustomizations | None = None
 
 
 @dataclass(kw_only=True)
@@ -4476,15 +4222,11 @@ class SponsoredGuestPortalSettingsByodSettingsByodRegistrationSuccessSettings:
 
 @dataclass(kw_only=True)
 class SponsoredGuestPortalSettingsByodSettings:
-    byodWelcomeSettings: (
-        SponsoredGuestPortalSettingsByodSettingsByodWelcomeSettings | None
-    ) = None
-    byodRegistrationSettings: (
-        SponsoredGuestPortalSettingsByodSettingsByodRegistrationSettings | None
-    ) = None
-    byodRegistrationSuccessSettings: (
-        SponsoredGuestPortalSettingsByodSettingsByodRegistrationSuccessSettings | None
-    ) = None
+    byodWelcomeSettings: SponsoredGuestPortalSettingsByodSettingsByodWelcomeSettings | None = None
+    byodRegistrationSettings: SponsoredGuestPortalSettingsByodSettingsByodRegistrationSettings | None = None
+    byodRegistrationSuccessSettings: SponsoredGuestPortalSettingsByodSettingsByodRegistrationSuccessSettings | None = (
+        None
+    )
 
 
 @dataclass(kw_only=True)
@@ -4515,17 +4257,11 @@ class SponsoredGuestPortalSettings:
     portalSettings: SponsoredGuestPortalSettingsPortalSettings | None = None
     loginPageSettings: SponsoredGuestPortalSettingsLoginPageSettings | None = None
     aupSettings: SponsoredGuestPortalSettingsAupSettings | None = None
-    guestChangePasswordSettings: (
-        SponsoredGuestPortalSettingsGuestChangePasswordSettings | None
-    ) = None
-    guestDeviceRegistrationSettings: (
-        SponsoredGuestPortalSettingsGuestDeviceRegistrationSettings | None
-    ) = None
+    guestChangePasswordSettings: SponsoredGuestPortalSettingsGuestChangePasswordSettings | None = None
+    guestDeviceRegistrationSettings: SponsoredGuestPortalSettingsGuestDeviceRegistrationSettings | None = None
     byodSettings: SponsoredGuestPortalSettingsByodSettings | None = None
     authSuccessSettings: SponsoredGuestPortalSettingsAuthSuccessSettings | None = None
-    postLoginBannerSettings: (
-        SponsoredGuestPortalSettingsPostLoginBannerSettings | None
-    ) = None
+    postLoginBannerSettings: SponsoredGuestPortalSettingsPostLoginBannerSettings | None = None
     supportInfoSettings: SponsoredGuestPortalSettingsSupportInfoSettings | None = None
 
 
@@ -4564,15 +4300,9 @@ class SponsoredGuestPortalCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        SponsoredGuestPortalCustomizationsGlobalCustomizationsMobileLogoImage | None
-    ) = None
-    bannerImage: (
-        SponsoredGuestPortalCustomizationsGlobalCustomizationsBannerImage | None
-    ) = None
-    backgroundImage: (
-        SponsoredGuestPortalCustomizationsGlobalCustomizationsBackgroundImage | None
-    ) = None
+    mobileLogoImage: SponsoredGuestPortalCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: SponsoredGuestPortalCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: SponsoredGuestPortalCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -4589,16 +4319,10 @@ class SponsoredGuestPortalCustomizationsPageCustomizations:
 @dataclass(kw_only=True)
 class SponsoredGuestPortalCustomizations:
     portalTheme: SponsoredGuestPortalCustomizationsPortalTheme | None = None
-    portalTweakSettings: (
-        SponsoredGuestPortalCustomizationsPortalTweakSettings | None
-    ) = None
+    portalTweakSettings: SponsoredGuestPortalCustomizationsPortalTweakSettings | None = None
     language: dict[str, Any] | None = None
-    globalCustomizations: (
-        SponsoredGuestPortalCustomizationsGlobalCustomizations | None
-    ) = None
-    pageCustomizations: SponsoredGuestPortalCustomizationsPageCustomizations | None = (
-        None
-    )
+    globalCustomizations: SponsoredGuestPortalCustomizationsGlobalCustomizations | None = None
+    pageCustomizations: SponsoredGuestPortalCustomizationsPageCustomizations | None = None
 
 
 @dataclass(kw_only=True)
@@ -4683,16 +4407,12 @@ class SponsoredguestportalResponseEntitySettingsByodSettingsByodRegistrationSucc
 
 @dataclass(kw_only=True)
 class SponsoredguestportalResponseEntitySettingsByodSettings:
-    byodWelcomeSettings: (
-        SponsoredguestportalResponseEntitySettingsByodSettingsByodWelcomeSettings | None
-    ) = None
-    byodRegistrationSettings: (
-        SponsoredguestportalResponseEntitySettingsByodSettingsByodRegistrationSettings
-        | None
-    ) = None
+    byodWelcomeSettings: SponsoredguestportalResponseEntitySettingsByodSettingsByodWelcomeSettings | None = None
+    byodRegistrationSettings: SponsoredguestportalResponseEntitySettingsByodSettingsByodRegistrationSettings | None = (
+        None
+    )
     byodRegistrationSuccessSettings: (
-        SponsoredguestportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSettings
-        | None
+        SponsoredguestportalResponseEntitySettingsByodSettingsByodRegistrationSuccessSettings | None
     ) = None
 
 
@@ -4721,29 +4441,17 @@ class SponsoredguestportalResponseEntitySettingsSupportInfoSettings:
 
 @dataclass(kw_only=True)
 class SponsoredguestportalResponseEntitySettings:
-    portalSettings: SponsoredguestportalResponseEntitySettingsPortalSettings | None = (
-        None
-    )
-    loginPageSettings: (
-        SponsoredguestportalResponseEntitySettingsLoginPageSettings | None
-    ) = None
+    portalSettings: SponsoredguestportalResponseEntitySettingsPortalSettings | None = None
+    loginPageSettings: SponsoredguestportalResponseEntitySettingsLoginPageSettings | None = None
     aupSettings: SponsoredguestportalResponseEntitySettingsAupSettings | None = None
-    guestChangePasswordSettings: (
-        SponsoredguestportalResponseEntitySettingsGuestChangePasswordSettings | None
-    ) = None
+    guestChangePasswordSettings: SponsoredguestportalResponseEntitySettingsGuestChangePasswordSettings | None = None
     guestDeviceRegistrationSettings: (
         SponsoredguestportalResponseEntitySettingsGuestDeviceRegistrationSettings | None
     ) = None
     byodSettings: SponsoredguestportalResponseEntitySettingsByodSettings | None = None
-    authSuccessSettings: (
-        SponsoredguestportalResponseEntitySettingsAuthSuccessSettings | None
-    ) = None
-    postLoginBannerSettings: (
-        SponsoredguestportalResponseEntitySettingsPostLoginBannerSettings | None
-    ) = None
-    supportInfoSettings: (
-        SponsoredguestportalResponseEntitySettingsSupportInfoSettings | None
-    ) = None
+    authSuccessSettings: SponsoredguestportalResponseEntitySettingsAuthSuccessSettings | None = None
+    postLoginBannerSettings: SponsoredguestportalResponseEntitySettingsPostLoginBannerSettings | None = None
+    supportInfoSettings: SponsoredguestportalResponseEntitySettingsSupportInfoSettings | None = None
 
 
 @dataclass(kw_only=True)
@@ -4781,18 +4489,9 @@ class SponsoredguestportalResponseEntityCustomizationsGlobalCustomizations:
     bannerTitle: str | None = None
     contactText: str | None = None
     footerElement: str | None = None
-    mobileLogoImage: (
-        SponsoredguestportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage
-        | None
-    ) = None
-    bannerImage: (
-        SponsoredguestportalResponseEntityCustomizationsGlobalCustomizationsBannerImage
-        | None
-    ) = None
-    backgroundImage: (
-        SponsoredguestportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage
-        | None
-    ) = None
+    mobileLogoImage: SponsoredguestportalResponseEntityCustomizationsGlobalCustomizationsMobileLogoImage | None = None
+    bannerImage: SponsoredguestportalResponseEntityCustomizationsGlobalCustomizationsBannerImage | None = None
+    backgroundImage: SponsoredguestportalResponseEntityCustomizationsGlobalCustomizationsBackgroundImage | None = None
 
 
 @dataclass(kw_only=True)
@@ -4803,26 +4502,16 @@ class SponsoredguestportalResponseEntityCustomizationsPageCustomizationsDatum:
 
 @dataclass(kw_only=True)
 class SponsoredguestportalResponseEntityCustomizationsPageCustomizations:
-    data: list[SponsoredguestportalResponseEntityCustomizationsPageCustomizationsDatum] | None = (
-        None
-    )
+    data: list[SponsoredguestportalResponseEntityCustomizationsPageCustomizationsDatum] | None = None
 
 
 @dataclass(kw_only=True)
 class SponsoredguestportalResponseEntityCustomizations:
-    portalTheme: SponsoredguestportalResponseEntityCustomizationsPortalTheme | None = (
-        None
-    )
-    portalTweakSettings: (
-        SponsoredguestportalResponseEntityCustomizationsPortalTweakSettings | None
-    ) = None
+    portalTheme: SponsoredguestportalResponseEntityCustomizationsPortalTheme | None = None
+    portalTweakSettings: SponsoredguestportalResponseEntityCustomizationsPortalTweakSettings | None = None
     language: dict[str, Any] | None = None
-    globalCustomizations: (
-        SponsoredguestportalResponseEntityCustomizationsGlobalCustomizations | None
-    ) = None
-    pageCustomizations: (
-        SponsoredguestportalResponseEntityCustomizationsPageCustomizations | None
-    ) = None
+    globalCustomizations: SponsoredguestportalResponseEntityCustomizationsGlobalCustomizations | None = None
+    pageCustomizations: SponsoredguestportalResponseEntityCustomizationsPageCustomizations | None = None
 
 
 @dataclass(kw_only=True)
@@ -4931,9 +4620,7 @@ class SystemcertificateResponseEntityErsLocalCertStubSubjectStub:
 
 @dataclass(kw_only=True)
 class SystemcertificateResponseEntityErsLocalCertStub:
-    subjectStub: SystemcertificateResponseEntityErsLocalCertStubSubjectStub | None = (
-        None
-    )
+    subjectStub: SystemcertificateResponseEntityErsLocalCertStubSubjectStub | None = None
     keyType: str | None = None
     keyLength: str | None = None
     digest: str | None = None
@@ -4980,9 +4667,7 @@ class TacacscommandsetsResponseEntityCommandsCommandListItem:
 
 @dataclass(kw_only=True)
 class TacacscommandsetsResponseEntityCommands:
-    commandList: list[TacacscommandsetsResponseEntityCommandsCommandListItem] | None = (
-        None
-    )
+    commandList: list[TacacscommandsetsResponseEntityCommandsCommandListItem] | None = None
 
 
 @dataclass(kw_only=True)
@@ -5006,9 +4691,7 @@ class TacacsProfileSessionAttributesSessionAttributeListItem:
 
 @dataclass(kw_only=True)
 class TacacsProfileSessionAttributes:
-    sessionAttributeList: list[TacacsProfileSessionAttributesSessionAttributeListItem] | None = (
-        None
-    )
+    sessionAttributeList: list[TacacsProfileSessionAttributesSessionAttributeListItem] | None = None
 
 
 @dataclass(kw_only=True)
@@ -5028,9 +4711,7 @@ class TacacsprofileResponseEntitySessionAttributesSessionAttributeListItem:
 
 @dataclass(kw_only=True)
 class TacacsprofileResponseEntitySessionAttributes:
-    sessionAttributeList: list[TacacsprofileResponseEntitySessionAttributesSessionAttributeListItem] | None = (
-        None
-    )
+    sessionAttributeList: list[TacacsprofileResponseEntitySessionAttributesSessionAttributeListItem] | None = None
 
 
 @dataclass(kw_only=True)
@@ -5141,16 +4822,12 @@ class OperationAdditionalDataEntityOperationAdditionalDataAdditionalDatum:
 
 @dataclass(kw_only=True)
 class OperationAdditionalDataEntityOperationAdditionalData:
-    additionalData: list[OperationAdditionalDataEntityOperationAdditionalDataAdditionalDatum] | None = (
-        None
-    )
+    additionalData: list[OperationAdditionalDataEntityOperationAdditionalDataAdditionalDatum] | None = None
 
 
 @dataclass(kw_only=True)
 class OperationAdditionalDataEntity:
-    OperationAdditionalData: (
-        OperationAdditionalDataEntityOperationAdditionalData | None
-    ) = None
+    OperationAdditionalData: OperationAdditionalDataEntityOperationAdditionalData | None = None
 
 
 @dataclass(kw_only=True)
@@ -5160,9 +4837,7 @@ class AciTestConnectivityEntityACITestConnectionResult:
 
 @dataclass(kw_only=True)
 class AciTestConnectivityEntity:
-    ACITestConnectionResult: AciTestConnectivityEntityACITestConnectionResult | None = (
-        None
-    )
+    ACITestConnectionResult: AciTestConnectivityEntityACITestConnectionResult | None = None
 
 
 @dataclass(kw_only=True)
@@ -5193,7 +4868,7 @@ class ERSResponse:
 
 @dataclass(kw_only=True)
 class Link:
-    rel: Literal['next', 'previous', 'self', 'status'] | None = None
+    rel: Literal["next", "previous", "self", "status"] | None = None
     href: str | None = None
     type: str | None = None
 
@@ -5364,9 +5039,7 @@ class ActivedirectoryResponseEntity:
     adgroups: ActivedirectoryResponseEntityAdgroups | None = None
     adAttributes: ActivedirectoryResponseEntityAdAttributes | None = None
     advancedSettings: ActivedirectoryResponseEntityAdvancedSettings | None = None
-    ERSActiveDirectoryDomains: (
-        ActivedirectoryResponseEntityERSActiveDirectoryDomains | None
-    ) = None
+    ERSActiveDirectoryDomains: ActivedirectoryResponseEntityERSActiveDirectoryDomains | None = None
     name: str | None = None
     id: str | None = None
     description: str | None = None
@@ -5563,9 +5236,7 @@ class AuthorizationprofileResponseEntity:
     webAuth: dict[str, Any] | None = None
     macSecPolicy: str | None = None
     reauth: AuthorizationprofileResponseEntityReauth | None = None
-    advancedAttributes: AuthorizationprofileResponseEntityAdvancedAttributes | None = (
-        None
-    )
+    advancedAttributes: AuthorizationprofileResponseEntityAdvancedAttributes | None = None
     ipv6DaclName: str | None = None
     airespaceIPv6ACL: str | None = None
     agentlessPosture: dict[str, Any] | None = None
@@ -6463,14 +6134,10 @@ class NetworkdeviceListResponse:
 
 @dataclass(kw_only=True)
 class NetworkdeviceResponseEntity:
-    authenticationSettings: NetworkdeviceResponseEntityAuthenticationSettings | None = (
-        None
-    )
+    authenticationSettings: NetworkdeviceResponseEntityAuthenticationSettings | None = None
     coaPort: float | None = None
     dtlsDnsName: str | None = None
-    NetworkDeviceIPList: list[NetworkdeviceResponseEntityNetworkDeviceIPListItem] | None = (
-        None
-    )
+    NetworkDeviceIPList: list[NetworkdeviceResponseEntityNetworkDeviceIPListItem] | None = None
     NetworkDeviceGroupList: list[str] | None = None
     modelName: str | None = None
     softwareVersion: str | None = None
@@ -6798,12 +6465,10 @@ class RadiusserversequenceResponseEntity:
     useAttrSetBeforeAcc: bool | None = None
     continueAuthorzPolicy: bool | None = None
     RadiusServerList: list[Any] | None = None
-    OnRequestAttrManipulatorList: list[RadiusserversequenceResponseEntityOnRequestAttrManipulatorListItem] | None = (
-        None
-    )
-    BeforeAcceptAttrManipulatorsList: list[RadiusserversequenceResponseEntityBeforeAcceptAttrManipulatorsListItem] | None = (
-        None
-    )
+    OnRequestAttrManipulatorList: list[RadiusserversequenceResponseEntityOnRequestAttrManipulatorListItem] | None = None
+    BeforeAcceptAttrManipulatorsList: (
+        list[RadiusserversequenceResponseEntityBeforeAcceptAttrManipulatorsListItem] | None
+    ) = None
     name: str | None = None
     id: str | None = None
     description: str | None = None
@@ -6831,18 +6496,10 @@ class RestidstoreListResponse:
 
 @dataclass(kw_only=True)
 class RestidstoreResponseEntity:
-    ersRestIDStoreAttributes: (
-        RestidstoreResponseEntityErsRestIDStoreAttributes | None
-    ) = None
-    ersRestIDStoreUserAttributes: (
-        RestidstoreResponseEntityErsRestIDStoreUserAttributes | None
-    ) = None
-    ersRestIDStoreDeviceAttributes: (
-        RestidstoreResponseEntityErsRestIDStoreDeviceAttributes | None
-    ) = None
-    ersRestIDStoreAdvanceSettings: (
-        RestidstoreResponseEntityErsRestIDStoreAdvanceSettings | None
-    ) = None
+    ersRestIDStoreAttributes: RestidstoreResponseEntityErsRestIDStoreAttributes | None = None
+    ersRestIDStoreUserAttributes: RestidstoreResponseEntityErsRestIDStoreUserAttributes | None = None
+    ersRestIDStoreDeviceAttributes: RestidstoreResponseEntityErsRestIDStoreDeviceAttributes | None = None
+    ersRestIDStoreAdvanceSettings: RestidstoreResponseEntityErsRestIDStoreAdvanceSettings | None = None
     name: str | None = None
     id: str | None = None
     description: str | None = None
@@ -7232,9 +6889,7 @@ class SgtvnvlanListResponse:
 
 @dataclass(kw_only=True)
 class SgtvnvlanResponseEntity:
-    virtualnetworklist: list[SgtvnvlanResponseEntityVirtualnetworklistItem] | None = (
-        None
-    )
+    virtualnetworklist: list[SgtvnvlanResponseEntityVirtualnetworklistItem] | None = None
     sgtId: str | None = None
     name: str | None = None
     id: str | None = None
@@ -7483,9 +7138,7 @@ class SupportbundleListResponse:
 @dataclass(kw_only=True)
 class SupportbundleResponseEntity:
     hostName: str | None = None
-    supportBundleIncludeOptions: (
-        SupportbundleResponseEntitySupportBundleIncludeOptions | None
-    ) = None
+    supportBundleIncludeOptions: SupportbundleResponseEntitySupportBundleIncludeOptions | None = None
     name: str | None = None
     id: str | None = None
     description: str | None = None
@@ -7838,9 +7491,7 @@ class GuestlocationResponse:
 
 @dataclass(kw_only=True)
 class GuestsmtpnotificationsettingsResponse:
-    ERSGuestSmtpNotificationSettings: (
-        GuestsmtpnotificationsettingsResponseEntity | None
-    ) = None
+    ERSGuestSmtpNotificationSettings: GuestsmtpnotificationsettingsResponseEntity | None = None
 
 
 @dataclass(kw_only=True)
@@ -7975,16 +7626,12 @@ class RestidstoreattributeResponse:
 
 @dataclass(kw_only=True)
 class RestidstoredeviceattributeResponse:
-    ERSRestIDStoreDeviceAttribute: RestidstoredeviceattributeResponseEntity | None = (
-        None
-    )
+    ERSRestIDStoreDeviceAttribute: RestidstoredeviceattributeResponseEntity | None = None
 
 
 @dataclass(kw_only=True)
 class RestidstorepredefinedregexResponse:
-    ERSRestIDStorePredefinedRegex: RestidstorepredefinedregexResponseEntity | None = (
-        None
-    )
+    ERSRestIDStorePredefinedRegex: RestidstorepredefinedregexResponseEntity | None = None
 
 
 @dataclass(kw_only=True)
