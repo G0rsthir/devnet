@@ -21,6 +21,7 @@ def build_client(
     verify_tls: bool,
     timeout: httpx2.Timeout = DEFAULT_TIMEOUT,
     headers: dict[str, str] | None = None,
+    auth: httpx2.Auth | None = None,
     transport: httpx2.AsyncBaseTransport | None = None,
 ) -> httpx2.AsyncClient:
     """
@@ -29,6 +30,7 @@ def build_client(
     Certificates are verified against the system trust store (httpx2 uses truststore)
 
     Args:
+        auth: How requests authenticate, e.g. an `httpx2.BasicAuth`
         transport: Where requests go instead of the network, e.g. an `httpx2.MockTransport`
     """
     return httpx2.AsyncClient(
@@ -36,6 +38,7 @@ def build_client(
         verify=verify_tls,
         timeout=timeout,
         headers=headers,
+        auth=auth,
         trust_env=False,
         transport=transport,
     )

@@ -1,13 +1,11 @@
 # Development
 
-## Structure
-
-## Enviroment Setup
+## Environment Setup
 
 Create .env for development. Update required variables
 
 ```bash
-cp .env.example .env
+cp .env.dev.example .env
 ```
 
 Start docker containers (Prefect Server) and optionally Netbox
@@ -20,7 +18,7 @@ Prefect UI - <http://localhost:4200/>
 
 Netbox UI - <http://localhost:8080/>
 
-## Python Enviroment
+## Python Environment
 
 ````bash
 # add python package

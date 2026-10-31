@@ -51,6 +51,9 @@ class ApiClient[C: HttpConfig](ABC):
         """
         return {}
 
+    def _auth(self) -> httpx2.Auth | None:
+        return None
+
     async def _authenticate(self) -> None:
         """
         Runs once after connecting
@@ -77,6 +80,7 @@ class ApiClient[C: HttpConfig](ABC):
             base_url=self.config.base_url,
             verify_tls=self.config.verify_tls,
             headers=self._headers(),
+            auth=self._auth(),
             transport=self._transport,
         )
         await self._http.__aenter__()

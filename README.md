@@ -1,5 +1,9 @@
 # Network Automation
 
-https://carlmontanari.github.io/scrapli/examples/python/
+A collection of network automation scripts that use NetBox as the source of truth
 
-https://github.com/networktocode/diffsync
+## Docs
+
+Development - [docs/DEVELOPMENT](docs/DEVELOPMENT.md)
+
+Deployment and Debug - [docs/DEPLOYMENT](docs/DEPLOYMENT.md)

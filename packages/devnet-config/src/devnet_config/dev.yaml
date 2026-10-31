@@ -3,6 +3,11 @@ systems:
     base_url: http://localhost:8080
     token: ${NETBOX_TOKEN}
     verify_tls: false
+  ise:
+    base_url: https://192.168.101.241
+    username: ${ISE_USERNAME}
+    password: ${ISE_PASSWORD}
+    verify_tls: false
 
 provision:
   # prefect:

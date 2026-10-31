@@ -6,12 +6,14 @@ from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
 from devnet_core.settings import BaseEnvSettings, ConfigModel, load_yaml_model
+from system_ise.config import IseConfig
 from system_netbox.config import NetboxConfig
 
 
 class Systems(ConfigModel):
     # One field per system package
     netbox: NetboxConfig
+    ise: IseConfig
 
 
 class DevnetConfig(ConfigModel):

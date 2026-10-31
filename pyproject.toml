@@ -20,6 +20,7 @@ devnet-api = { workspace = true }
 devnet-flows = { workspace = true }
 devnet-core = { workspace = true }
 system-netbox = { workspace = true }
+system-ise = { workspace = true }
 devnet-config = { workspace = true }
 
 [dependency-groups]
@@ -61,7 +62,7 @@ convention = "google"
 # Import rules, checked by `uv run lint-imports`
 [tool.importlinter]
 # Installed workspace packages
-root_packages = ["devnet_core", "system_netbox", "devnet_api", "devnet_flows", "devnet_config"]
+root_packages = ["devnet_core", "system_netbox", "devnet_api", "devnet_flows", "devnet_config", "system_ise"]
 
 [[tool.importlinter.contracts]]
 name = "Layers: a layer imports only the layers below it"
@@ -69,7 +70,7 @@ type = "layers"
 layers = [
     "devnet_api | devnet_flows",
     "devnet_config",
-    "system_netbox",
+    "system_netbox | system_ise",
     "devnet_core",
 ]
 

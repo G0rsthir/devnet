@@ -4,7 +4,7 @@ The webhook service only hands work off
 
 ## Setup
 
-Define enviroment variables (core and devnet-api). .env.example
+Define environment variables (core and devnet-api). .env.dev.example
 
 ## Run
 

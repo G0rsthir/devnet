@@ -10,6 +10,7 @@ x-automation: &automation
     context: ../..
     dockerfile: deploy/docker/Dockerfile.automation
   pull_policy: build  # never pull
+  # TODO remove env, use local vars for testing
   env_file: ../../.env
   restart: unless-stopped
 

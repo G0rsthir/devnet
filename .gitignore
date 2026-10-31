@@ -1,8 +1,15 @@
+# Cache
 __pycache__
+.ruff_cache/
+.import_linter_cache
+.mypy_cache
+
+# Env
 .venv/
 .idea/
-.ruff_cache/
 .env
+.env.*
+!.env.*.example
 .vscode/*
 !.vscode/settings.json.default
 !.vscode/extensions.json

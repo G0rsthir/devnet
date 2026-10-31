@@ -22,7 +22,9 @@
     "**/*.pyc": true,
     "**/.pytest_cache": true,
     "**/.ruff_cache": true,
-    "**/py.typed": true
+    "**/py.typed": true,
+    "**/.import_linter_cache": true,
+    "**/.mypy_cache": true
   },
   "search.exclude": {
     "**/__pycache__": true,

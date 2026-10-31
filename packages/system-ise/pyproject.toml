@@ -1,0 +1,37 @@
+[project]
+name = "system-ise"
+version = "0.1.0"
+description = "Cisco Identity Services Engine (ISE) integration"
+readme = "README.md"
+authors = [
+    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "devnet-core",
+    "httpx2>=2.16.0",
+    "pydantic>=2.14.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "datamodel-code-generator>=0.86.0",
+]
+
+# ISE ERS API types, generated from its OpenAPI schema
+# Local reference only (schema/ is git-ignored): copy what you need into src/
+# and fix the types, the schema has e.g. enums typed as `object`
+[tool.datamodel-codegen]
+input = "schema/ise.json"
+input-file-type = "openapi"
+# Must be a directory: dotted schema names (network.networkdevice) become modules
+output = "schema/generated"
+output-model-type = "dataclasses.dataclass"
+preset = "standard-py313-20261017"
+dataclass-arguments = { kw_only = true }
+# NetworkDevice.authenticationSettings -> NetworkDeviceAuthenticationSettings
+naming-strategy = "parent-prefixed"

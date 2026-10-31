@@ -17,8 +17,8 @@ members = [
     "devnet-core",
     "devnet-flows",
     "ingest",
-    "ise",
     "network-automation",
+    "system-ise",
     "system-netbox",
 ]
 
@@ -740,6 +740,7 @@ dependencies = [
     { name = "devnet-core" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "system-ise" },
     { name = "system-netbox" },
 ]
 
@@ -748,6 +749,7 @@ requires-dist = [
     { name = "devnet-core", editable = "packages/devnet-core" },
     { name = "pydantic", specifier = ">=2.14.1" },
     { name = "pydantic-settings", specifier = ">=2.16.1" },
+    { name = "system-ise", editable = "packages/system-ise" },
     { name = "system-netbox", editable = "packages/system-netbox" },
 ]
 
@@ -1405,11 +1407,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/01/e1/2069291243c926a2f
 wheels = [
     { url = "https://files.pythonhosted.org/packages/56/43/4ca9e49d27a1fcf6bece6f6aec0ea46bb9112489b93d4b688fb415457bdb/iniconfig-2.3.1-py3-none-any.whl", hash = "sha256:9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7", size = 7552, upload-time = "2026-10-06T22:48:36.959Z" },
 ]
-
-[[package]]
-name = "ise"
-version = "0.1.0"
-source = { editable = "packages/ise" }
 
 [[package]]
 name = "isort"
@@ -2947,6 +2944,31 @@ sdist = { url = "https://files.pythonhosted.org/packages/ad/eb/4e197bf26b023abaf
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f3/93/181df62699d9b5aca1d87e5cfda131dac87e3cdaebf668662f7206ca3470/starlette-1.9.0-py3-none-any.whl", hash = "sha256:fd3f159936e882d06c1108f84688f7cda2cf85fc6a592a50edbd175e882c2ddc", size = 80335, upload-time = "2026-10-18T15:50:31.526Z" },
 ]
+
+[[package]]
+name = "system-ise"
+version = "0.1.0"
+source = { editable = "packages/system-ise" }
+dependencies = [
+    { name = "devnet-core" },
+    { name = "httpx2" },
+    { name = "pydantic" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "datamodel-code-generator" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "devnet-core", editable = "packages/devnet-core" },
+    { name = "httpx2", specifier = ">=2.16.0" },
+    { name = "pydantic", specifier = ">=2.14.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "datamodel-code-generator", specifier = ">=0.86.0" }]
 
 [[package]]
 name = "system-netbox"
