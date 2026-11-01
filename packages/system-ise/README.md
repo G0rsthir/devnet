@@ -8,17 +8,12 @@ Official ISE API documentation: <https://developer.cisco.com/docs/identity-servi
 
 Enable ERS API on ISE
 
-- Admin > System > Settings > ERS Settings > Enable ERS API
+- Administration > Settings > API Settings > API Service Settings > Enable ERS API
 
-```bash
-# TODO
-# Create a new ERS API user with the following permissions:
-# - Read/Write: Network Access > Network Devices
-# - Read/Write: Network Access > Network Device Groups
-# - Read/Write: Location > Locations
-## ada
+Create a new ERS API user with the following permissions:
 
-```
+- Read/Write: Administration > Network Devices
+- Read/Write: Administration > Network Device Groups
 
 ## Regenerate ISE API types
 

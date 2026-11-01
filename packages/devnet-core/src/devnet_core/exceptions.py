@@ -33,11 +33,15 @@ class ConfigurationError(InfrastructureError):
 class SystemConnectionError(DomainError):
     """
     An external system is unreachable, rejected the request or returned an unexpected response
+
+    Args:
+        status_code: The system's answer, if it rejected the request
     """
 
     code = "system_connection_error"
 
-    def __init__(self, name: str, msg: str):
+    def __init__(self, name: str, msg: str, *, status_code: int | None = None):
         self.name = name
         self.msg = msg
+        self.status_code = status_code
         super().__init__(f"{name}: {msg}")

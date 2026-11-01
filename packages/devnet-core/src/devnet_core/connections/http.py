@@ -105,11 +105,11 @@ def connection_errors(name: str, *, message_parser: MessageParser = system_messa
         yield
     except httpx2.HTTPStatusError as e:
         response = e.response
-        msg = f"{response.status_code} {response.reason_phrase}"
+        msg = f"{response.status_code} {response.reason_phrase}".strip()
         system_msg = _parse_message(response, message_parser)
         if system_msg:
             msg = f"{msg}. {system_msg}"
-        raise SystemConnectionError(name=name, msg=msg) from e
+        raise SystemConnectionError(name=name, msg=msg, status_code=response.status_code) from e
     except httpx2.TimeoutException as e:
         raise SystemConnectionError(name=name, msg="Connection timed out") from e
     except httpx2.HTTPError as e:
