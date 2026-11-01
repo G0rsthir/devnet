@@ -8,6 +8,8 @@ ENV UV_COMPILE_BYTECODE=1 \
     PATH="/app/.venv/bin:$PATH" \
     # The server writes UI files at startup; the venv isn't writable by the devnet user.
     PREFECT_UI_STATIC_DIRECTORY=/tmp/prefect-ui \
+    # Mounted at runtime. Absolute, because Prefect runs flows in a temp directory.
+    DEVNET_CONFIG=/etc/devnet/devnet.yaml \
     # Logging for the worker and its flow runs, including the devnet logger. devnet-api has its own.
     PREFECT_LOGGING_SETTINGS_PATH=/app/services/devnet-flows/logging.yaml \
     PREFECT_LOGGING_TO_API_WHEN_MISSING_FLOW=ignore

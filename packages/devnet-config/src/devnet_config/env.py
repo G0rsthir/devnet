@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from pydantic import FilePath
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from devnet_core.const import ENCODING, Environments
@@ -12,4 +15,8 @@ class BaseEnvSettings(BaseSettings):
 
 
 class CoreEnvSettings(BaseEnvSettings):
+    model_config = SettingsConfigDict(env_prefix="DEVNET_")
+
     ENVIRONMENT: Environments = Environments.DEVELOPMENT
+
+    CONFIG: FilePath = Path("devnet.yaml")

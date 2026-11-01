@@ -10,6 +10,14 @@ x-devnet: &devnet
   build: .
   env_file: .env              # NETBOX_*, ISE_*, ...; `environment` below wins over it
   environment: *prefect-client
+  volumes:
+    # Long syntax: with the short one, a missing file makes Docker create a directory there
+    - type: bind
+      source: ./devnet.yaml
+      target: /etc/devnet/devnet.yaml
+      read_only: true
+      bind:
+        create_host_path: false
   restart: unless-stopped
 
 services:

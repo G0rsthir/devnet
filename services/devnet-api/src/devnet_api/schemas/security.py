@@ -16,7 +16,7 @@ class AuthSessionContextBase(BaseModel):
 
 class AccessSessionContext(AuthSessionContextBase):
     """
-    Stores data about active (current) access session.
+    Stores data about active (current) access session
     """
 
     scopes: list[AccessScope] | None = None
@@ -24,7 +24,7 @@ class AccessSessionContext(AuthSessionContextBase):
 
 class RefreshSessionContext(AuthSessionContextBase):
     """
-    Stores data about active (current) refresh session.
+    Stores data about active (current) refresh session
     """
 
     scopes: list[RefreshScope] | None = None

@@ -1,0 +1,13 @@
+# Copy to devnet.yaml and set your own addresses. It's merged over devnet_config/base.yaml
+systems:
+  netbox:
+    base_url: http://localhost:8080
+    verify_tls: false
+  ise:
+    base_url: https://ise.example.com
+    verify_tls: false
+
+provision:
+  netbox:
+    # NetBox runs in rootless Docker, so it reaches devnet-api through the host's LAN IP
+    webhook_url: http://<host-lan-ip>:8000/api/v1/netbox/webhooks/device

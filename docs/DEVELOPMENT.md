@@ -16,6 +16,9 @@ VS Code and recommended extensions - <https://code.visualstudio.com/>
 # Create .env for development. Update required variables
 cp .env.dev.example .env
 
+# Create devnet.yaml for your own servers. Update the addresses
+cp devnet.example.yaml devnet.yaml
+
 # Copy or merge .vscode/settings.json for development
 cp .vscode/settings.json.default .vscode/settings.json
 

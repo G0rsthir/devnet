@@ -2,7 +2,7 @@ name: e2e
 
 x-prefect-client: &prefect-client
   PREFECT_API_URL: http://prefect-server:4200/api
-  #PREFECT_API_AUTH_STRING: ${PREFECT_API_AUTH_STRING:?set PREFECT_API_AUTH_STRING in .env}
+  PREFECT_API_AUTH_STRING: ${PREFECT_API_AUTH_STRING:?set PREFECT_API_AUTH_STRING in .env}
 
 x-automation: &automation
   image: ${AUTOMATION_IMAGE:-devnet-automation}:${AUTOMATION_TAG:-e2e}
@@ -12,6 +12,14 @@ x-automation: &automation
   pull_policy: build  # never pull
   # TODO remove env, use local vars for testing
   env_file: ../../.env
+  volumes:
+    # Long syntax: with the short one, a missing file makes Docker create a directory there
+    - type: bind
+      source: ../../devnet.yaml
+      target: /etc/devnet/devnet.yaml
+      read_only: true
+      bind:
+        create_host_path: false
   restart: unless-stopped
 
 
@@ -47,8 +55,11 @@ services:
     command: devnet-api run prod
     ports:
       - "8000:8000"
+    environment: *prefect-client
 
   # Registers every deployment in prefect.yaml
+  # TODO if  move this prod i cant use provision here
+  # how to solve it?
   deploy:
     <<: *automation
     command:

@@ -12,7 +12,9 @@ dependencies = [
     "pydantic-settings>=2.16.1",
     "system-netbox",
     "system-ise",
-    "devnet-core"
+    "devnet-core",
+    "python-dotenv>=1.2.4",
+    "pyyaml>=6.0.3",
 ]
 
 [build-system]

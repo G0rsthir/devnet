@@ -4,9 +4,9 @@ The webhook service only hands work off
 
 ## Setup
 
-Define environment variables (core and devnet-api). .env.dev.example
+For development guide, see [docs/DEVELOPMENT.md](../../docs/DEVELOPMENT.md).
 
-## Run
+### Run
 
 ```bash
 # Start Dev Server
@@ -16,9 +16,9 @@ uv run devnet-api run dev
 uv run devnet-api run prod
 ```
 
-## API Tokens
+## API Token generation
 
-Clients send a token in the `Authorization: Bearer <token>` header.
+Clients send a token in the `Authorization: Bearer <token>` header
 
 ```bash
 # --scope can repeat. --expires-in takes m, h, d, w, y
@@ -34,12 +34,6 @@ To revoke a token before it expires, add its `jti` to `.env` and restart the API
 DEVNET_API_REVOKED_JWT_TOKENS=["b9bff4ef2a0340aeaebaf92b9a3fa1fb"]
 ```
 
-## Pachages
-
-```bash
-uv add --package devnet-api <package>
-```
-
-## ???
+## Design
 
 - **Redelivered webhooks don't start new runs.** The idempotency key is built from NetBox's `request_id`,

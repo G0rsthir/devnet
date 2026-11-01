@@ -10,6 +10,7 @@ __pycache__
 .env
 .env.*
 !.env.*.example
+/devnet.yaml
 .vscode/*
 !.vscode/settings.json.default
 !.vscode/extensions.json
