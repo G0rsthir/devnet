@@ -3,9 +3,12 @@ systems:
   netbox:
     base_url: http://localhost:8080
     verify_tls: false
+    token: ${NETBOX_TOKEN}
   ise:
     base_url: https://ise.example.com
     verify_tls: false
+    username: ${ISE_USERNAME}
+    password: ${ISE_PASSWORD}
 
 provision:
   netbox:

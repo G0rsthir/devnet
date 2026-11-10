@@ -1,0 +1,63 @@
+# A device for unicon's mock_device_cli
+#
+# It answers the commands that the iosxe plugin sends at connect. If a session enters config mode,
+# the device goes to the `changed` state: `show running-config` then has `exec-timeout 0 0`.
+
+enable:
+  prompt: "%N#"
+  commands: &show_commands
+    "enable": ""
+    "term length 0": ""
+    "term width 0": ""
+    "show version": "Cisco IOS XE Software, Version 17.09.04a"
+    "show version | include operating mode": ""
+    "show install summary": ""
+    "show clock": "10:11:12.000 UTC Tue Nov 10 2026"
+    "config term":
+      new_state: config
+    "show running-config": |
+      Building configuration...
+      !
+      hostname wan-rt1
+      !
+      ip http server
+      !
+      line vty 0 4
+       exec-timeout 10 0
+       transport input ssh
+      !
+      end
+
+config:
+  prompt: "%N(config)#"
+  commands:
+    "no logging console": ""
+    "line console 0":
+      new_state: config_line
+    "end":
+      new_state: changed
+
+config_line:
+  prompt: "%N(config-line)#"
+  commands:
+    "exec-timeout 0": ""
+    "line vty 0 4": ""
+    "end":
+      new_state: changed
+
+changed:
+  prompt: "%N#"
+  commands:
+    <<: *show_commands
+    "show running-config": |
+      Building configuration...
+      !
+      hostname wan-rt1
+      !
+      ip http server
+      !
+      line vty 0 4
+       exec-timeout 0 0
+       transport input ssh
+      !
+      end

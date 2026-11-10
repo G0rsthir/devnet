@@ -2,6 +2,7 @@
   "recommendations": [
     "esbenp.prettier-vscode",
     "charliermarsh.ruff",
-    "ms-python.python"
+    "ms-python.python",
+    "ms-python.mypy-type-checker"
   ]
 }

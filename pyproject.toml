@@ -27,6 +27,7 @@ devnet-config = { workspace = true }
 dev = [
     "deptry>=0.25.1",
     "import-linter>=2.15",
+    "mypy>=2.4.1",
     "pre-commit>=4.7.0",
     "pytest",
     "ruff",
@@ -81,3 +82,6 @@ layers = [
     "system_netbox | system_ise",
     "devnet_core",
 ]
+
+[tool.mypy]
+plugins = ['pydantic.mypy']

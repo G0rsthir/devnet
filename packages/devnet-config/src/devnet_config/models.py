@@ -1,8 +1,7 @@
-from functools import cache
 from typing import Any
 
 import yaml
-from dotenv import load_dotenv
+from cachetools.func import ttl_cache
 from pydantic import Field, ValidationError
 from pydantic_settings import (
     BaseSettings,
@@ -18,6 +17,9 @@ from devnet_core.exceptions import ConfigurationError
 from devnet_core.settings import ConfigModel
 from system_ise.config import IseConfig
 from system_netbox.config import NetboxConfig
+
+# Seconds until get_config reads the files again
+CONFIG_TTL = 60
 
 
 class Systems(ConfigModel):
@@ -50,14 +52,12 @@ class DevnetConfig(BaseSettings):
         return init_settings, env_settings, yaml_settings
 
 
-@cache
+@ttl_cache(maxsize=1, ttl=CONFIG_TTL)
 def get_config() -> DevnetConfig:
     """
     Raises:
         ConfigurationError: If a config file can't be read
     """
-    # EnvSecret reads os.environ
-    load_dotenv(".env")
     try:
         return DevnetConfig()
     except (OSError, yaml.YAMLError, ValidationError, SettingsError) as e:

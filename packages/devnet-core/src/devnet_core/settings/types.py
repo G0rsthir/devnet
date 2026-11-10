@@ -1,15 +1,29 @@
 import json
-import os
 import re
 from dataclasses import dataclass
+from functools import cache
+from pathlib import Path
 from typing import Annotated
 
-from pydantic import BaseModel, BeforeValidator, PlainSerializer, PlainValidator
-from pydantic_settings import NoDecode
+from pydantic import (
+    BaseModel,
+    BeforeValidator,
+    Field,
+    PlainSerializer,
+    PlainValidator,
+    SecretStr,
+    ValidationError,
+    create_model,
+)
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict, SettingsError
 
+from devnet_core.const import ENCODING
 from devnet_core.exceptions import ConfigurationError
 
 _ENV_REF = re.compile(r"\$\{(\w+)\}")
+
+# Where Docker mounts secrets
+_DOCKER_SECRETS = Path("/run/secrets")
 
 
 def json_or_empty_set(value: object) -> object:
@@ -22,23 +36,52 @@ def json_or_empty_set(value: object) -> object:
 type EnvStrSet = Annotated[set[str], NoDecode, BeforeValidator(json_or_empty_set)]
 
 
-@dataclass(frozen=True, kw_only=True)
-class SecretRef:
+class SecretSettings(BaseSettings):
     """
-    A secret from the config file. Holds the variable's name, the value is read only when used
+    Any setting: environment, .env, then Docker secrets
     """
 
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding=ENCODING,
+        env_ignore_empty=True,
+        secrets_dir=_DOCKER_SECRETS if _DOCKER_SECRETS.is_dir() else None,
+        extra="ignore",
+        # A validation error would show the secret
+        hide_input_in_errors=True,
+    )
+
+    value: SecretStr | None = None
+
+
+@cache
+def _secret_settings(var: str) -> type[SecretSettings]:
+    """
+    SecretSettings that looks its value up as var
+    """
+    return create_model(
+        "SecretSettings",
+        __base__=SecretSettings,
+        value=(SecretStr | None, Field(default=None, validation_alias=var)),
+    )
+
+
+@dataclass(frozen=True, kw_only=True)
+class SecretRef:
     var: str
 
     def get_secret_value(self) -> str:
         """
         Raises:
-            ConfigurationError: If the environment variable isn't set
+            ConfigurationError: If no source has the secret, or one can't be read
         """
-        value = os.environ.get(self.var)
-        if not value:
-            raise ConfigurationError(f"environment variable {self.var} is not set")
-        return value
+        try:
+            secret = _secret_settings(self.var)().value
+        except (OSError, SettingsError, ValidationError) as e:
+            raise ConfigurationError(f"secret {self.var} can't be read: {e}") from e
+        if secret is None or not secret.get_secret_value():
+            raise ConfigurationError(f"secret {self.var} is not set")
+        return secret.get_secret_value()
 
 
 def secret_ref(value: object) -> SecretRef:
@@ -62,12 +105,17 @@ def secret_ref(value: object) -> SecretRef:
 type EnvSecret = Annotated[SecretRef, PlainValidator(secret_ref), PlainSerializer(lambda ref: f"${{{ref.var}}}")]
 
 
+# TODO add?
 def missing_secrets(value: object) -> list[str]:
     """
-    Environment variables that aren't set
+    Variables of the secrets that can't be read
     """
     if isinstance(value, SecretRef):
-        return [] if os.environ.get(value.var) else [value.var]
+        try:
+            value.get_secret_value()
+        except ConfigurationError:
+            return [value.var]
+        return []
     if isinstance(value, BaseModel):
         return [var for name in type(value).model_fields for var in missing_secrets(getattr(value, name))]
     if isinstance(value, dict):

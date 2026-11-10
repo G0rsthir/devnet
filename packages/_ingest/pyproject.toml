@@ -8,7 +8,12 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "anyio>=4.15.1",
     "devnet-core",
+    "diffsync>=2.2.3",
+    "pydantic>=2.14.1",
+    "structlog>=26.1.0",
+    "system-netbox",
 ]
 
 [build-system]
@@ -17,3 +22,4 @@ build-backend = "uv_build"
 
 [tool.uv.sources]
 devnet-core = { workspace = true }
+system-netbox = { workspace = true }
