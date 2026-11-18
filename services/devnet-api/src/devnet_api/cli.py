@@ -19,7 +19,9 @@ from devnet_config import get_config
 from devnet_core.const import Environments
 from devnet_core.exceptions import ConfigurationError, SystemConnectionError
 
-DURATION_UNITS = {"m": "minutes", "h": "hours", "d": "days", "w": "weeks", "y": "years"}
+DURATION_UNITS = {"m": "minutes", "h": "hours", "d": "days", "w": "weeks"}
+
+REQUIRED_SETTINGS = ["ACCESS_JWT_SECRET", "REFRESH_JWT_SECRET"]
 
 # Main CLI app
 cli = Typer(no_args_is_help=True)
@@ -34,17 +36,24 @@ cli.add_typer(run_cli, name="run")
 cli.add_typer(token_cli, name="token")
 
 
+def _create_runtime(environment: Environments):
+    runtime = bootstrap_runtime(environment)
+    validate_server_startup(env=runtime.env, required=REQUIRED_SETTINGS)
+    return runtime
+
+
+# TODO - logging
+
+
 @run_cli.command(name="dev")
 def dev_server():
     """
     Run the server in development mode
     """
-    container = bootstrap_runtime(Environments.DEVELOPMENT)
+    _create_runtime(Environments.DEVELOPMENT)
 
     echo("Running in development mode")
     echo("In development mode, for more details, please refer to the developer guide")
-
-    validate_server_startup(env=container.env)
 
     uvicorn_rum(
         app="devnet_api.main:run_http_server_dev",
@@ -63,11 +72,9 @@ def prod_server():
     """
     Run the server in production mode
     """
-    container = bootstrap_runtime(Environments.PRODUCTION)
+    _create_runtime(Environments.PRODUCTION)
 
     echo("Running in production mode")
-
-    validate_server_startup(env=container.env)
 
     uvicorn_rum(
         app="devnet_api.main:run_http_server_prod",
@@ -79,17 +86,15 @@ def prod_server():
 
 
 def parse_duration(value: str) -> timedelta:
-    match = re.fullmatch(r"([1-9][0-9]*)([mhdwy])", value)
+    match = re.fullmatch(r"([1-9][0-9]*)([mhdw])", value)
     if not match:
-        raise BadParameter("use a number and m, h, d, w or y, e.g. 90d")
+        raise BadParameter("use a number and m, h, d, w, e.g. 90d")
     amount, unit = match.groups()
     return timedelta(**{DURATION_UNITS[unit]: int(amount)})
 
 
 def _token_service() -> AuthTokenService:
-    container = bootstrap_runtime()
-
-    validate_server_startup(env=container.env)
+    container = _create_runtime(environment=Environments.DEVELOPMENT)
 
     access_manager, refresh_manager = create_auth_managers(
         access_jwt_secret=container.env.ACCESS_JWT_SECRET,

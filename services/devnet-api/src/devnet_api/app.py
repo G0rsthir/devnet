@@ -8,7 +8,6 @@ from devnet_core.const import Environments
 from .routes import api_router
 
 
-# TODO improve description
 def create_http_server(app_context: RuntimeContainer, **kwargs) -> FastAPI:
     debug = False
 

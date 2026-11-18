@@ -1,3 +1,3 @@
-from .models import DevnetConfig, get_config
+from .models import DevnetConfig, Features, get_config
 
-__all__ = ["DevnetConfig", "get_config"]
+__all__ = ["DevnetConfig", "Features", "get_config"]

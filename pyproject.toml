@@ -28,7 +28,7 @@ dev = [
     "deptry>=0.25.1",
     "import-linter>=2.15",
     "mypy>=2.4.1",
-    "pre-commit>=4.7.0",
+    "prek>=0.5.11",
     "pytest",
     "ruff",
 ]
@@ -61,6 +61,8 @@ ignore = [
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "httpx".msg = "Use httpx2 instead"
+"os.environ".msg = "Read settings from devnet-config"
+"os.getenv".msg = "Read settings from devnet-config"
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
@@ -85,3 +87,7 @@ layers = [
 
 [tool.mypy]
 plugins = ['pydantic.mypy']
+
+check_untyped_defs = true
+# Mypy doesn't follow pydantic's @computed_field on a @property
+disable_error_code = ["prop-decorator"]

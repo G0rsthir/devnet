@@ -50,7 +50,7 @@ class AuthManager[T](OAuth2PasswordBearer):
             scopes (Dict[str, str]): Scopes argument of OAuth2PasswordBearer for more information see
                 `https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-security-scheme`
             out_of_scope_exception (Exception): Exception to raise when the user is out of scopes
-            revoked_tokens (Collection[str]): jti of tokens to reject before they expire
+            revoked_tokens (Collection[str]): tokens to reject before they expire
         """
         if use_cookie is False and use_header is False:
             raise AttributeError("use_cookie and use_header are both False one of them needs to be True")
@@ -265,8 +265,8 @@ class AuthManager[T](OAuth2PasswordBearer):
         """
         payload = self._get_payload(token)
 
-        if payload.get("jti") in self.revoked_tokens:
-            logger.warning("Rejected revoked token %s (sub: %s)", payload["jti"], payload.get("sub"))
+        if token in self.revoked_tokens:
+            logger.warning("Rejected revoked token %s.. (sub: %s)", token[:10], payload.get("sub"))
             raise self.not_authenticated_exception
 
         if not self._has_scopes(payload, security_scopes):
@@ -274,7 +274,7 @@ class AuthManager[T](OAuth2PasswordBearer):
 
         return await self._get_current_context(payload)
 
-    async def __call__(
+    async def __call__(  # type: ignore
         self,
         request: Request,
         security_scopes: SecurityScopes = None,  # type: ignore

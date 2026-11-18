@@ -1,4 +1,3 @@
-# Copy to devnet.yaml and set your own addresses. It's merged over devnet_config/base.yaml
 systems:
   netbox:
     base_url: http://localhost:8080
@@ -9,6 +8,14 @@ systems:
     verify_tls: false
     username: ${ISE_USERNAME}
     password: ${ISE_PASSWORD}
+
+# Each feature is on by default. Set one to false to turn it off
+features:
+  ingest: true
+  compliance: true
+  ise_sync: true
+  backups: true
+  netbox_webhook: true
 
 provision:
   netbox:

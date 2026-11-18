@@ -11,8 +11,8 @@ from system_netbox.client import NetboxClient
 from system_netbox.config import NetboxConfig
 from system_netbox.models.generated import WebhookRequest, WritableEventRuleRequest
 
-# Provision again before this ends: NetBox's webhooks fail once the token expires
-TOKEN_LIFETIME = timedelta(days=365)
+# Provision again before this ends
+TOKEN_LIFETIME = timedelta(days=3650)
 
 
 class NetboxProvision(ConfigModel):
@@ -33,7 +33,7 @@ def netbox_provision_config() -> NetboxProvision:
 
 async def provision_netbox(config: NetboxConfig, webhook_url: str, token_service: AuthTokenService) -> None:
     """
-    Create or update the webhook and event rule that send NetBox device changes to devnet-api
+    Create or update the webhook and event rule that send NetBox changes to devnet-api
 
     Issues a new token on every run. Earlier tokens stay valid until they expire
     """
@@ -46,7 +46,6 @@ async def provision_netbox(config: NetboxConfig, webhook_url: str, token_service
         webhook = WebhookRequest(
             name="devnet",
             payload_url=webhook_url,
-            # Holds the token: don't log this object
             additional_headers=f"Authorization: Bearer {token}",
         )
         webhook_id = await client.extras.webhooks.ensure(webhook)

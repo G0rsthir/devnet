@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
+# TODO
 class NetboxRequest(BaseModel):
     """
     The NetBox request behind a change. One request can change many objects

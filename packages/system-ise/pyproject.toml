@@ -3,9 +3,6 @@ name = "system-ise"
 version = "0.1.0"
 description = "Cisco Identity Services Engine (ISE) integration"
 readme = "README.md"
-authors = [
-    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
-]
 requires-python = ">=3.13"
 dependencies = [
     "devnet-core",

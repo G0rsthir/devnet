@@ -14,3 +14,5 @@ __pycache__
 .vscode/*
 !.vscode/settings.json.default
 !.vscode/extensions.json
+packages/_compliance
+packages/_ingest

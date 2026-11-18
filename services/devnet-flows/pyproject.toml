@@ -3,15 +3,12 @@ name = "devnet-flows"
 version = "0.1.0"
 description = "Prefect Flows"
 readme = "README.md"
-authors = [
-    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
-]
 requires-python = ">=3.13"
 dependencies = [
     "prefect>=3.9.0",
     "devnet-core",
     "pydantic>=2.14.2",
-    "devnet-config"
+    "devnet-config",
 ]
 
 [build-system]

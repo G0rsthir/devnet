@@ -3,9 +3,6 @@ name = "devnet-api"
 version = "0.1.0"
 description = "HTTP API for devnet: receives webhooks and other requests"
 readme = "README.md"
-authors = [
-    { name = "G0rsthir", email = "194412152+G0rsthir@users.noreply.github.com" }
-]
 requires-python = ">=3.13"
 dependencies = [
     "bcrypt>=5.0.0",

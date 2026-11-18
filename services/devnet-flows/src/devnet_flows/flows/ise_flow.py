@@ -1,5 +1,4 @@
 # from ise.sync import devices_to_check, sync_device
-# from prefect import flow, get_run_logger
 
 
 # @flow(name="sync-ise-device", retries=3, retry_delay_seconds=120)
@@ -16,10 +15,10 @@
 #         sync_device(device_id, dry_run=dry_run)
 
 
-# from devnet_flows.tasks.netbox import fetch_device
+# from ise import client, mapping, sync
 # from prefect import flow, task
 
-# from ise import client, mapping, sync
+# from devnet_flows.tasks.netbox import fetch_device
 
 
 # @task(retries=3, retry_delay_seconds=60)
@@ -33,8 +32,8 @@
 
 
 # @flow(name="sync-ise-device")
-# def sync_ise_device(device_id: int, dry_run: bool = False) -> None:
-#     device = fetch_device(device_id)  # task: NetBox read
+# def sync_ise_device(device_id: int) -> None:
+#     device = fetch_device(device_id)
 #     change = sync.plan(mapping.desired(device), read_ise_device(device_id))  # transforms
 #     if change and not dry_run:
 #         apply_to_ise(change)

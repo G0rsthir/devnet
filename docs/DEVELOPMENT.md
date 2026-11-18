@@ -26,8 +26,11 @@ cp .vscode/settings.json.default .vscode/settings.json
 uv sync
 
 # Run pre-commit hooks
-uv run pre-commit install
-uv run pre-commit run --all-files
+uv tool install prek
+prek install -f
+
+# Run on demand
+prek run --all-files
 
 ```
 

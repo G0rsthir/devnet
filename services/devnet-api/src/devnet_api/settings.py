@@ -1,7 +1,8 @@
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
-from devnet_core.settings import BaseEnvSettings, EnvStrSet
+from devnet_config.env import BaseEnvSettings
+from devnet_core.settings import EnvStrSet
 
 
 class AppEnvSettings(BaseEnvSettings):
@@ -13,5 +14,5 @@ class AppEnvSettings(BaseEnvSettings):
     # Secret key used to encode and decode refresh JWT tokens
     REFRESH_JWT_SECRET: str = Field(default="", exclude=True)
 
-    # jti of tokens to reject before they expire, as JSON: ["b9bf...", ...]
-    REVOKED_JWT_TOKENS: EnvStrSet = set()
+    # Tokens to reject before they expire
+    REVOKED_JWT_TOKENS: EnvStrSet = Field(default_factory=set)
