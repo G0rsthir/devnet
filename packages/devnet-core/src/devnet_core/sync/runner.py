@@ -5,9 +5,9 @@ from diffsync.diff import Diff
 from diffsync.enum import DiffSyncFlags
 
 from devnet_core.logging import get_logger
-from ingest.sync.adapter import SyncAdapter
-from ingest.sync.logging import configure_logging
-from ingest.sync.report import SyncReport
+from devnet_core.sync.adapter import SyncAdapter
+from devnet_core.sync.logging import configure_logging
+from devnet_core.sync.report import SyncReport
 
 logger = get_logger(__name__)
 

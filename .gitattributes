@@ -1,2 +1,2 @@
 # codegen outputs
-packages/system-*/models/** binary
+packages/system-*/schema/** binary

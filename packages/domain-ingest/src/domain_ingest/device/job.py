@@ -1,8 +1,8 @@
-from ingest.device.collected import CollectedDevice
-from ingest.device.models import DeviceDiff
-from ingest.device.netbox import NetboxDeviceAdapter
-from ingest.device.source import CollectedDeviceAdapter
-from ingest.sync import SyncReport, run_sync
+from devnet_core.sync import SyncReport, run_sync
+from domain_ingest.device.collected import CollectedDevice
+from domain_ingest.device.models import DeviceDiff
+from domain_ingest.device.netbox import NetboxDeviceAdapter
+from domain_ingest.device.source import CollectedDeviceAdapter
 from system_netbox.client import NetboxClient
 
 

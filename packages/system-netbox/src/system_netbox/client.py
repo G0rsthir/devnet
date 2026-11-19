@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from devnet_core.connections.base import ConnectivityInfo
 from devnet_core.connections.client import ApiClient
 from system_netbox.config import NetboxConfig
-from system_netbox.endpoints import ExtrasEndpoints
+from system_netbox.endpoints import DcimEndpoints, ExtrasEndpoints, IpamEndpoints
 
 
 class _Status(BaseModel):
@@ -34,6 +34,14 @@ class NetboxClient(ApiClient[NetboxConfig]):
     async def check_connectivity(self) -> ConnectivityInfo:
         response = await self._request("GET", "/api/status/")
         return ConnectivityInfo(version=self._parse(response, _Status).netbox_version)
+
+    @cached_property
+    def dcim(self) -> DcimEndpoints:
+        return DcimEndpoints(self)
+
+    @cached_property
+    def ipam(self) -> IpamEndpoints:
+        return IpamEndpoints(self)
 
     @cached_property
     def extras(self) -> ExtrasEndpoints:

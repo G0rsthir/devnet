@@ -6,17 +6,10 @@ from typing import Any, cast
 from diffsync.enum import DiffSyncModelFlags
 from pydantic import BaseModel
 
-from ingest.device.models import Device, Interface, IPAddress, MACAddress
-from ingest.sync import RemoteModel, SyncAdapter
+from devnet_core.sync import RemoteModel, SyncAdapter
+from domain_ingest.device.models import Device, Interface, IPAddress, MACAddress
 from system_netbox.client import NetboxClient
-from system_netbox.endpoints import Endpoint
-from system_netbox.models.generated import (
-    MACAddressRequest,
-    VRFRequest,
-    WritableDeviceRequest,
-    WritableInterfaceRequest,
-    WritableIPAddressRequest,
-)
+from system_netbox.models.generated import MACAddressRequest, WritableInterfaceRequest, WritableIPAddressRequest
 
 DEVICE_INTERFACE = "dcim.interface"
 
@@ -24,7 +17,7 @@ DEVICE_INTERFACE = "dcim.interface"
 SYNC_ENABLED = "sync_enabled"
 
 
-# What this feature reads from NetBox. A list request asks for these fields only: the full
+# What this feature reads from NetBox. Endpoint.select asks for these fields only: the full
 # interface serializer is slow, and a NetBox upgrade can't break fields that aren't read
 
 
@@ -77,21 +70,17 @@ class _Vrf(BaseModel):
     name: str
 
 
-def _fields(model: type[BaseModel]) -> str:
-    return ",".join(model.model_fields)
-
-
 class _Api:
     """
-    The NetBox endpoints of this feature. Their place is system_netbox, as client.dcim and client.ipam
+    The NetBox endpoints of this feature, read into the models above
     """
 
     def __init__(self, client: NetboxClient) -> None:
-        self.devices = Endpoint(client, "/api/dcim/devices/", _Device, WritableDeviceRequest)
-        self.interfaces = Endpoint(client, "/api/dcim/interfaces/", _Interface, WritableInterfaceRequest)
-        self.ip_addresses = Endpoint(client, "/api/ipam/ip-addresses/", _IPAddress, WritableIPAddressRequest)
-        self.mac_addresses = Endpoint(client, "/api/dcim/mac-addresses/", _MACAddress, MACAddressRequest)
-        self.vrfs = Endpoint(client, "/api/ipam/vrfs/", _Vrf, VRFRequest)
+        self.devices = client.dcim.devices.select(_Device)
+        self.interfaces = client.dcim.interfaces.select(_Interface)
+        self.ip_addresses = client.ipam.ip_addresses.select(_IPAddress)
+        self.mac_addresses = client.dcim.mac_addresses.select(_MACAddress)
+        self.vrfs = client.ipam.vrfs.select(_Vrf)
 
 
 class _NetboxModel(RemoteModel):
@@ -223,10 +212,10 @@ class NetboxDeviceAdapter(SyncAdapter):
         device_id = str(self.device_id)
         nb_device, nb_interfaces, nb_ip_addresses, nb_mac_addresses, nb_vrfs = await asyncio.gather(
             self.api.devices.get(self.device_id),
-            self.api.interfaces.find(device_id=device_id, fields=_fields(_Interface)),
-            self.api.ip_addresses.find(device_id=device_id, fields=_fields(_IPAddress)),
-            self.api.mac_addresses.find(device_id=device_id, fields=_fields(_MACAddress)),
-            self.api.vrfs.find(fields=_fields(_Vrf)),
+            self.api.interfaces.find(device_id=device_id),
+            self.api.ip_addresses.find(device_id=device_id),
+            self.api.mac_addresses.find(device_id=device_id),
+            self.api.vrfs.find(),
         )
         self._vrf_ids = {vrf.name: vrf.id for vrf in nb_vrfs}
         self.device_name = nb_device.name

@@ -8,7 +8,7 @@ from typing import Any, ClassVar, cast
 import pytest
 from diffsync import DiffSyncModel
 
-from ingest.sync import RemoteModel, SyncAdapter, run_sync
+from devnet_core.sync import RemoteModel, SyncAdapter, run_sync
 
 pytestmark = pytest.mark.anyio
 

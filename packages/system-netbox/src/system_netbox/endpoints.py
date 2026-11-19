@@ -1,22 +1,32 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 import httpx2
 from pydantic import BaseModel
 
 from devnet_core.serialization import cached_type_adapter
 from system_netbox.models.generated import (
+    VRF,
     CustomField,
     CustomFieldChoiceSet,
+    Device,
     EventRule,
+    Interface,
+    IPAddress,
+    MACAddress,
+    MACAddressRequest,
     Tag,
     TagRequest,
+    VRFRequest,
     Webhook,
     WebhookRequest,
     WritableCustomFieldChoiceSetRequest,
     WritableCustomFieldRequest,
+    WritableDeviceRequest,
     WritableEventRuleRequest,
+    WritableInterfaceRequest,
+    WritableIPAddressRequest,
 )
 
 if TYPE_CHECKING:
@@ -52,6 +62,7 @@ def _matches(desired: Any, actual: Any) -> bool:
     return desired == actual
 
 
+# TODO remove ai logic
 class Endpoint[T: _HasId, R]:
     """
     One NetBox endpoint
@@ -60,24 +71,53 @@ class Endpoint[T: _HasId, R]:
         model: What NetBox returns, e.g. Webhook
         request: What create sends, e.g. WebhookRequest
         key: Field that identifies an object of this kind
+        fields: Read only these fields. Set by select()
     """
 
-    def __init__(self, client: NetboxClient, path: str, model: type[T], request: type[R], *, key: str = "name"):
+    def __init__(
+        self,
+        client: NetboxClient,
+        path: str,
+        model: type[T],
+        request: type[R],
+        *,
+        key: str = "name",
+        fields: list[str] | None = None,
+    ):
         self._client = client
         self.path = path
         self.model = model
         self.request = request
         self.key = key
+        self.fields = fields
+
+    def select[M: _HasId](self, model: type[M]) -> Endpoint[M, R]:
+        """
+        This endpoint, read into a model of the fields that a caller uses
+
+        Reads ask NetBox for these fields only (`?fields=`): the full serializer of some objects is slow,
+        and a NetBox upgrade can't break a field that isn't read
+
+        Args:
+            model: A pydantic model with an `id` field
+        """
+        fields = cast(type[BaseModel], model).model_fields
+        names = [field.alias or name for name, field in fields.items()]
+        return Endpoint(self._client, self.path, model, self.request, key=self.key, fields=names)
+
+    def _read_params(self) -> dict[str, str]:
+        return {"fields": ",".join(self.fields)} if self.fields else {}
 
     async def get(self, id: int) -> T:
-        response = await self._client._request("GET", f"{self.path}{id}/")
+        response = await self._client._request("GET", f"{self.path}{id}/", params=self._read_params())
         return self._client._parse(response, self.model)
 
     async def find_one(self, **filters: str) -> T | None:
         """
         Filters, e.g. find_one(name="devnet")
         """
-        response = await self._client._request("GET", self.path, params={**filters, "limit": 1})
+        params = {**filters, **self._read_params(), "limit": 1}
+        response = await self._client._request("GET", self.path, params=params)
         results = self._client._parse(response, _Page[self.model]).results
         return results[0] if results else None
 
@@ -87,7 +127,7 @@ class Endpoint[T: _HasId, R]:
         """
         objects: list[T] = []
         # Paged by ID, not offset: an object deleted while paging can't make the next page skip one
-        params: dict[str, str | int] = {**filters, "start": 0, "limit": _MAX_PAGE_SIZE}
+        params: dict[str, str | int] = {**filters, **self._read_params(), "start": 0, "limit": _MAX_PAGE_SIZE}
         while True:
             response = await self._client._request("GET", self.path, params=params)
             page = self._client._parse(response, _Page[self.model])
@@ -132,6 +172,19 @@ class Endpoint[T: _HasId, R]:
         if changed:
             await self.update(found["id"], changed)
         return found["id"]
+
+
+class DcimEndpoints:
+    def __init__(self, client: NetboxClient):
+        self.devices = Endpoint(client, "/api/dcim/devices/", Device, WritableDeviceRequest)
+        self.interfaces = Endpoint(client, "/api/dcim/interfaces/", Interface, WritableInterfaceRequest)
+        self.mac_addresses = Endpoint(client, "/api/dcim/mac-addresses/", MACAddress, MACAddressRequest)
+
+
+class IpamEndpoints:
+    def __init__(self, client: NetboxClient):
+        self.ip_addresses = Endpoint(client, "/api/ipam/ip-addresses/", IPAddress, WritableIPAddressRequest)
+        self.vrfs = Endpoint(client, "/api/ipam/vrfs/", VRF, VRFRequest)
 
 
 class ExtrasEndpoints:

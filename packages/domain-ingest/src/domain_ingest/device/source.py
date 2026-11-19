@@ -1,9 +1,9 @@
 from diffsync.enum import DiffSyncModelFlags
 
-from ingest.device.collected import CollectedDevice, CollectedInterface
-from ingest.device.interface_type import interface_type, parent_name
-from ingest.device.models import Device, Interface, IPAddress, MACAddress
-from ingest.sync import SyncAdapter
+from devnet_core.sync import SyncAdapter
+from domain_ingest.device.collected import CollectedDevice, CollectedInterface
+from domain_ingest.device.interface_type import interface_type, parent_name
+from domain_ingest.device.models import Device, Interface, IPAddress, MACAddress
 
 
 class CollectedDeviceAdapter(SyncAdapter):

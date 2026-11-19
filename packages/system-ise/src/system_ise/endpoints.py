@@ -8,7 +8,13 @@ from pydantic import BaseModel
 
 from devnet_core.exceptions import SystemConnectionError
 from devnet_core.serialization import cached_type_adapter
-from system_ise.models import NetworkDeviceGroup, NetworkDeviceGroupRequest, ResourceSummary
+from system_ise.models import (
+    NetworkDevice,
+    NetworkDeviceGroup,
+    NetworkDeviceGroupRequest,
+    NetworkDeviceRequest,
+    ResourceSummary,
+)
 
 if TYPE_CHECKING:
     from system_ise.client import IseClient
@@ -132,4 +138,11 @@ class NetworkEndpoints:
             NetworkDeviceGroup,
             NetworkDeviceGroupRequest,
             wrapper="NetworkDeviceGroup",
+        )
+        self.devices = Endpoint(
+            client,
+            "/ers/config/networkdevice",
+            NetworkDevice,
+            NetworkDeviceRequest,
+            wrapper="NetworkDevice",
         )
