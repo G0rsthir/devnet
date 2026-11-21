@@ -14,12 +14,10 @@ tree before anything exists in NetBox, and a dry run shows every change.
 from collections.abc import Iterator
 from typing import ClassVar
 
-from diffsync import DiffSyncModel
-from diffsync.diff import Diff, DiffElement
-from diffsync.enum import DiffSyncActions
+from devnet_core.sync import Diff, DiffAsyncModel, DiffElement, DiffSyncActions
 
 
-class Device(DiffSyncModel):
+class Device(DiffAsyncModel):
     _modelname: ClassVar[str] = "device"
     _identifiers: ClassVar[tuple[str, ...]] = ("name",)
     _attributes: ClassVar[tuple[str, ...]] = ("serial",)
@@ -31,7 +29,7 @@ class Device(DiffSyncModel):
     interfaces: list[str] = []
 
 
-class Interface(DiffSyncModel):
+class Interface(DiffAsyncModel):
     _modelname: ClassVar[str] = "interface"
     _identifiers: ClassVar[tuple[str, ...]] = ("device", "name")
     _shortname: ClassVar[tuple[str, ...]] = ("name",)
@@ -51,7 +49,7 @@ class Interface(DiffSyncModel):
     mac_addresses: list[str] = []
 
 
-class IPAddress(DiffSyncModel):
+class IPAddress(DiffAsyncModel):
     _modelname: ClassVar[str] = "ip_address"
     _identifiers: ClassVar[tuple[str, ...]] = ("device", "interface", "address", "vrf")
     _shortname: ClassVar[tuple[str, ...]] = ("address",)
@@ -67,7 +65,7 @@ class IPAddress(DiffSyncModel):
     description: str = ""
 
 
-class MACAddress(DiffSyncModel):
+class MACAddress(DiffAsyncModel):
     _modelname: ClassVar[str] = "mac_address"
     _identifiers: ClassVar[tuple[str, ...]] = ("device", "interface", "mac")
     _shortname: ClassVar[tuple[str, ...]] = ("mac",)

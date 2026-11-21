@@ -7,10 +7,10 @@ the ISE device after the device is renamed or deleted in NetBox. An ISE device w
 
 from typing import ClassVar
 
-from diffsync import DiffSyncModel
+from devnet_core.sync import DiffAsyncModel
 
 
-class NetworkDevice(DiffSyncModel):
+class NetworkDevice(DiffAsyncModel):
     _modelname: ClassVar[str] = "network_device"
     _identifiers: ClassVar[tuple[str, ...]] = ("netbox_id",)
     _attributes: ClassVar[tuple[str, ...]] = ("name", "ip_addresses")

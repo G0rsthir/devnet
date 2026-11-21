@@ -5,7 +5,6 @@ description = "Shared Code"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "anyio>=4.15.1",
     "diffsync>=2.2.3",
     "httpx2>=2.16.0",
     "pydantic>=2.14.1",

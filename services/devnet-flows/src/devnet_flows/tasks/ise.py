@@ -12,9 +12,6 @@ logger = get_logger(__name__)
 @task(
     name="sync-device-to-ise",
     task_run_name="sync-device-to-ise-{device_id}",
-    retries=1,
-    retry_delay_seconds=30,
-    retry_condition_fn=systems.transient,
     timeout_seconds=120,
     cache_policy=NO_CACHE,
 )

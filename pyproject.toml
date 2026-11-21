@@ -75,6 +75,8 @@ convention = "google"
 [tool.importlinter]
 # Installed workspace packages
 root_packages = ["devnet_core", "system_netbox", "devnet_api", "devnet_flows", "devnet_config", "system_ise", "domain_ingest"]
+# Lets a contract name a third-party package, e.g. diffsync
+include_external_packages = true
 
 [[tool.importlinter.contracts]]
 name = "Layers: a layer imports only the layers below it"
@@ -86,6 +88,14 @@ layers = [
     "system_netbox | system_ise",
     "devnet_core",
 ]
+
+[[tool.importlinter.contracts]]
+name = "DiffSync: only devnet_core imports it. Features import the DiffSync names from devnet_core.sync"
+type = "forbidden"
+source_modules = ["devnet_api", "devnet_flows", "devnet_config", "domain_ingest", "system_netbox", "system_ise"]
+forbidden_modules = ["diffsync"]
+# devnet_core.sync imports diffsync, so a feature does too, through it
+allow_indirect_imports = true
 
 [tool.mypy]
 plugins = ['pydantic.mypy']

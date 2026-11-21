@@ -83,15 +83,6 @@ async def test_feature_off_ends_the_run_before_the_task(job: FakeJob, monkeypatc
     assert job.calls == []
 
 
-async def test_an_error_that_can_pass_is_retried(job: FakeJob) -> None:
-    job.errors = [SystemConnectionError("ise", "Connection timed out")]
-
-    report = await flows.sync_ise_device(device_id=5, dry_run=False)
-
-    assert job.calls == [(5, False), (5, False)]
-    assert not report.dry_run
-
-
 async def test_an_error_that_cannot_pass_fails_the_run(job: FakeJob) -> None:
     job.errors = [SystemConnectionError("ise", "400 Bad Request", status_code=400)]
 

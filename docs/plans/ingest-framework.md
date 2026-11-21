@@ -81,16 +81,17 @@ flowchart LR
 
 ### Parts
 
-| Part           | Code                                         | Responsible for                                                           |
-| -------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| Contract model | `DiffSyncModel` subclass, used by both sides | Which fields identify an object, which fields devnet owns, which children |
-| Source adapter | `SyncAdapter`                                | `aload()`: build the models from collected data. Set the import rules     |
-| Target adapter | `SyncAdapter` with `RemoteModel` models      | `aload()`: build the models from the system. Write one object             |
-| Runner         | `run_sync()`                                 | Load, diff, delete guard, apply, report. The same for each feature        |
-| Job            | One function, e.g. `import_device()`         | Build the two adapters, call the runner                                   |
-| Flow           | devnet-flows                                 | Inventory, one task for each device, retries, mail                        |
+| Part           | Code                                          | Responsible for                                                                |
+| -------------- | --------------------------------------------- | ------------------------------------------------------------------------------ |
+| Contract model | `DiffAsyncModel` subclass, used by both sides | Which fields identify an object, which fields devnet owns, which children      |
+| Source adapter | `SyncAdapter`                                 | `aload()`: build the models from collected data. Set the import rules          |
+| Target model   | Subclass of the contract model                | The ID in the target system. `acreate`, `aupdate`, `adelete`: write one object |
+| Target adapter | `SyncAdapter`                                 | `aload()`: build the target models from the system                             |
+| Runner         | `run_sync()`                                  | Load, diff, delete guard, apply, report. The same for each feature             |
+| Job            | One function, e.g. `import_device()`          | Build the two adapters, call the runner                                        |
+| Flow           | devnet-flows                                  | Inventory, one task for each device, retries, mail                             |
 
-DiffSync gives the models, the diff, the order of the writes and the flags. The framework (`devnet_core.sync`, 250 lines) adds async I/O, the dry run, the delete guard and the report.
+DiffSync gives the models, the diff, the order of the writes and the flags. The framework (`devnet_core.sync`, 310 lines) adds async I/O, the apply step, the dry run, the delete guard and the report.
 
 ### Model Tree
 
@@ -126,16 +127,17 @@ device                  name                              | serial
 - `dry_run` is `True` by default. The report has the same diff as a real run
 - Delete guard: if the deletes are more than 50% of the target's objects, or the source is empty, the run applies no deletes and adds a warning. Creates and updates continue
 - One failed object does not stop the run. Its children are skipped. The report has one line for each failure
-- A cancelled run stops before its next write
+- A cancelled run stops at once. The write in progress is cancelled too
 
 ### Async
 
-DiffSync is blocking code and the clients are async. The framework connects them in one place:
+DiffSync is blocking code and the clients are async. DiffSync computes the diff, and the framework applies it with async code:
 
 - `SyncAdapter.aload()` is async. DiffSync never calls a load method itself
 - The diff uses memory only. It runs on the event loop
-- `run_sync()` runs the DiffSync sync in a worker thread. `RemoteModel` sends each write back to the event loop, where the HTTP client lives
-- A feature writes `async def acreate / aupdate / adelete` and does not see the thread
+- `apply_diff()` writes the changes on the event loop, in the order of the diff. It calls the hooks of `DiffAsyncModel`: `async def acreate / aupdate / adelete`
+- `apply_diff()` keeps the rules of the DiffSync sync: children after their parent, `NATURAL_DELETION_ORDER`, and the children of a failed object are skipped
+- DiffSync's `sync_from()` is not used. A `DiffAsyncModel` raises an error if it is called. See [decision 0003](../decisions/0003-own-async-apply-step.md)
 
 ### Report
 
@@ -164,7 +166,7 @@ DRY-RUN device sw1 -> netbox: create=5 update=1 delete=0 failed=0 warnings=0
 | `NetboxModel.identity()`                      | `_identifiers`, with names                                                          |
 | `managed_fields`, `diff_models()`             | `_attributes`, DiffSync diff                                                        |
 | `plan_change()`, `Plan`                       | `target.diff_from(source)`                                                          |
-| `apply_change()`                              | DiffSync sync, which calls the `RemoteModel` hooks                                  |
+| `apply_change()`                              | `apply_diff()`, which calls the `DiffAsyncModel` hooks                              |
 | `to_payload()`                                | `acreate` / `aupdate` of the NetBox model, with the generated request types         |
 | `from_record()`, `bind()`, `_record`          | `NetboxDeviceAdapter.aload()`, `pk` field                                           |
 | `ReconcileResult.synced`                      | Not needed. The adapter store resolves names to IDs                                 |
@@ -173,7 +175,7 @@ DRY-RUN device sw1 -> netbox: create=5 update=1 delete=0 failed=0 warnings=0
 | `_link_parents()`                             | `Interface.parent` and `DeviceDiff`                                                 |
 | `_link_primary_macs()`                        | `MACAddress.primary`                                                                |
 | `_link_primary_ip()` (VM)                     | `primary` attribute on the IP address of the VM feature                             |
-| `SyncSummary`, `SyncReporter`                 | `SyncReport`. DiffSync logs each change                                             |
+| `SyncSummary`, `SyncReporter`                 | `SyncReport`. `apply_diff()` logs each change                                       |
 | `SyncRun.to_markdown()`                       | devnet-flows builds the mail from the reports                                       |
 | `sync_device_facts()` and its flow            | `import_device_facts()`: `Device` without children, in its own flow. See decision 2 |
 | `CollectedDevice`, `CollectedDeviceInterface` | `ingest.device.collected`                                                           |
@@ -186,13 +188,13 @@ DRY-RUN device sw1 -> netbox: create=5 update=1 delete=0 failed=0 warnings=0
 
 ## Package Layout
 
-| Path                                      | Contents                                                                                   |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `packages/devnet-core` `devnet_core.sync` | The framework: `SyncAdapter`, `RemoteModel`, `run_sync`, `SyncReport`. No system knowledge |
-| `packages/system-netbox`                  | NetBox client. Endpoint groups `client.dcim` and `client.ipam`                             |
-| `packages/system-devices` (new)           | The `DeviceCli` port and its driver adapters, shared with compliance. Collector: parsers   |
-| `packages/ingest`                         | Features that write to NetBox. One folder for each: `device/`, `virtual_machine/`          |
-| `services/devnet-flows`                   | One flow for each feature                                                                  |
+| Path                                      | Contents                                                                                      |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `packages/devnet-core` `devnet_core.sync` | The framework: `SyncAdapter`, `DiffAsyncModel`, `run_sync`, `SyncReport`. No system knowledge |
+| `packages/system-netbox`                  | NetBox client. Endpoint groups `client.dcim` and `client.ipam`                                |
+| `packages/system-devices` (new)           | The `DeviceCli` port and its driver adapters, shared with compliance. Collector: parsers      |
+| `packages/ingest`                         | Features that write to NetBox. One folder for each: `device/`, `virtual_machine/`             |
+| `services/devnet-flows`                   | One flow for each feature                                                                     |
 
 Import layers, top to bottom:
 
@@ -206,11 +208,13 @@ devnet_core
 
 In place since step 3: `devnet_core.sync`, `client.dcim` and `client.ipam`, and `packages/ingest`, with its layer in import-linter and its dependencies checked by deptry. `system-devices` comes with the collector.
 
+Only `devnet_core` imports DiffSync. A feature imports the DiffSync names it needs from `devnet_core.sync`: `DiffSyncModelFlags`, `Diff`, `DiffElement`, `DiffSyncActions`. An import-linter contract checks it.
+
 ## Add A Feature
 
-1. Write the contract models. Identifiers are names that both systems know. Attributes are the fields that devnet owns
+1. Write the contract models: `DiffAsyncModel` subclasses. Identifiers are names that both systems know. Attributes are the fields that devnet owns
 2. Write the source adapter: `aload()` builds the models. Set a flag for each object that a rule excludes
-3. Write the target adapter: `aload()`, and a `RemoteModel` subclass for each model with `acreate`, `aupdate`, `adelete`. Reuse the NetBox models if the target is NetBox
+3. Write the target adapter: `aload()`, and a subclass of each contract model with `acreate`, `aupdate`, `adelete`. Reuse the NetBox models if the target is NetBox
 4. Write the job: build the two adapters and call `run_sync()`
 5. Test with a fake target. The minimum: the first run creates, the second run changes nothing
 6. Add the flow and its deployment
@@ -221,7 +225,8 @@ The smallest complete feature is at the top of [test_sync_runner.py](../../packa
 
 | File                                   | Contents                                                                                   |
 | -------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `devnet_core/sync/adapter.py`          | `SyncAdapter`, `RemoteModel`: async load, async writes from the worker thread              |
+| `devnet_core/sync/adapter.py`          | `SyncAdapter`, `DiffAsyncModel`: async load, async write hooks                             |
+| `devnet_core/sync/apply.py`            | `apply_diff()`: writes the diff on the event loop, with the rules of the DiffSync sync     |
 | `devnet_core/sync/runner.py`           | `run_sync()`: load, diff, delete guard, apply                                              |
 | `devnet_core/sync/report.py`           | `SyncReport`                                                                               |
 | `devnet_core/sync/logging.py`          | structlog to the `devnet.diffsync` logger                                                  |

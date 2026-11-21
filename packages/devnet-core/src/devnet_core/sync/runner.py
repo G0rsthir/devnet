@@ -1,11 +1,9 @@
-from functools import partial
-
-from anyio import to_thread
 from diffsync.diff import Diff
 from diffsync.enum import DiffSyncFlags
 
 from devnet_core.logging import get_logger
 from devnet_core.sync.adapter import SyncAdapter
+from devnet_core.sync.apply import apply_diff
 from devnet_core.sync.logging import configure_logging
 from devnet_core.sync.report import SyncReport
 
@@ -35,16 +33,13 @@ async def run_sync(
     await source.aload()
     await target.aload()
 
-    # One object that fails must not stop the others
-    flags = DiffSyncFlags.CONTINUE_ON_FAILURE
-    diff = target.diff_from(source, diff_class=diff_class, flags=flags)
+    diff = target.diff_from(source, diff_class=diff_class)
     warnings = [*source.problems, *target.problems]
 
     # A collection that failed without an error looks the same as "everything was removed"
     deletes = diff.summary()["delete"]
     if deletes and (source.empty or deletes > max_delete_fraction * len(target)):
-        flags |= DiffSyncFlags.SKIP_UNMATCHED_DST
-        diff = target.diff_from(source, diff_class=diff_class, flags=flags)
+        diff = target.diff_from(source, diff_class=diff_class, flags=DiffSyncFlags.SKIP_UNMATCHED_DST)
         warnings.append(f"{deletes} of {len(target)} objects would be deleted: deletes blocked")
 
     summary = diff.summary()
@@ -58,13 +53,7 @@ async def run_sync(
     )
 
     if not dry_run and diff.has_diffs():
-        # DiffSync's sync is blocking code. It runs in a worker thread, and RemoteModel
-        # sends each write back to this event loop
-        try:
-            await to_thread.run_sync(partial(target.sync_from, source, diff_class=diff_class, flags=flags, diff=diff))
-        finally:
-            # A cancelled await does not stop the thread. This does, before its next write
-            target.closed = True
+        await apply_diff(target, diff)
         report.applied = dict(target.applied)
         report.failures = list(target.failures)
 

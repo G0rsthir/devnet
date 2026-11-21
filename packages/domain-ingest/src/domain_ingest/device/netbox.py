@@ -3,10 +3,9 @@ from __future__ import annotations
 import asyncio
 from typing import Any, cast
 
-from diffsync.enum import DiffSyncModelFlags
 from pydantic import BaseModel
 
-from devnet_core.sync import RemoteModel, SyncAdapter
+from devnet_core.sync import DiffAsyncModel, DiffSyncModelFlags, SyncAdapter
 from domain_ingest.device.models import Device, Interface, IPAddress, MACAddress
 from system_netbox.client import NetboxClient
 from system_netbox.models.generated import MACAddressRequest, WritableInterfaceRequest, WritableIPAddressRequest
@@ -83,7 +82,7 @@ class _Api:
         self.vrfs = client.ipam.vrfs.select(_Vrf)
 
 
-class _NetboxModel(RemoteModel):
+class _NetboxModel(DiffAsyncModel):
     # NetBox ID. Not in _attributes, so DiffSync doesn't compare it
     pk: int | None = None
 

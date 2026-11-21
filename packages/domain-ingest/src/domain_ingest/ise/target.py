@@ -5,7 +5,7 @@ from ipaddress import ip_interface
 from typing import Any, cast
 
 from devnet_core.exceptions import DataIntegrityError
-from devnet_core.sync import RemoteModel, SyncAdapter
+from devnet_core.sync import SyncAdapter
 from domain_ingest.ise.models import NetworkDevice
 from system_ise.client import IseClient
 from system_ise.models import NetworkDeviceIP, NetworkDeviceRequest
@@ -23,7 +23,7 @@ def _ip_list(ip_addresses: tuple[str, ...]) -> list[NetworkDeviceIP]:
     return [NetworkDeviceIP(ipaddress=str(i.ip), mask=i.network.prefixlen) for i in interfaces]
 
 
-class IseNetworkDevice(RemoteModel, NetworkDevice):
+class IseNetworkDevice(NetworkDevice):
     # ISE ID. Not in _attributes, so DiffSync doesn't compare it
     pk: str | None = None
 

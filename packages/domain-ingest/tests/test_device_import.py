@@ -2,9 +2,9 @@ from typing import Any
 
 import pytest
 from fake_netbox import FakeNetbox
-from ingest.device import CollectedDevice, CollectedInterface, import_device
 
 from devnet_core.sync import SyncReport
+from domain_ingest.device import CollectedDevice, CollectedInterface, import_device
 
 pytestmark = pytest.mark.anyio
 

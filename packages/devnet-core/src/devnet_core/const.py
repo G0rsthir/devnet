@@ -1,11 +1,7 @@
 from enum import Enum, StrEnum
-from typing import Final, Literal
+from typing import Final
 
 ENCODING: Final = "utf-8"
-
-LOGGING_LEVEL = Literal["DEBUG", "INFO", "ERROR"]
-
-LOGGING_LEVEL_WITH_DEFAULT = Literal["DEFAULT"] | LOGGING_LEVEL
 
 
 class UnsetEnum(Enum):

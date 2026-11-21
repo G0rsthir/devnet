@@ -110,24 +110,24 @@ class Endpoint[T: _HasId, R]:
     async def delete(self, id: str) -> None:
         await self._client._request("DELETE", f"{self.path}/{id}")
 
-    async def ensure(self, desired: R) -> str:
-        """
-        Create or update fields that differ
+    # async def ensure(self, desired: R) -> str:
+    #     """
+    #     Create or update fields that differ
 
-        Args:
-            desired: Fields left as None aren't compared or written
+    #     Args:
+    #         desired: Fields left as None aren't compared or written
 
-        Returns:
-            The object's ID
-        """
-        data = cached_type_adapter(self.request).dump_python(desired, mode="json", exclude_none=True)
-        found = await self.find_one(name=data["name"])
-        if found is None:
-            return (await self.create(desired)).id
-        changed = {k: v for k, v in data.items() if getattr(found, k) != v}
-        if changed:
-            await self.update(found.id, changed)
-        return found.id
+    #     Returns:
+    #         The object's ID
+    #     """
+    #     data = cached_type_adapter(self.request).dump_python(desired, mode="json", exclude_none=True)
+    #     found = await self.find_one(name=data["name"])
+    #     if found is None:
+    #         return (await self.create(desired)).id
+    #     changed = {k: v for k, v in data.items() if getattr(found, k) != v}
+    #     if changed:
+    #         await self.update(found.id, changed)
+    #     return found.id
 
 
 class NetworkEndpoints:

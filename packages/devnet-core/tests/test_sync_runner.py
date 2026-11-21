@@ -6,9 +6,8 @@ import asyncio
 from typing import Any, ClassVar, cast
 
 import pytest
-from diffsync import DiffSyncModel
 
-from devnet_core.sync import RemoteModel, SyncAdapter, run_sync
+from devnet_core.sync import DiffAsyncModel, SyncAdapter, run_sync
 
 pytestmark = pytest.mark.anyio
 
@@ -18,7 +17,7 @@ def anyio_backend() -> str:
     return "asyncio"
 
 
-class Item(DiffSyncModel):
+class Item(DiffAsyncModel):
     _modelname: ClassVar[str] = "item"
     _identifiers: ClassVar[tuple[str, ...]] = ("name",)
     _attributes: ClassVar[tuple[str, ...]] = ("value",)
@@ -40,7 +39,7 @@ class Source(SyncAdapter):
             self.add(Item(name=name, value=value))
 
 
-class RemoteItem(RemoteModel, Item):
+class RemoteItem(Item):
     @property
     def system(self) -> dict[str, int]:
         return cast(Target, self.adapter).system
@@ -108,5 +107,5 @@ async def test_cancelled_run_stops_writing() -> None:
 
     written = len(system)
     await asyncio.sleep(0.2)
-    # The write that was in progress can still finish
-    assert len(system) <= written + 1 < 20
+    # The write that was in progress is cancelled too
+    assert len(system) == written < 20

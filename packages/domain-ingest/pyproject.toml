@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "devnet-core",
-    "diffsync>=2.2.3",
     "pydantic>=2.14.1",
     "system-ise",
     "system-netbox",

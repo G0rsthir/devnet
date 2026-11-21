@@ -1,6 +1,6 @@
 # 0002. DiffSync For Reconciliation
 
-- Status: Accepted
+- Status: Accepted. The apply step is superseded by [0003](0003-own-async-apply-step.md)
 - Date: 2026-11-19
 
 devnet uses [DiffSync](https://github.com/networktocode/diffsync) to compare two systems and to apply the difference. It replaces the reconciler of the old project (`netbox_pipelines/sync/common.py`)

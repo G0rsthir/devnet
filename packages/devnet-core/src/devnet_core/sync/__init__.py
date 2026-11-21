@@ -1,12 +1,17 @@
-"""
-Sync framework: a thin layer over DiffSync
+from diffsync.diff import Diff, DiffElement
+from diffsync.enum import DiffSyncActions, DiffSyncModelFlags
 
-DiffSync gives the models, the diff and the sync order. This package adds what devnet needs around it:
-async I/O, a dry run, a delete guard and a report. See docs/plans/ingest-framework.md
-"""
-
-from .adapter import RemoteModel, SyncAdapter
+from .adapter import DiffAsyncModel, SyncAdapter
 from .report import SyncReport
 from .runner import run_sync
 
-__all__ = ["RemoteModel", "SyncAdapter", "SyncReport", "run_sync"]
+__all__ = [
+    "Diff",
+    "DiffAsyncModel",
+    "DiffElement",
+    "DiffSyncActions",
+    "DiffSyncModelFlags",
+    "SyncAdapter",
+    "SyncReport",
+    "run_sync",
+]
