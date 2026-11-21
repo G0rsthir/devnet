@@ -1,4 +1,4 @@
-from typing import Any, Self
+from typing import Any, Literal, Self
 
 import yaml
 from cachetools.func import ttl_cache
@@ -14,7 +14,7 @@ from pydantic_settings import (
 from devnet_config.env import CoreEnvSettings
 from devnet_core.const import ENCODING
 from devnet_core.exceptions import ConfigurationError
-from devnet_core.settings import ConfigModel
+from devnet_core.settings import ConfigModel, EnvSecret
 from system_ise.config import IseConfig
 from system_netbox.config import NetboxConfig
 
@@ -35,12 +35,31 @@ class Features(ConfigModel):
     netbox_webhook: bool = True
 
 
+class MailConfig(ConfigModel):
+    host: str
+    port: int = 587
+    security: Literal["starttls", "tls", "none"] = "starttls"
+    verify_tls: bool = True
+    username: EnvSecret | None = None
+    password: EnvSecret | None = None
+    sender: str
+    to: tuple[str, ...] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _login(self) -> Self:
+        if (self.username is None) != (self.password is None):
+            raise ValueError("set both username and password, or neither")
+        return self
+
+
 class DevnetConfig(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="DEVNET_", env_nested_delimiter="__", extra="forbid", frozen=True)
 
     features: Features = Features()
 
     systems: Systems
+
+    mail: MailConfig | None = None
 
     provision: dict[str, Any] = Field(default_factory=dict)
 

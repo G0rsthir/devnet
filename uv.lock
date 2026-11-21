@@ -888,6 +888,7 @@ dependencies = [
     { name = "devnet-core" },
     { name = "domain-ingest" },
     { name = "prefect" },
+    { name = "pydantic" },
     { name = "system-ise" },
     { name = "system-netbox" },
 ]
@@ -898,6 +899,7 @@ requires-dist = [
     { name = "devnet-core", editable = "packages/devnet-core" },
     { name = "domain-ingest", editable = "packages/domain-ingest" },
     { name = "prefect", specifier = ">=3.9.0" },
+    { name = "pydantic", specifier = ">=2.14.2" },
     { name = "system-ise", editable = "packages/system-ise" },
     { name = "system-netbox", editable = "packages/system-netbox" },
 ]

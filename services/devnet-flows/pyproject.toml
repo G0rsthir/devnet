@@ -7,7 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "prefect>=3.9.0",
     "devnet-core",
-    #"pydantic>=2.14.2",
+    "pydantic>=2.14.2",
     "devnet-config",
     "domain-ingest",
     "system-ise",

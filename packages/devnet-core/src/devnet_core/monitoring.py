@@ -1,6 +1,8 @@
+from contextlib import AbstractContextManager
 from typing import Protocol
 
 import sentry_sdk
+from sentry_sdk.crons import monitor
 
 from devnet_core.const import Environments
 
@@ -37,3 +39,26 @@ def setup_monitoring(env: MonitoringSettings, *, process: str) -> None:
         max_value_length=1024,
     )
     sentry_sdk.get_global_scope().set_tag("process", process)
+
+
+def cron_monitor(
+    slug: str, *, cron: str, timezone: str, checkin_margin: int, max_runtime: int
+) -> AbstractContextManager[None]:
+    """
+    Sentry creates the monitor with this schedule
+
+    Args:
+        cron: The schedule of the job, e.g. "0 * * * *"
+        timezone: The timezone of the schedule, e.g. "UTC"
+        checkin_margin: Minutes that a run can start late before Sentry counts it as missed
+        max_runtime: Minutes that a run can take before Sentry counts it as failed
+    """
+    return monitor(
+        monitor_slug=slug,
+        monitor_config={
+            "schedule": {"type": "crontab", "value": cron},
+            "timezone": timezone,
+            "checkin_margin": checkin_margin,
+            "max_runtime": max_runtime,
+        },
+    )

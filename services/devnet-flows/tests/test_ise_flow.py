@@ -1,5 +1,5 @@
 """
-The wiring of the ISE flow: feature flag, task, retries. The job is fake: domain-ingest tests the sync itself
+The wiring of the ISE flow: feature flag, dry run, a failed task. The job is fake: domain-ingest tests the sync itself
 """
 
 from collections.abc import Iterator
@@ -13,7 +13,6 @@ from devnet_core.exceptions import SystemConnectionError
 from devnet_core.sync import SyncReport
 from devnet_flows import systems
 from devnet_flows.flows import ise as flows
-from devnet_flows.tasks.ise import sync_device_to_ise
 
 pytestmark = pytest.mark.anyio
 
@@ -40,13 +39,13 @@ class FakeClient:
 class FakeJob:
     def __init__(self) -> None:
         self.calls: list[tuple[int, bool]] = []
-        # Raised by the next calls, one for each call
-        self.errors: list[Exception] = []
+        # Raised by the call, if set
+        self.error: Exception | None = None
 
     async def __call__(self, netbox: object, ise: object, *, device_id: int, dry_run: bool) -> SyncReport:
         self.calls.append((device_id, dry_run))
-        if self.errors:
-            raise self.errors.pop(0)
+        if self.error is not None:
+            raise self.error
         return SyncReport(source=f"netbox device {device_id}", target="ise", dry_run=dry_run)
 
 
@@ -61,8 +60,6 @@ def job(monkeypatch: pytest.MonkeyPatch) -> FakeJob:
     monkeypatch.setattr(systems, "netbox", FakeClient)
     monkeypatch.setattr(systems, "ise", FakeClient)
     monkeypatch.setattr(flows, "get_config", lambda: config(ise_sync=True))
-    # No wait before the retry
-    monkeypatch.setattr(flows, "sync_device_to_ise", sync_device_to_ise.with_options(retry_delay_seconds=0))
     return fake
 
 
@@ -83,8 +80,9 @@ async def test_feature_off_ends_the_run_before_the_task(job: FakeJob, monkeypatc
     assert job.calls == []
 
 
-async def test_an_error_that_cannot_pass_fails_the_run(job: FakeJob) -> None:
-    job.errors = [SystemConnectionError("ise", "400 Bad Request", status_code=400)]
+async def test_a_failed_task_fails_the_run_without_a_retry(job: FakeJob) -> None:
+    # Not even a timeout is retried: reconcile-ise covers the device again
+    job.error = SystemConnectionError("ise", "Connection timed out")
 
     state = await flows.sync_ise_device(device_id=5, dry_run=False, return_state=True)
 

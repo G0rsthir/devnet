@@ -22,13 +22,15 @@ flowchart TB
     end
 
     subgraph worker["Process worker · devnet-automation container"]
-        system_flow["flows/#lt;system#gt;.py<br/>retries, logs"]
+        system_flow["flows/#lt;system#gt;.py<br/>timeouts, logs"]
     end
 
     subgraph packages["packages · business logic"]
-        system_pkg["#lt;system#gt;<br/>plan, apply"]
-        core["devnet-core<br/>shared code"]
-        system_pkg --> core
+        feature["domain_ingest.#lt;system#gt;<br/>job: load, diff, apply"]
+        client["system-#lt;system#gt;<br/>API client"]
+        core["devnet-core<br/>sync framework, shared code"]
+        feature --> client
+        feature --> core
     end
 
     subgraph external["External APIs"]
@@ -40,19 +42,20 @@ flowchart TB
     dispatch -->|arun_deployment| deploy_change
     deploy_change --> system_flow
     deploy_nightly --> system_flow
-    system_flow -->|execute| system_pkg
-    system_pkg -->|create, update, delete| system_api
+    system_flow -->|execute| feature
+    client -->|create, update, delete| system_api
 ```
 
 ## Components
 
-| Part                        | Responsible for                                                                                                                     | Not responsible for                                         |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| NetBox                      | Source of truth. An Event Rule sends a webhook when a something is created, updated or deleted                                      | Deciding which devices belong in which system               |
-| devnet-api                  | Checks `Authorization` header, starts one run per system, returns 202 with the run IDs                                              | Calling a system's API, business rules, waiting for results |
-| Prefect server + worker     | Queueing (one sync per system at a time), retries, logs, run history, nightly reconcile                                             | Business rules                                              |
-| `packages/system-<system>/` | Which devices belong in the system, mapping NetBox fields to the system's, comparing, create/update/delete through the system's API | Webhooks, scheduling                                        |
-| `packages/devnet-core`      | Settings base, shared logic                                                                                                         | Anything specific to one system                             |
+| Part                        | Responsible for                                                                                                                                                           | Not responsible for                                         |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| NetBox                      | Source of truth. An Event Rule sends a webhook when a something is created, updated or deleted                                                                            | Deciding which devices belong in which system               |
+| devnet-api                  | Checks `Authorization` header, starts one run per system, returns 202 with the run IDs                                                                                    | Calling a system's API, business rules, waiting for results |
+| Prefect server + worker     | Queueing (one sync per system at a time), timeouts, logs, run history, nightly reconcile                                                                                  | Business rules                                              |
+| `packages/domain-ingest`    | One job for each sync, e.g. `domain_ingest.ise.sync_device()`: which devices belong in the system, mapping NetBox fields to the system's, comparing, create/update/delete | Webhooks, scheduling                                        |
+| `packages/system-<system>/` | The client of the system's API                                                                                                                                            | Business rules                                              |
+| `packages/devnet-core`      | Settings base, shared logic, the sync framework `devnet_core.sync`                                                                                                        | Anything specific to one system                             |
 
 ## Design Principles
 

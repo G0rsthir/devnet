@@ -60,6 +60,10 @@ ignore = [
     "E501"
 ]
 
+[tool.ruff.lint.flake8-bugbear]
+# Frozen models: one instance is safe as the default of a flow parameter
+extend-immutable-calls = ["devnet_flows.inventory.DeviceQuery"]
+
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "httpx".msg = "Use httpx2 instead"
 "os.environ".msg = "Read settings from devnet-config"

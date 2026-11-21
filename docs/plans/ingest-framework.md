@@ -31,7 +31,7 @@ flow: NetBox devices (Redis claim) -> one task for each device
 - Plan, then guard, then apply. The delete guard blocks a mass delete after a bad collection
 - One run for each device. A failure stays in that device
 - The import rules: `sync_enabled` custom field, `ip_only`, "a down interface is not created"
-- `VrfResolver`, the type rules in `_resolve_type`, the Redis claim for device batches
+- `VrfResolver`, the type rules in `_resolve_type`
 
 ### Problems
 
@@ -89,7 +89,7 @@ flowchart LR
 | Target adapter | `SyncAdapter`                                 | `aload()`: build the target models from the system                             |
 | Runner         | `run_sync()`                                  | Load, diff, delete guard, apply, report. The same for each feature             |
 | Job            | One function, e.g. `import_device()`          | Build the two adapters, call the runner                                        |
-| Flow           | devnet-flows                                  | Inventory, one task for each device, retries, mail                             |
+| Flow           | devnet-flows                                  | Inventory, one task for each device, mail                                      |
 
 DiffSync gives the models, the diff, the order of the writes and the flags. The framework (`devnet_core.sync`, 310 lines) adds async I/O, the apply step, the dry run, the delete guard and the report.
 
@@ -185,7 +185,7 @@ DRY-RUN device sw1 -> netbox: create=5 update=1 delete=0 failed=0 warnings=0
 | pynetbox                                      | `system_netbox` client                                                              |
 | pyATS session                                 | `DeviceCli` port and `PyatsCli`, see the compliance plan                            |
 | Genie parsers                                 | Collector, with Genie. Not ported yet, see decision 1                               |
-| `device_chunk_generator` (Redis claim)        | No change. It moves to devnet-flows                                                 |
+| `device_chunk_generator` (Redis claim)        | Not ported for now: see decision 5 of the flows plan                                |
 
 ## Package Layout
 
@@ -271,7 +271,7 @@ Limits:
 3. **Done.** Promote the prototype: rename `_ingest` to `ingest`, move `ingest.sync` to `devnet_core.sync`, move the endpoints to `system_netbox`, add `ingest` to import-linter and deptry
 4. Collector: run the commands with the `DeviceCli` port, parse to `CollectedDevice`. Port `_normalise_interfaces` and `_normalise_device_facts`. A facts-only collection for the job `import_device_facts()` (decision 2)
 5. Transform: port `VrfResolver` with the alias and subnet rules of the `sync_vrf` custom field
-6. Flows `ingest-devices` and `ingest-device-facts`, each with its own schedule: inventory, Redis claim, one task for each device, mail from the reports. devnet-flows provisions the `sync_enabled` custom field
+6. Flows `ingest-devices` and `ingest-device-facts`, each with its own schedule: inventory, one task for each device, mail from the reports. devnet-flows provisions the `sync_enabled` custom field
 7. VM import from NSX: contract `virtual_machine` → `vm_interface` → addresses. Reuse the NetBox address models. Move `VmTransformConfig` from a Prefect variable to `devnet.yaml`
 8. NetBox to ISE with the same framework
 

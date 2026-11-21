@@ -17,6 +17,16 @@ features:
   backups: true
   netbox_webhook: true
 
+# The SMTP server of the report mails of the flows
+# mail:
+#   host: smtp.example.com
+#   port: 587
+#   security: starttls # starttls, tls or none
+#   username: ${SMTP_USERNAME}
+#   password: ${SMTP_PASSWORD}
+#   sender: devnet@example.com
+#   to: [netops@example.com]
+
 provision:
   netbox:
     # NetBox runs in rootless Docker, so it reaches devnet-api through the host's LAN IP
