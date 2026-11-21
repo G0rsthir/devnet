@@ -5,7 +5,7 @@ from typing import Any, cast
 
 from pydantic import BaseModel
 
-from devnet_core.sync import DiffAsyncModel, DiffSyncModelFlags, SyncAdapter
+from devnet_core.sync import ChangeRejected, DiffAsyncModel, DiffSyncModelFlags, SyncAdapter
 from domain_ingest.device.models import Device, Interface, IPAddress, MACAddress
 from system_netbox.client import NetboxClient
 from system_netbox.models.generated import MACAddressRequest, WritableInterfaceRequest, WritableIPAddressRequest
@@ -197,14 +197,14 @@ class NetboxDeviceAdapter(SyncAdapter):
     def interface_id(self, name: str) -> int:
         interface = self.get_or_none(NetboxInterface, {"device": self.device_name, "name": name})
         if interface is None:
-            raise LookupError(f"interface {name} is not in NetBox")
+            raise ChangeRejected(f"interface {name} is not in NetBox")
         return cast(NetboxInterface, interface).id
 
     def vrf_id(self, name: str | None) -> int | None:
         if name is None:
             return None
         if name not in self._vrf_ids:
-            raise LookupError(f"VRF {name} is not in NetBox")
+            raise ChangeRejected(f"VRF {name} is not in NetBox")
         return self._vrf_ids[name]
 
     async def aload(self) -> None:

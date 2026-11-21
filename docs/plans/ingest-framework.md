@@ -126,7 +126,8 @@ device                  name                              | serial
 
 - `dry_run` is `True` by default. The report has the same diff as a real run
 - Delete guard: if the deletes are more than 50% of the target's objects, or the source is empty, the run applies no deletes and adds a warning. Creates and updates continue
-- One failed object does not stop the run. Its children are skipped. The report has one line for each failure
+- A rejected object does not stop the run: a hook raised `ChangeRejected`, or the system answered 400, 409 or 422. Its children are skipped. The report has one line for each failure
+- Any other error stops the run, e.g. a timeout, a 401 or a bug in a hook. A note on the error names the change
 - A cancelled run stops at once. The write in progress is cancelled too
 
 ### Async

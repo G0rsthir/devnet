@@ -1,25 +1,19 @@
 # Sync
 
-DiffSync is a utility library that can be used to compare and synchronize different datasets
+[DiffSync](https://github.com/networktocode/diffsync) is a utility library that can be used to compare and synchronize different datasets
 
-[DiffSync](https://github.com/networktocode/diffsync)
+In short: a **model** is one object. An **adapter** holds all the objects of one system. `run_sync()` compares two adapters and writes the difference to the target
 
-In short: a **model** is one object. An **adapter** holds all the objects of one system. `run_sync()` compares two adapters and writes the difference through the models of the target.
+Flags (`DiffSyncModelFlags`) exclude objects or change the order of the deletes
 
 ## Model
 
 A sync has two kinds of model:
 
-- **Contract model**, e.g. `Vlan`: a `DiffAsyncModel` subclass. The source uses it as it is
-- **Target model**, e.g. `RemoteVlan`: a subclass of the contract model. It adds a field for the ID in the target system, and writes the hooks
+- **Contract model**, shared fields and logic by both systems
+- **Target/Source model**, a subclass of the contract model. It has system-specific fields and logic, like the ID and writes to the system
 
 The `_modelname` must be the same in both adapters. DiffSync pairs the two sides by this name
-
-```text
-DiffAsyncModel
-└── Vlan              contract model, used by the source
-    └── RemoteVlan    target model: writes to the target
-```
 
 ## Adapter
 
@@ -27,6 +21,8 @@ An adapter holds the objects of one system for one run, in memory.
 A sync has two adapters: the source and target
 
 `top_level` lists the types without a parent. DiffSync finds the children through their parent
+
+A hook can raise `ChangeRejected` when its object can't be written. The sync records the failure in the report, skips the object's children and goes on.
 
 ## Example
 
@@ -51,7 +47,7 @@ class Vlan(DiffAsyncModel):
     name: str = ""
 
 
-# Source adapter: the VLANs that must exist
+# Source adapter
 class VlanSource(SyncAdapter):
     vlan = Vlan
     top_level = ["vlan"]
@@ -65,14 +61,16 @@ class VlanSource(SyncAdapter):
             self.add(Vlan(vid=vid, name=name))
 
 
-# Target model: the contract model, the ID in the target system and the writes
+# Target model
 class RemoteVlan(Vlan):
     # Not in _attributes, so it is not compared
     pk: int | None = None
 
-    # A model reaches its system through its adapter
     @property
     def api(self) -> VlanApi:
+        """
+        Return the API of the adapter, for writing to the system
+        """
         return cast(VlanTarget, self.adapter).api
 
     async def acreate(self) -> None:
@@ -94,7 +92,7 @@ class RemoteVlan(Vlan):
         await self.api.delete(self.pk)
 
 
-# Target adapter: the VLANs that exist now
+# Target adapter
 class VlanTarget(SyncAdapter):
     vlan = RemoteVlan
     top_level = ["vlan"]
@@ -108,22 +106,14 @@ class VlanTarget(SyncAdapter):
             self.add(RemoteVlan(vid=row["vid"], name=row["name"], pk=row["id"]))
 ```
 
-Run it. The target has VLAN 10 `staff` and VLAN 30 `old`:
+Run it
 
 ```python
-# Dry run: computes the changes and writes nothing
+# Dry run
 report = await run_sync(VlanSource({10: "users", 20: "voice"}), VlanTarget(api))
-print(report.summary())  # DRY-RUN source -> target: create=1 update=1 delete=1 failed=0 warnings=0
 print(report.diff)
 
-# Real run, with new adapters
+# Real run
 report = await run_sync(VlanSource({10: "users", 20: "voice"}), VlanTarget(api), dry_run=False)
 print(report.summary())  # source -> target: create=1 update=1 delete=1 failed=0 warnings=0
 ```
-
-## Rules
-
-- A hook finds other objects in its adapter, e.g. the ID of its parent. See `NetboxIPAddress.acreate()` in [netbox.py](../../../../domain-ingest/src/domain_ingest/device/netbox.py)
-
-- Flags (`DiffSyncModelFlags`) exclude objects or change the order of the deletes: `IGNORE`, `SKIP_UNMATCHED_SRC`, `NATURAL_DELETION_ORDER`. See [the plan](../../../../../docs/plans/ingest-framework.md#rules)
-- A `Diff` subclass sets the order of the changes: `run_sync(..., diff_class=DeviceDiff)`

@@ -1,20 +1,24 @@
+from http import HTTPStatus
 from typing import Any, cast
 
 from diffsync.diff import Diff, DiffElement
 from diffsync.enum import DiffSyncActions, DiffSyncModelFlags
 
+from devnet_core.exceptions import SystemConnectionError
 from devnet_core.logging import get_logger
-from devnet_core.sync.adapter import DiffAsyncModel, SyncAdapter
+from devnet_core.sync.adapter import ChangeRejected, DiffAsyncModel, SyncAdapter
 
 logger = get_logger(__name__)
+
+# The system refused the data of the object
+_REJECTED = {HTTPStatus.BAD_REQUEST, HTTPStatus.CONFLICT, HTTPStatus.UNPROCESSABLE_CONTENT}
 
 
 async def apply_diff(target: SyncAdapter, diff: Diff) -> None:
     """
     Write the changes of a diff to the target system
 
-    The async version of DiffSync's sync_from with CONTINUE_ON_FAILURE: a change that fails is recorded
-    on the target, the changes to that object's children are skipped, and the sync goes on with the next object.
+    Any error other that ChangeRejected stops the sync
     """
     for element in diff.get_children():
         await _apply(target, element, parent=None)
@@ -54,7 +58,7 @@ async def _write(
     Write one change to the system, then to the store
 
     Returns:
-        False if the change failed
+        False if the change was rejected
     """
     change = f"{action} {model.get_type()} {model.get_unique_id()}"
     try:
@@ -65,6 +69,10 @@ async def _write(
         else:
             await model.adelete()
     except Exception as e:
+        if not _is_rejection(e):
+            # The traceback shows the change that stopped the sync
+            e.add_note(f"sync stopped at: {change}")
+            raise
         target.failures.append(f"{change}: {e}")
         logger.error(f"{change} failed: {e}")
         return False
@@ -85,3 +93,9 @@ async def _write(
             parent.remove_child(model)
         target.remove(model)
     return True
+
+
+def _is_rejection(e: Exception) -> bool:
+    if isinstance(e, ChangeRejected):
+        return True
+    return isinstance(e, SystemConnectionError) and e.status_code in _REJECTED

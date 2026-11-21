@@ -1,13 +1,10 @@
 from diffsync.diff import Diff
 from diffsync.enum import DiffSyncFlags
 
-from devnet_core.logging import get_logger
 from devnet_core.sync.adapter import SyncAdapter
 from devnet_core.sync.apply import apply_diff
 from devnet_core.sync.logging import configure_logging
 from devnet_core.sync.report import SyncReport
-
-logger = get_logger(__name__)
 
 _ACTIONS = ("create", "update", "delete", "no-change")
 
@@ -21,7 +18,7 @@ async def run_sync(
     diff_class: type[Diff] = Diff,
 ) -> SyncReport:
     """
-    Make the target match the source: load both, diff, check the deletes, apply
+    Synchronize two adapters and return a report
 
     Args:
         dry_run: Compute the diff and write nothing
@@ -57,5 +54,4 @@ async def run_sync(
         report.applied = dict(target.applied)
         report.failures = list(target.failures)
 
-    logger.info(report.summary())
     return report

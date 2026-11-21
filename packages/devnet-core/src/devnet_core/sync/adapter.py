@@ -44,9 +44,7 @@ class DiffAsyncModel(DiffSyncModel):
 
     async def acreate(self) -> None:
         """
-        Create this object in the system
-
-        and keep its ID on self
+        Create this object in the system and keep its ID on self
         """
         raise NotImplementedError(f"{type(self).__name__} does not support create")
 
@@ -71,6 +69,12 @@ class DiffAsyncModel(DiffSyncModel):
 
     def delete(self) -> NoReturn:
         _use_apply_diff()
+
+
+class ChangeRejected(Exception):
+    """
+    Raise it from a hook when this object can't be written, but the rest of the sync can go on
+    """
 
 
 def _use_apply_diff() -> NoReturn:

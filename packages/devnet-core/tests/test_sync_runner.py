@@ -1,13 +1,10 @@
-"""
-The sync framework with the smallest possible feature: named numbers, from one dict to another
-"""
-
 import asyncio
 from typing import Any, ClassVar, cast
 
 import pytest
 
-from devnet_core.sync import DiffAsyncModel, SyncAdapter, run_sync
+from devnet_core.exceptions import SystemConnectionError
+from devnet_core.sync import ChangeRejected, DiffAsyncModel, SyncAdapter, run_sync
 
 pytestmark = pytest.mark.anyio
 
@@ -69,6 +66,25 @@ class Target(SyncAdapter):
             self.add(RemoteItem(name=name, value=value))
 
 
+class FailingItem(RemoteItem):
+    async def acreate(self) -> None:
+        if self.value < 0:
+            raise cast(FailingTarget, self.adapter).error
+        await super().acreate()
+
+
+class FailingTarget(Target):
+    """
+    A system that raises the given error when it creates a negative value
+    """
+
+    item = FailingItem
+
+    def __init__(self, system: dict[str, int], *, error: Exception) -> None:
+        super().__init__(system)
+        self.error = error
+
+
 async def test_dry_run_is_the_default() -> None:
     system = {"a": 1, "b": 2, "c": 3}
 
@@ -109,3 +125,38 @@ async def test_cancelled_run_stops_writing() -> None:
     await asyncio.sleep(0.2)
     # The write that was in progress is cancelled too
     assert len(system) == written < 20
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        pytest.param(ChangeRejected("negative value"), id="hook"),
+        pytest.param(SystemConnectionError(name="system", msg="400 Bad Request", status_code=400), id="system"),
+    ],
+)
+async def test_rejected_change_does_not_stop_the_sync(error: Exception) -> None:
+    system: dict[str, int] = {}
+
+    report = await run_sync(Source({"a": 1, "b": -2, "c": 3}), FailingTarget(system, error=error), dry_run=False)
+
+    assert system == {"a": 1, "c": 3}
+    assert report.failures == [f"create item b: {error}"]
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        pytest.param(RuntimeError("bug in a hook"), id="bug"),
+        pytest.param(SystemConnectionError(name="system", msg="Connection timed out"), id="timeout"),
+        pytest.param(SystemConnectionError(name="system", msg="401 Unauthorized", status_code=401), id="auth"),
+    ],
+)
+async def test_other_error_stops_the_sync(error: Exception) -> None:
+    system: dict[str, int] = {}
+
+    with pytest.raises(type(error)):
+        await run_sync(Source({"a": 1, "b": -2, "c": 3}), FailingTarget(system, error=error), dry_run=False)
+
+    # c comes after b in the diff: it is not written
+    assert system == {"a": 1}
+    assert error.__notes__ == ["sync stopped at: create item b"]

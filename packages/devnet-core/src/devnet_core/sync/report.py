@@ -5,22 +5,25 @@ from dataclasses import dataclass, field
 class SyncReport:
     """
     Result of one sync run
-
-    Args:
-        planned: Number of changes in the diff, by action: create, update, delete, no-change
-        applied: Number of changes written, by action. Empty for a dry run
-        failures: One line for each object that could not be written
-        warnings: Things a person must look at, e.g. blocked deletes
-        diff: The diff as text, for logs and reports
     """
 
     source: str
     target: str
     dry_run: bool
+
+    # Number of changes in the diff, by action: create, update, delete, no-change
     planned: dict[str, int] = field(default_factory=dict)
+
+    # Number of changes written, by action. Empty for a dry run
     applied: dict[str, int] = field(default_factory=dict)
+
+    # List of failed operations
     failures: list[str] = field(default_factory=list)
+
+    # List of warnings
     warnings: list[str] = field(default_factory=list)
+
+    # The diff as text, for logs and reports
     diff: str = ""
 
     @property
